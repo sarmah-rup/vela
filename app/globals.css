@@ -1,26 +1,305 @@
 @import "tailwindcss";
 
+/* ───────────────────────────────────────────────────────────────────────
+   VELA design system — clean, light, image-forward.
+   Lots of whitespace, soft surfaces, one confident accent. No noise.
+   ─────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  /* Surfaces — near-monochrome, photography carries the colour */
+  --color-ink: #0b0c0e;
+  --color-bg: #ffffff;
+  --color-bg-soft: #f4f4f2;
+  --color-surface: #ffffff;
+  --color-surface-2: #fafafa;
+  --color-line: #e6e5e1;
+  --color-line-soft: #efefec;
+
+  /* Text */
+  --color-fg: #0e0f12;
+  --color-muted: #5f626b;
+  --color-faint: #9a9da6;
+
+  /* Accent — refined near-black (buttons, stats, links read monochrome) */
+  --color-key: #111317;
+  --color-key-deep: #000000;
+  --color-key-soft: #f0f0ee;
+
+  /* Secondary — mid grey for supporting icons */
+  --color-fill: #4a4d55;
+  --color-fill-deep: #2c2e34;
+
+  /* Soft neutral glow tints */
+  --color-glow-warm: #f1efec;
+  --color-glow-cool: #eef0f2;
+
+  /* Fonts (wired in layout.tsx) */
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-jbmono), ui-monospace, monospace;
+
+  /* Radii */
+  --radius-card: 22px;
+  --radius-pill: 999px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  background: var(--color-key);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-key);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Display headings: tight, confident */
+.font-display {
+  letter-spacing: -0.03em;
+}
+
+/* Editorial serif, used on hero headlines and big stats only */
+.font-serif {
+  font-family: var(--font-serif);
+  letter-spacing: -0.015em;
+  font-optical-sizing: auto;
+}
+
+/* ── Surfaces ──────────────────────────────────────────────────────────── */
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+}
+
+/* Soft elevated card with a gentle shadow */
+.card-soft {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  box-shadow:
+    0 1px 2px rgba(13, 15, 20, 0.04),
+    0 18px 40px -28px rgba(13, 15, 20, 0.18);
+}
+
+.glass {
+  background: color-mix(in oklab, #ffffff 78%, transparent);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  border: 1px solid var(--color-line);
+}
+
+/* Subtle ambient wash, used behind hero / CTA. Very light, no grain. */
+.studio-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.studio-glow::before,
+.studio-glow::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(110px);
+  opacity: 0.7;
+}
+.studio-glow::before {
+  width: 48vw;
+  height: 48vw;
+  top: -20vw;
+  right: -12vw;
+  background: radial-gradient(circle, var(--color-glow-cool), transparent 70%);
+}
+.studio-glow::after {
+  width: 40vw;
+  height: 40vw;
+  bottom: -18vw;
+  left: -10vw;
+  background: radial-gradient(circle, var(--color-glow-warm), transparent 70%);
+}
+
+/* Hairline divider */
+.rule {
+  height: 1px;
+  background: var(--color-line);
+}
+
+/* Elevated image frame with a crisp edge highlight and layered shadow */
+.media {
+  border-radius: 26px;
+  border: 1px solid var(--color-line);
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.6) inset,
+    0 2px 6px -2px rgba(13, 15, 20, 0.08),
+    0 40px 80px -40px rgba(13, 15, 20, 0.4);
+}
+
+/* Lift-on-hover used across interactive cards */
+.lift {
+  transition:
+    transform 0.4s var(--ease-out-expo),
+    box-shadow 0.4s var(--ease-out-expo),
+    border-color 0.4s var(--ease-out-expo);
+  will-change: transform;
+}
+.lift:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 2px 6px -2px rgba(13, 15, 20, 0.08),
+    0 30px 60px -30px rgba(13, 15, 20, 0.3);
+}
+
+/* Tiny pill/chip with a soft floating shadow, for micro callouts */
+.chip {
+  background: color-mix(in oklab, #ffffff 88%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-line);
+  box-shadow: 0 12px 30px -14px rgba(13, 15, 20, 0.35);
+}
+
+/* Faint dotted texture for section backdrops */
+.dotted {
+  background-image: radial-gradient(var(--color-line) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 70% at 50% 40%,
+    #000 30%,
+    transparent 75%
+  );
+  mask-image: radial-gradient(
+    ellipse 70% 70% at 50% 40%,
+    #000 30%,
+    transparent 75%
+  );
+}
+
+/* Gradient text reads as solid ink with a faint accent shift */
+.text-gradient {
+  background: linear-gradient(100deg, var(--color-fg) 30%, var(--color-key));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── Motion ────────────────────────────────────────────────────────────── */
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.ring-spin {
+  animation: spin-slow 8s linear infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+.float {
+  animation: float 7s var(--ease-out-expo) infinite;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee {
+  animation: marquee 40s linear infinite;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-key) 50%, transparent);
+  }
+  50% {
+    opacity: 0.65;
+    box-shadow: 0 0 0 5px transparent;
+  }
+}
+.pulse-dot {
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Refined page scrollbar */
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--color-faint) 45%, transparent);
+  border: 3px solid var(--color-bg);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklab, var(--color-faint) 70%, transparent);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Soft photographic vignette + edge highlight on real images.
+   Applied via the Placeholder wrapper, felt rather than seen. */
+[data-placeholder]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 -60px 60px -40px rgba(13, 15, 20, 0.45);
 }
