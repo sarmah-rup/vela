@@ -1,0 +1,179 @@
+/* Marketing-matched header tokens (from the Next app's app/globals.css). */
+.wrap {
+  --m-key: #111317;
+  --m-key-deep: #000000;
+  --m-bg: #ffffff;
+  --m-bg-soft: #f4f4f2;
+  --m-line: #e6e5e1;
+  --m-fg: #0e0f12;
+  --m-muted: #5f626b;
+  --m-faint: #9a9da6;
+  --m-font: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  padding: 1rem 0;
+  background: transparent;
+  font-family: var(--m-font);
+}
+
+.inner {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 72rem;
+  padding: 0 1.5rem;
+}
+
+.pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0.75rem 0.5rem 1rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, #ffffff 78%, transparent);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  border: 1px solid var(--m-line);
+  box-shadow: 0 20px 50px -30px rgba(0, 0, 0, 0.5);
+}
+
+/* Logo */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+.logoMark {
+  display: grid;
+  place-items: center;
+  height: 2rem;
+  width: 2rem;
+  border-radius: 10px;
+  background: var(--m-key);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+}
+.logoWord {
+  font-weight: 600;
+  font-size: 1.125rem;
+  letter-spacing: -0.03em;
+  color: var(--m-fg);
+}
+
+/* Desktop nav */
+.nav {
+  display: none;
+  align-items: center;
+  gap: 0.25rem;
+}
+.navLink,
+.navBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.875rem;
+  font-family: var(--m-font);
+  color: var(--m-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.navLink:hover,
+.navBtn:hover { color: var(--m-fg); text-decoration: none; }
+
+.chev { transition: transform 0.2s ease; }
+.chevUp { transform: rotate(180deg); transition: transform 0.2s ease; }
+
+/* Product dropdown */
+.productWrap { position: relative; }
+.dropdown {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  padding-top: 0.75rem;
+  width: min(92vw, 22rem);
+}
+.dropdownCard {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: var(--m-bg);
+  border: 1px solid var(--m-line);
+  border-radius: 22px;
+  box-shadow: 0 18px 40px -28px rgba(13, 15, 20, 0.4);
+}
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--m-fg);
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+.dropdownItem:hover { background: var(--m-bg-soft); text-decoration: none; }
+.dot {
+  height: 0.375rem;
+  width: 0.375rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--m-key) 70%, transparent);
+}
+
+/* CTAs */
+.cta { display: none; align-items: center; gap: 0.5rem; }
+.signin {
+  border-radius: 999px;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.875rem;
+  color: var(--m-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.signin:hover { color: var(--m-fg); text-decoration: none; }
+.tryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: var(--m-key);
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 8px 22px -10px var(--m-key);
+  transition: background 0.2s ease;
+}
+.tryBtn:hover { background: var(--m-key-deep); color: #fff; text-decoration: none; }
+
+/* Mobile burger toggles the docs sidebar */
+.burger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  width: 2.5rem;
+  border: none;
+  background: transparent;
+  border-radius: 999px;
+  color: var(--m-fg);
+  cursor: pointer;
+}
+
+@media (min-width: 997px) {
+  .nav { display: flex; }
+  .cta { display: flex; }
+  .burger { display: none; }
+}

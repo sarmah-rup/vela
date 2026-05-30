@@ -1,106 +1,311 @@
-import { Check, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { RevealGroup, RevealItem } from "@/components/ui/reveal";
+"use client";
+
+import * as React from "react";
+import Link from "next/link";
+import { Check, ArrowUpRight } from "lucide-react";
+import { Container, Eyebrow, SectionHeading } from "@/components/ui/primitives";
+import { Reveal } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 
-const tiers = [
+type Tier = {
+  name: string;
+  blurb: string;
+  // Priced tiers carry monthly + yearly (per-month, billed annually) numbers.
+  monthly?: number;
+  yearly?: number;
+  credits?: string;
+  custom?: boolean; // Enterprise
+  cta: string;
+  href: string;
+  highlight?: boolean;
+  featuresLead?: string;
+  features: string[];
+};
+
+// Two priced tiers + one custom (Enterprise). Yearly ≈ 17% off (2 months free).
+const tiers: Tier[] = [
   {
-    name: "Hobby",
-    price: "$0",
-    cadence: "to start",
-    blurb: "Build a proof of concept on the house.",
-    cta: { label: "Start free", href: "/demo" },
+    name: "Pro",
+    blurb: "For production apps shipping real volume.",
+    monthly: 49,
+    yearly: 41,
+    credits: "20,000 credits / mo",
+    cta: "Get started",
+    href: "/sign-up?plan=pro",
     features: [
-      "250 generations / month",
-      "All five endpoints",
-      "Community Slack",
-      "Standard models",
+      "20,000 credits / month",
+      "10 API keys",
+      "Webhooks & async jobs",
+      "All capabilities & models",
+      "Email support",
     ],
-    featured: false,
   },
   {
     name: "Scale",
-    price: "$0.04",
-    cadence: "per generation",
-    blurb: "Usage-based pricing that drops with volume.",
-    cta: { label: "Get an API key", href: "/demo" },
+    blurb: "For high-volume pipelines and teams.",
+    monthly: 199,
+    yearly: 166,
+    credits: "120,000 credits / mo",
+    cta: "Get started",
+    href: "/sign-up?plan=scale",
+    highlight: true,
+    featuresLead: "Everything in Pro, plus",
     features: [
-      "Volume tiers to $0.018",
-      "Batch + webhooks",
-      "Deterministic seeds",
-      "Custom model library",
-      "99.9% uptime SLA",
+      "120,000 credits / month",
+      "Unlimited API keys",
+      "Priority GPUs",
+      "Team collaboration",
+      "Priority support",
     ],
-    featured: true,
   },
   {
     name: "Enterprise",
-    price: "Custom",
-    cadence: "annual",
-    blurb: "Licensing, controls and support for the catalogue.",
-    cta: { label: "Talk to sales", href: "/contact" },
+    blurb: "For high-volume teams with strict brand requirements.",
+    custom: true,
+    cta: "Book a call",
+    href: "/contact",
+    featuresLead: "Everything in Scale, plus",
     features: [
-      "IP indemnification",
-      "SSO, SCIM, audit logs",
-      "Private deployment",
-      "Brand-locked models",
+      "Volume credit pricing",
+      "Dedicated GPUs & SLA",
+      "SSO / SAML",
+      "White-glove onboarding",
       "Solutions engineer",
     ],
-    featured: false,
   },
 ];
 
-export function Pricing() {
+function Price({ tier, yearly }: { tier: Tier; yearly: boolean }) {
+  if (tier.custom) {
+    return (
+      <div className="mt-6">
+        <span className="font-display text-5xl font-semibold tracking-tight text-fg">
+          Custom
+        </span>
+      </div>
+    );
+  }
+  const perMonth = yearly ? tier.yearly! : tier.monthly!;
+  const showStrike = yearly && tier.monthly! > tier.yearly!;
+  const savePct = Math.round((1 - tier.yearly! / tier.monthly!) * 100);
   return (
-    <RevealGroup className="grid items-stretch gap-5 lg:grid-cols-3">
-      {tiers.map((tier) => (
-        <RevealItem key={tier.name} className="h-full">
-          <div
-            className={cn(
-              "card relative flex h-full flex-col gap-6 p-7",
-              tier.featured && "border-key/50",
-            )}
-          >
-            {tier.featured ? (
-              <>
-                <div className="studio-glow opacity-40" />
-                <span className="absolute right-6 top-6 rounded-pill bg-key px-2.5 py-1 text-xs font-semibold text-ink">
-                  Most popular
-                </span>
-              </>
-            ) : null}
-            <div className="relative flex flex-col gap-1">
-              <span className="font-mono text-xs uppercase tracking-[0.2em] text-faint">
-                {tier.name}
-              </span>
-              <div className="flex items-end gap-2">
-                <span className="font-display text-5xl tracking-tight">
-                  {tier.price}
-                </span>
-                <span className="pb-2 text-sm text-faint">{tier.cadence}</span>
-              </div>
-              <p className="mt-1 text-sm text-muted">{tier.blurb}</p>
+    <div className="mt-6">
+      {showStrike ? (
+        <div className="mb-1 flex items-center gap-2">
+          <span className="text-lg text-faint line-through">${tier.monthly}</span>
+          <span className="rounded-full bg-key-soft px-2 py-0.5 text-[0.7rem] font-semibold text-fg">
+            Save {savePct}%
+          </span>
+        </div>
+      ) : null}
+      <div className="flex items-baseline gap-1.5">
+        <span className="font-display text-5xl font-semibold tracking-tight text-fg">
+          ${perMonth}
+        </span>
+        <span className="text-sm text-muted">
+          USD&nbsp;/<br className="hidden sm:block" />
+          month
+        </span>
+      </div>
+      <p className="mt-2 text-xs text-faint">
+        {yearly ? "Billed annually · all credits upfront" : "Billed monthly"}
+      </p>
+    </div>
+  );
+}
+
+export function Pricing() {
+  const [yearly, setYearly] = React.useState(true);
+
+  return (
+    <section className="relative py-20 sm:py-28">
+      <Container>
+        <div className="mx-auto mb-10 max-w-2xl text-center">
+          <Reveal>
+            <Eyebrow>Pricing</Eyebrow>
+          </Reveal>
+          <Reveal delay={0.06}>
+            <SectionHeading
+              align="center"
+              className="mt-4"
+              title="Simple pricing that scales with you"
+              description="Two plans with clear monthly or yearly pricing, plus a custom Enterprise tier. No seats, no minimums, no surprise invoices."
+            />
+          </Reveal>
+        </div>
+
+        {/* Monthly / Yearly toggle */}
+        <Reveal delay={0.1}>
+          <div className="mb-12 flex items-center justify-center gap-3">
+            <div className="inline-flex items-center rounded-pill border border-line bg-surface p-1">
+              <button
+                onClick={() => setYearly(false)}
+                className={cn(
+                  "rounded-pill px-4 py-1.5 text-sm font-medium transition-colors",
+                  !yearly ? "bg-key text-white" : "text-muted hover:text-fg",
+                )}
+              >
+                Monthly
+              </button>
+              <button
+                onClick={() => setYearly(true)}
+                className={cn(
+                  "rounded-pill px-4 py-1.5 text-sm font-medium transition-colors",
+                  yearly ? "bg-key text-white" : "text-muted hover:text-fg",
+                )}
+              >
+                Yearly
+              </button>
             </div>
-            <div className="rule" />
-            <ul className="relative flex flex-1 flex-col gap-3 text-sm">
-              {tier.features.map((f) => (
-                <li key={f} className="flex items-center gap-3 text-muted">
-                  <Check className="h-4 w-4 shrink-0 text-key" />
-                  {f}
-                </li>
-              ))}
-            </ul>
-            <Button
-              href={tier.cta.href}
-              variant={tier.featured ? "primary" : "outline"}
-              className="relative w-full"
-            >
-              {tier.cta.label}
-              <ArrowRight className="h-4 w-4" />
-            </Button>
+            <span className="hidden text-sm text-muted sm:inline">
+              Save ~17% with yearly plans
+            </span>
           </div>
-        </RevealItem>
-      ))}
-    </RevealGroup>
+        </Reveal>
+
+        <div className="grid items-stretch gap-6 lg:grid-cols-3">
+          {tiers.map((tier) => {
+            const dark = tier.highlight;
+            return (
+              <Reveal key={tier.name}>
+                <div
+                  className={cn(
+                    "relative flex h-full flex-col rounded-card border p-8",
+                    dark
+                      ? "border-key bg-key text-white shadow-[0_30px_60px_-30px_rgba(0,0,0,0.5)]"
+                      : "card-soft",
+                  )}
+                >
+                  {dark ? (
+                    <span className="absolute right-6 top-6 rounded-full bg-white/15 px-2.5 py-1 text-[0.7rem] font-semibold uppercase tracking-wide text-white">
+                      Most popular
+                    </span>
+                  ) : null}
+
+                  <h3
+                    className={cn(
+                      "font-display text-xl font-semibold",
+                      dark ? "text-white" : "text-fg",
+                    )}
+                  >
+                    {tier.name}
+                  </h3>
+                  <p
+                    className={cn(
+                      "mt-1 max-w-[24ch] text-sm",
+                      dark ? "text-white/70" : "text-muted",
+                    )}
+                  >
+                    {tier.blurb}
+                  </p>
+
+                  {dark ? <PriceDark tier={tier} yearly={yearly} /> : <Price tier={tier} yearly={yearly} />}
+
+                  {tier.credits ? (
+                    <div
+                      className={cn(
+                        "mt-6 flex items-center justify-between rounded-xl border px-4 py-3 text-sm",
+                        dark ? "border-white/20 text-white/90" : "border-line text-fg",
+                      )}
+                    >
+                      <span>{tier.credits}</span>
+                    </div>
+                  ) : (
+                    <div className="mt-6 h-[1px]" />
+                  )}
+
+                  <div className="mt-6">
+                    <Link
+                      href={tier.href}
+                      className={cn(
+                        "inline-flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all",
+                        dark
+                          ? "bg-white text-key hover:bg-white/90"
+                          : tier.custom
+                            ? "border border-line bg-surface text-fg hover:border-key/50 hover:text-key"
+                            : "bg-key text-white hover:bg-key-deep",
+                      )}
+                    >
+                      {tier.cta}
+                      <ArrowUpRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+
+                  {tier.featuresLead ? (
+                    <p
+                      className={cn(
+                        "mt-7 text-sm",
+                        dark ? "text-white/80" : "text-muted",
+                      )}
+                    >
+                      {tier.featuresLead}
+                    </p>
+                  ) : null}
+
+                  <ul className={cn("mt-4 space-y-3", !tier.featuresLead && "mt-7")}>
+                    {tier.features.map((f) => (
+                      <li
+                        key={f}
+                        className={cn(
+                          "flex items-start gap-2.5 text-sm",
+                          dark ? "text-white/90" : "text-fg",
+                        )}
+                      >
+                        <Check
+                          className={cn(
+                            "mt-0.5 h-4 w-4 shrink-0",
+                            dark ? "text-white" : "text-key",
+                          )}
+                        />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
+
+        <p className="mt-10 text-center text-sm text-muted">
+          All plans include async jobs, webhooks, and C2PA-licensed output.{" "}
+          <Link href="/docs/intro" className="font-medium text-fg underline-offset-2 hover:underline">
+            Read the docs
+          </Link>
+          .
+        </p>
+      </Container>
+    </section>
+  );
+}
+
+// Price block on the dark (popular) card — same layout, light-on-dark colors.
+function PriceDark({ tier, yearly }: { tier: Tier; yearly: boolean }) {
+  const perMonth = yearly ? tier.yearly! : tier.monthly!;
+  const showStrike = yearly && tier.monthly! > tier.yearly!;
+  const savePct = Math.round((1 - tier.yearly! / tier.monthly!) * 100);
+  return (
+    <div className="mt-6">
+      {showStrike ? (
+        <div className="mb-1 flex items-center gap-2">
+          <span className="text-lg text-white/50 line-through">${tier.monthly}</span>
+          <span className="rounded-full bg-white/15 px-2 py-0.5 text-[0.7rem] font-semibold text-white">
+            Save {savePct}%
+          </span>
+        </div>
+      ) : null}
+      <div className="flex items-baseline gap-1.5">
+        <span className="font-display text-5xl font-semibold tracking-tight text-white">
+          ${perMonth}
+        </span>
+        <span className="text-sm text-white/70">
+          USD&nbsp;/<br className="hidden sm:block" />
+          month
+        </span>
+      </div>
+      <p className="mt-2 text-xs text-white/60">
+        {yearly ? "Billed annually · all credits upfront" : "Billed monthly"}
+      </p>
+    </div>
   );
 }

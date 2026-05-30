@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Fraunces, JetBrains_Mono } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { brand } from "@/lib/site";
-import { SiteHeader } from "@/components/site/site-header";
-import { SiteFooter } from "@/components/site/site-footer";
+import { SiteChrome } from "@/components/site/site-chrome";
 import { ScrollProgress } from "@/components/site/scroll-progress";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -41,20 +41,26 @@ export const metadata: Metadata = {
   },
 };
 
+// Only mount ClerkProvider once real keys exist — otherwise an invalid placeholder key
+// would throw during render and break the marketing site. See SETUP.md.
+const clerkConfigured =
+  !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY &&
+  !process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.includes("REPLACE_ME");
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  return (
+  const tree = (
     <html
       lang="en"
       className={`${jakarta.variable} ${fraunces.variable} ${jbmono.variable} h-full antialiased`}
     >
       <body className="relative min-h-full bg-bg text-fg">
         <ScrollProgress />
-        <SiteHeader />
-        <main className="relative z-[2]">{children}</main>
-        <SiteFooter />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );
+
+  return clerkConfigured ? <ClerkProvider>{tree}</ClerkProvider> : tree;
 }

@@ -114,12 +114,12 @@ export function SiteHeader() {
 
           <div className="hidden items-center gap-2 lg:flex">
             <Link
-              href="/contact"
+              href="/sign-in"
               className="rounded-pill px-3.5 py-2 text-sm text-muted transition-colors hover:text-fg"
             >
               Sign in
             </Link>
-            <Button href="/demo" size="sm">
+            <Button href="/sign-up" size="sm">
               Try the API
               <ArrowUpRight className="h-4 w-4" />
             </Button>
@@ -170,7 +170,14 @@ export function SiteHeader() {
                 </Link>
               ))}
               <div className="mt-3 grid gap-2">
-                <Button href="/demo" onClick={() => setMenuOpen(false)}>
+                <Link
+                  href="/sign-in"
+                  onClick={() => setMenuOpen(false)}
+                  className="block rounded-xl px-2 py-2.5 text-sm text-fg hover:bg-bg-soft"
+                >
+                  Sign in
+                </Link>
+                <Button href="/sign-up" onClick={() => setMenuOpen(false)}>
                   Try the API
                 </Button>
               </div>

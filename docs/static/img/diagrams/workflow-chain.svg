@@ -1,0 +1,37 @@
+<svg width="920" height="200" viewBox="0 0 920 200" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Geist, system-ui, sans-serif">
+  <defs>
+    <marker id="warrow" markerWidth="10" markerHeight="10" refX="7.5" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#a5a5f5"/>
+    </marker>
+    <linearGradient id="waccent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5b5bd6"/>
+      <stop offset="1" stop-color="#a5a5f5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- connectors -->
+  <line x1="248" y1="100" x2="312" y2="100" stroke="#a5a5f5" stroke-width="2.5" marker-end="url(#warrow)"/>
+  <line x1="552" y1="100" x2="616" y2="100" stroke="#a5a5f5" stroke-width="2.5" marker-end="url(#warrow)"/>
+
+  <!-- step 1: Generate -->
+  <rect x="64" y="64" width="184" height="72" rx="14" fill="#ffffff" stroke="#5b5bd6" stroke-opacity="0.5"/>
+  <rect x="64" y="64" width="6" height="72" rx="3" fill="url(#waccent)"/>
+  <text x="92" y="98" font-size="17" font-weight="600" fill="#0a0a0f" letter-spacing="-0.02em">Generate</text>
+  <text x="92" y="118" font-size="13" fill="#6b7280">create the base image</text>
+
+  <!-- step 2: Background -->
+  <rect x="312" y="64" width="240" height="72" rx="14" fill="#ffffff" stroke="#5b5bd6" stroke-opacity="0.5"/>
+  <rect x="312" y="64" width="6" height="72" rx="3" fill="url(#waccent)"/>
+  <text x="340" y="98" font-size="17" font-weight="600" fill="#0a0a0f" letter-spacing="-0.02em">Background</text>
+  <text x="340" y="118" font-size="13" fill="#6b7280">stage the scene</text>
+
+  <!-- step 3: Upscale -->
+  <rect x="616" y="64" width="184" height="72" rx="14" fill="#ffffff" stroke="#5b5bd6" stroke-opacity="0.5"/>
+  <rect x="616" y="64" width="6" height="72" rx="3" fill="url(#waccent)"/>
+  <text x="644" y="98" font-size="17" font-weight="600" fill="#0a0a0f" letter-spacing="-0.02em">Upscale</text>
+  <text x="644" y="118" font-size="13" fill="#6b7280">sharpen to 2K+</text>
+
+  <!-- passing result_url labels -->
+  <text x="280" y="84" font-size="11" font-family="Geist Mono, monospace" fill="#5b5bd6">result_url</text>
+  <text x="584" y="84" font-size="11" font-family="Geist Mono, monospace" fill="#5b5bd6">result_url</text>
+</svg>

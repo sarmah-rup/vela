@@ -57,7 +57,7 @@ export const productNav: NavGroup = {
 };
 
 export const mainNav: NavItem[] = [
-  { label: "Platform", href: "/platform" },
+  { label: "Docs", href: "/docs" },
   { label: "Solutions", href: "/solutions" },
   { label: "Use cases", href: "/use-cases" },
   { label: "Developers", href: "/developers" },
@@ -68,7 +68,7 @@ export const footerNav: NavGroup[] = [
   {
     label: "Product",
     items: [
-      { label: "Platform", href: "/platform" },
+      { label: "Docs", href: "/docs" },
       { label: "On-Model Imagery", href: "/features/on-model" },
       { label: "Virtual Try-On", href: "/features/try-on" },
       { label: "Editing & Background", href: "/features/editing" },

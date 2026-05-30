@@ -1,0 +1,148 @@
+/* ImagePipeline landing — Vela luxury layout.
+   Section rhythm 96px (matches app .section), 1200px container, generous whitespace. */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 7.5rem 1.5rem 0;
+  text-align: center;
+}
+
+.heroInner {
+  position: relative;
+  z-index: 1;
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--vela-indigo);
+  border: 1px solid var(--vela-border);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  margin-bottom: 1.75rem;
+  background: rgba(91, 91, 214, 0.06);
+}
+
+.heroTitle {
+  font-size: clamp(2.6rem, 6vw, 4.25rem);
+  line-height: 1.04;
+  letter-spacing: -0.045em;
+  font-weight: 600;
+  margin: 0 auto;
+  max-width: 18ch;
+  text-wrap: balance;
+}
+
+.heroSubtitle {
+  margin: 1.75rem auto 0;
+  max-width: 44rem;
+  font-size: 1.2rem;
+  line-height: 1.65;
+  color: var(--vela-muted);
+}
+
+.heroButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2.75rem;
+}
+
+.heroMedia {
+  position: relative;
+  z-index: 1;
+  max-width: 920px;
+  margin: 5rem auto 0;
+  padding: 0 1.5rem;
+}
+.heroImage {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  border: 1px solid var(--vela-border);
+  box-shadow:
+    0 2px 4px rgba(10, 10, 15, 0.04),
+    0 24px 60px rgba(91, 91, 214, 0.16),
+    0 8px 24px rgba(10, 10, 15, 0.08);
+}
+
+/* ---------------------------------------------------------- Sections */
+.section { padding: 7rem 1.5rem; }
+.sectionMuted {
+  background: var(--vela-subtle);
+  border-block: 1px solid var(--vela-border);
+}
+.sectionInner { max-width: 1200px; margin: 0 auto; }
+.sectionHead { max-width: 42rem; margin: 0 auto 3.5rem; text-align: center; }
+.kicker {
+  display: inline-block;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--vela-indigo);
+  margin-bottom: 1rem;
+}
+.sectionTitle {
+  font-size: clamp(1.8rem, 3.4vw, 2.4rem);
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+  margin: 0;
+}
+.sectionLede {
+  margin: 1.1rem auto 0;
+  font-size: 1.1rem;
+  line-height: 1.65;
+  color: var(--vela-muted);
+}
+
+/* ---------------------------------------------------------- Capability grid */
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.card { display: block; padding: 1.9rem; color: inherit; border-radius: 12px; }
+.card:hover { text-decoration: none; }
+.cardIcon { width: 48px; height: 48px; margin-bottom: 1.1rem; display: block; }
+.cardTitle { font-size: 1.2rem; letter-spacing: -0.02em; margin-bottom: 0.6rem; }
+.cardBody { color: var(--vela-muted); font-size: 0.97rem; line-height: 1.6; margin-bottom: 1.25rem; }
+.cardLink { color: var(--vela-indigo); font-weight: 500; font-size: 0.92rem; }
+[data-theme='dark'] .cardLink { color: var(--vela-glow); }
+
+/* ---------------------------------------------------------- Diagram band */
+.diagramFrame {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+  background: var(--ifm-background-color);
+  border: 1px solid var(--vela-border);
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(10, 10, 15, 0.04), 0 18px 48px rgba(10, 10, 15, 0.06);
+}
+.diagram { width: 100%; height: auto; display: block; }
+
+/* ---------------------------------------------------------- Quickstart row */
+.codeRow { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 3.5rem; align-items: center; }
+.codeCopy .kicker { text-align: left; }
+.codeCopy .sectionTitle { font-size: clamp(1.7rem, 3vw, 2.2rem); }
+.codeCopy .sectionLede { margin-left: 0; }
+.codeCopy .heroButtons { justify-content: flex-start; margin-top: 2rem; }
+.codeBlock :global(.theme-code-block) { margin-bottom: 0; }
+
+/* ---------------------------------------------------------- Responsive */
+@media (max-width: 996px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .codeRow { grid-template-columns: 1fr; gap: 2.5rem; }
+  .codeCopy { text-align: center; }
+  .codeCopy .kicker,
+  .codeCopy .heroButtons { text-align: center; justify-content: center; }
+}
+@media (max-width: 768px) {
+  .hero { padding-top: 5.5rem; }
+  .grid { grid-template-columns: 1fr; }
+  .heroButtons { flex-direction: column; align-items: stretch; }
+  .section { padding: 4.5rem 1.25rem; }
+  .diagramFrame { padding: 1.5rem 1rem; overflow-x: auto; }
+}
