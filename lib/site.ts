@@ -7,6 +7,16 @@
 // CTA points here.
 export const CAL_URL = "https://cal.com/imagepipeline/30min";
 
+// Social profiles. Rendered in the footer and emitted as Organization sameAs.
+export const socialLinks = [
+  { label: "X", href: "https://twitter.com/imagepipeline" },
+  { label: "YouTube", href: "https://youtube.com/@imagepipeline" },
+  { label: "Instagram", href: "https://www.instagram.com/imagepipeline/" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/imagepipeline/" },
+  { label: "Facebook", href: "https://www.facebook.com/imagepipeline" },
+  { label: "Hugging Face", href: "https://huggingface.co/imagepipeline" },
+] as const;
+
 export const brand = {
   name: "ImagePipeline",
   wordmark: "ImagePipeline",

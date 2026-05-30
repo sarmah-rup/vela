@@ -141,7 +141,7 @@ const config: Config = {
         // anchors hit the site root as intended.
         { type: 'html', value: '<a class="menu__link" href="/pricing">Pricing</a>' },
         { type: 'html', value: '<a class="menu__link" href="/sign-in">Sign in</a>' },
-        { type: 'html', value: '<a class="menu__link" href="https://cal.com/imagepipeline/30min">Try the API</a>' },
+        { type: 'html', value: '<a class="menu__link" href="/sign-up">Try Now</a>' },
       ],
     },
     footer: {

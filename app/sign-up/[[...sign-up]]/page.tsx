@@ -1,4 +1,5 @@
 import { SignUp } from "@clerk/nextjs";
+import { AuthShell, clerkAppearance } from "@/components/site/auth-shell";
 
 const clerkConfigured =
   !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY &&
@@ -16,8 +17,8 @@ export default function SignUpPage() {
     );
   }
   return (
-    <div className="flex min-h-screen items-center justify-center px-6 py-16">
-      <SignUp />
-    </div>
+    <AuthShell>
+      <SignUp appearance={clerkAppearance} />
+    </AuthShell>
   );
 }

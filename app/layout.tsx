@@ -3,7 +3,7 @@ import Script from "next/script";
 import { Plus_Jakarta_Sans, Fraunces, JetBrains_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
-import { brand } from "@/lib/site";
+import { brand, socialLinks } from "@/lib/site";
 import { PLANS } from "@/lib/plans";
 import { SiteChrome } from "@/components/site/site-chrome";
 import { ScrollProgress } from "@/components/site/scroll-progress";
@@ -23,6 +23,7 @@ const structuredData = {
       description: brand.description,
       logo: `${SITE_URL}/icon.svg`,
       email: brand.email,
+      sameAs: socialLinks.map((s) => s.href),
     },
     {
       "@type": "WebSite",
@@ -92,13 +93,13 @@ const jbmono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: `${brand.name}, ${brand.tagline}`,
+    default: `${brand.name} - ${brand.tagline}`,
     template: `%s · ${brand.name}`,
   },
   description: brand.description,
   metadataBase: new URL(`https://${brand.domain}`),
   openGraph: {
-    title: `${brand.name}, ${brand.tagline}`,
+    title: `${brand.name} - ${brand.tagline}`,
     description: brand.description,
     type: "website",
     siteName: brand.name,

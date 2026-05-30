@@ -83,8 +83,8 @@ export default function Navbar(): ReactNode {
             <a href="/sign-in" className={styles.signin}>
               Sign in
             </a>
-            <a href="https://cal.com/imagepipeline/30min" className={styles.tryBtn}>
-              Try the API
+            <a href="/sign-up" className={styles.tryBtn}>
+              Try Now
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                 <path d="M7 17L17 7M17 7H8M17 7v9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -117,8 +117,8 @@ export default function Navbar(): ReactNode {
             <a href="/sign-in" onClick={close} className={styles.mobileItem}>
               Sign in
             </a>
-            <a href="https://cal.com/imagepipeline/30min" onClick={close} className={styles.mobileTryBtn}>
-              Try the API
+            <a href="/sign-up" onClick={close} className={styles.mobileTryBtn}>
+              Try Now
             </a>
           </div>
         ) : null}
