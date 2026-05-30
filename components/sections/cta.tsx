@@ -11,8 +11,8 @@ export function CtaSection({
 }: {
   title?: string;
   subtitle?: string;
-  primary?: { label: string; href: string };
-  secondary?: { label: string; href: string };
+  primary?: { label: string; href: string } | null;
+  secondary?: { label: string; href: string } | null;
 }) {
   return (
     <Container>
@@ -24,15 +24,21 @@ export function CtaSection({
               {title}
             </h2>
             <p className="text-pretty text-lg text-muted">{subtitle}</p>
-            <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
-              <Button href={primary.href} size="lg">
-                {primary.label}
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-              <Button href={secondary.href} variant="outline" size="lg">
-                {secondary.label}
-              </Button>
-            </div>
+            {primary || secondary ? (
+              <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
+                {primary ? (
+                  <Button href={primary.href} size="lg">
+                    {primary.label}
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                ) : null}
+                {secondary ? (
+                  <Button href={secondary.href} variant="outline" size="lg">
+                    {secondary.label}
+                  </Button>
+                ) : null}
+              </div>
+            ) : null}
           </div>
         </Frame>
       </Reveal>

@@ -1,8 +1,5 @@
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { Container, SectionHeading } from "@/components/ui/primitives";
-import { Button } from "@/components/ui/button";
-import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
+import { Reveal } from "@/components/ui/reveal";
 import { CenterSlider } from "@/components/sections/center-slider";
 import { BeforeAfter } from "@/components/sections/before-after";
 import { HeroRotator } from "@/components/sections/hero-rotator";
@@ -12,8 +9,6 @@ import { StatsShowcase } from "@/components/sections/stats-showcase";
 import { CategoryShowcase } from "@/components/sections/category-showcase";
 import { StatsBand } from "@/components/sections/stats-band";
 import { CtaSection } from "@/components/sections/cta";
-import { Placeholder } from "@/components/ui/placeholder";
-import { useCases } from "@/lib/use-cases";
 import { logoCloud } from "@/lib/site";
 
 export default function HomePage() {
@@ -38,16 +33,6 @@ export default function HomePage() {
                   on-brand imagery at scale, with full creative control. No
                   studio, no photoshoot.
                 </p>
-              </Reveal>
-              <Reveal delay={0.18}>
-                <div className="flex flex-wrap items-center gap-3">
-                  <Button href="/demo" size="lg">
-                    Get started
-                  </Button>
-                  <Button href="/contact" variant="soft" size="lg">
-                    Book a demo
-                  </Button>
-                </div>
               </Reveal>
             </div>
 
@@ -88,11 +73,6 @@ export default function HomePage() {
               eyebrow="One platform"
               title="One platform for every fashion workflow."
             />
-          </Reveal>
-          <Reveal delay={0.06}>
-            <Button href="/platform" variant="soft">
-              Learn more
-            </Button>
           </Reveal>
           <Reveal delay={0.12} className="w-full">
             <WorkflowTabs />
@@ -169,59 +149,13 @@ export default function HomePage() {
         <StatsBand />
       </section>
 
-      {/* ── Use cases teaser ───────────────────────────────────────────── */}
-      <section className="py-16">
-        <Container className="flex flex-col gap-10">
-          <Reveal>
-            <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
-              <SectionHeading
-                align="left"
-                eyebrow="Use cases"
-                title="See it on a real catalogue."
-              />
-              <Button href="/use-cases" variant="outline">
-                All use cases
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </Reveal>
-          <RevealGroup className="grid gap-5 md:grid-cols-3">
-            {useCases.map((u) => (
-              <RevealItem key={u.slug}>
-                <Link
-                  href={`/use-cases/${u.slug}`}
-                  className="card-soft lift group flex h-full flex-col overflow-hidden"
-                >
-                  <Placeholder tone={u.heroTone} ratio="16/10" rounded="rounded-none" />
-                  <div className="flex flex-1 flex-col gap-2 p-6">
-                    <span className="text-xs text-faint">{u.vertical}</span>
-                    <span className="font-display text-xl font-bold tracking-tight">
-                      {u.company}
-                    </span>
-                    <span className="text-sm text-muted">{u.oneLiner}</span>
-                    <span className="mt-auto flex items-center gap-2 pt-3">
-                      <span className="font-display text-2xl font-bold tracking-tight text-key">
-                        {u.headlineMetric.value}
-                      </span>
-                      <span className="text-xs text-faint">
-                        {u.headlineMetric.label}
-                      </span>
-                    </span>
-                  </div>
-                </Link>
-              </RevealItem>
-            ))}
-          </RevealGroup>
-        </Container>
-      </section>
-
       {/* ── CTA ────────────────────────────────────────────────────────── */}
       <section className="pb-8">
         <CtaSection
           title="Replace the photoshoot with an API call."
           subtitle="Start free with 250 generations. Bring a flat-lay and see it come back on-model in minutes."
-          primary={{ label: "Start free", href: "/demo" }}
-          secondary={{ label: "Book a demo", href: "/contact" }}
+          primary={null}
+          secondary={null}
         />
       </section>
     </>

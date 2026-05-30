@@ -4,8 +4,8 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
-import { ChevronDown, Menu, X, ArrowUpRight } from "lucide-react";
-import { mainNav, productNav } from "@/lib/site";
+import { Menu, X, ArrowUpRight } from "lucide-react";
+import { mainNav } from "@/lib/site";
 import { Logo } from "./logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -13,7 +13,6 @@ import { cn } from "@/lib/utils";
 export function SiteHeader() {
   const [scrolled, setScrolled] = React.useState(false);
   const [menuOpen, setMenuOpen] = React.useState(false);
-  const [productOpen, setProductOpen] = React.useState(false);
   const pathname = usePathname();
 
   React.useEffect(() => {
@@ -42,56 +41,6 @@ export function SiteHeader() {
           <Logo />
 
           <nav className="hidden items-center gap-1 lg:flex">
-            <div
-              className="relative"
-              onMouseEnter={() => setProductOpen(true)}
-              onMouseLeave={() => setProductOpen(false)}
-            >
-              <button
-                className="inline-flex items-center gap-1 rounded-pill px-3.5 py-2 text-sm text-muted transition-colors hover:text-fg"
-                aria-expanded={productOpen}
-              >
-                Product
-                <ChevronDown
-                  className={cn(
-                    "h-3.5 w-3.5 transition-transform",
-                    productOpen && "rotate-180",
-                  )}
-                />
-              </button>
-              <AnimatePresence>
-                {productOpen ? (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 8 }}
-                    transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute left-1/2 top-full w-[min(92vw,30rem)] -translate-x-1/2 pt-3"
-                  >
-                    <div className="card grid gap-1 p-2">
-                      {productNav.items.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className="group/item flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-bg-soft"
-                        >
-                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-key/70 transition-transform group-hover/item:scale-150" />
-                          <span>
-                            <span className="block text-sm font-medium text-fg">
-                              {item.label}
-                            </span>
-                            <span className="block text-xs leading-relaxed text-faint">
-                              {item.description}
-                            </span>
-                          </span>
-                        </Link>
-                      ))}
-                    </div>
-                  </motion.div>
-                ) : null}
-              </AnimatePresence>
-            </div>
-
             {mainNav.map((item) => {
               const active = pathname === item.href;
               return (
@@ -145,20 +94,6 @@ export function SiteHeader() {
             className="mx-auto mt-2 w-full max-w-6xl px-6 lg:hidden"
           >
             <div className="card max-h-[75vh] overflow-y-auto p-4">
-              <p className="px-2 pb-1 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-faint">
-                Product
-              </p>
-              {productNav.items.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="block rounded-xl px-2 py-2.5 text-sm text-fg hover:bg-bg-soft"
-                >
-                  {item.label}
-                </Link>
-              ))}
-              <div className="my-3 h-px bg-line" />
               {mainNav.map((item) => (
                 <Link
                   key={item.href}

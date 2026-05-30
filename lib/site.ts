@@ -58,53 +58,17 @@ export const productNav: NavGroup = {
 
 export const mainNav: NavItem[] = [
   { label: "Docs", href: "/docs" },
-  { label: "Solutions", href: "/solutions" },
-  { label: "Use cases", href: "/use-cases" },
-  { label: "Developers", href: "/developers" },
   { label: "Pricing", href: "/pricing" },
 ];
 
 export const footerNav: NavGroup[] = [
   {
-    label: "Product",
+    label: "Links",
     items: [
       { label: "Docs", href: "/docs" },
-      { label: "On-Model Imagery", href: "/features/on-model" },
-      { label: "Virtual Try-On", href: "/features/try-on" },
-      { label: "Editing & Background", href: "/features/editing" },
-      { label: "Ad Creative", href: "/features/ad-creative" },
-      { label: "Enterprise API", href: "/features/enterprise-api" },
-    ],
-  },
-  {
-    label: "Developers",
-    items: [
-      { label: "Documentation", href: "/developers" },
-      { label: "API Reference", href: "/developers#reference" },
-      { label: "Live Demo", href: "/demo" },
-      { label: "Status", href: "/developers#status" },
-      { label: "Changelog", href: "/blog" },
-    ],
-  },
-  {
-    label: "Company",
-    items: [
-      { label: "About", href: "/about" },
-      { label: "Use cases", href: "/use-cases" },
-      { label: "Customers", href: "/customers" },
-      { label: "Blog", href: "/blog" },
-      { label: "Resources", href: "/resources" },
-      { label: "Contact", href: "/contact" },
-    ],
-  },
-  {
-    label: "Resources",
-    items: [
       { label: "Pricing", href: "/pricing" },
-      { label: "Solutions", href: "/solutions" },
-      { label: "Guides", href: "/resources" },
-      { label: "Security", href: "/enterprise-api" },
-      { label: "Careers", href: "/about#careers" },
+      { label: "Sign in", href: "/sign-in" },
+      { label: "Sign up", href: "/sign-up" },
     ],
   },
 ];
