@@ -345,6 +345,13 @@ article { max-width: 56rem; }
   background: transparent !important;
   box-shadow: none !important;
   display: block;
+  /* IMPORTANT: no backdrop-filter/filter/transform here. Any of those would make
+     this header the containing block for the position:fixed mobile sidebar drawer
+     (a child of .navbar), trapping the drawer inside the navbar's height instead
+     of letting it fill the viewport. The pill (.pill) carries the blur instead. */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
 }
 .navbar.navbar--fixed-top { position: sticky; }
 
