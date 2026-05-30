@@ -1,31 +1,20 @@
 import type { MetadataRoute } from "next";
 import { brand } from "@/lib/site";
 import { legalDocs } from "@/lib/legal";
-import { featureOrder } from "@/lib/features";
-import { useCases } from "@/lib/use-cases";
-import { posts } from "@/lib/blog";
 
 const SITE_URL = `https://${brand.domain}`;
 
+// Only the pages that are actually part of the live site (linked in the nav/footer)
+// are listed — we don't want crawlers indexing orphaned or placeholder routes.
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
     "",
     "/pricing",
-    "/solutions",
-    "/use-cases",
-    "/developers",
-    "/platform",
-    "/about",
-    "/customers",
-    "/contact",
-    "/demo",
-    "/resources",
-    "/blog",
+    "/faq",
     "/docs",
+    "/sign-in",
+    "/sign-up",
     ...legalDocs.map((d) => `/legal/${d.slug}`),
-    ...featureOrder.map((s) => `/features/${s}`),
-    ...useCases.map((u) => `/use-cases/${u.slug}`),
-    ...posts.map((p) => `/blog/${p.slug}`),
   ];
 
   return paths.map((path) => ({

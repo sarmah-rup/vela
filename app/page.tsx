@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   ArrowUpRight,
   Lock,
@@ -20,6 +21,8 @@ import { CategoryShowcase } from "@/components/sections/category-showcase";
 import { CountUp } from "@/components/ui/count-up";
 import { CtaSection } from "@/components/sections/cta";
 import { logoCloud, stats } from "@/lib/site";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 const trustPoints = [
   { icon: Lock, title: "100% privacy", desc: "Yours, end to end." },
@@ -51,10 +54,10 @@ export default function HomePage() {
                 </h1>
               </Reveal>
               <Reveal delay={0.12}>
-                <p className="max-w-sm text-pretty leading-relaxed text-muted">
-                  ImagePipeline helps fashion and ecommerce teams produce authentic,
-                  on-brand imagery at scale, with full creative control. No
-                  studio, no photoshoot.
+                <p className="max-w-md text-pretty leading-relaxed text-muted">
+                  ImagePipeline is the image AI API for fashion and ecommerce —
+                  turn flat-lays into on-model shots, run virtual try-on, and
+                  relight backgrounds from one API. No studio, no photoshoot.
                 </p>
               </Reveal>
               <Reveal delay={0.18}>

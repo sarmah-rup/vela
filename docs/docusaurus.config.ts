@@ -37,6 +37,35 @@ const config: Config = {
     'https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap',
   ],
 
+  // Product + API structured data on every docs page (AI/search citeability).
+  headTags: [
+    {
+      tagName: 'script',
+      attributes: { type: 'application/ld+json' },
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'Organization',
+            '@id': 'https://imagepipeline.io/#organization',
+            name: 'ImagePipeline',
+            url: 'https://imagepipeline.io',
+            logo: 'https://imagepipeline.io/icon.svg',
+          },
+          {
+            '@type': 'WebAPI',
+            name: 'ImagePipeline API',
+            description:
+              'REST API for image generation, virtual try-on, identity, background & relight, and ad creative. Async jobs with polling or webhooks.',
+            url: 'https://imagepipeline.io/docs/api',
+            documentation: 'https://imagepipeline.io/docs',
+            provider: { '@id': 'https://imagepipeline.io/#organization' },
+          },
+        ],
+      }),
+    },
+  ],
+
   presets: [
     [
       'classic',
