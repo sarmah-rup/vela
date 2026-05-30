@@ -62,7 +62,7 @@
   --ifm-background-surface-color: #ffffff; /* cards / navbar stay white */
   --ifm-font-color-base: #0e0f12;
   --ifm-heading-color: #0e0f12;
-  --ifm-navbar-background-color: rgba(255, 255, 255, 0.72);
+  --ifm-navbar-background-color: #ffffff; /* opaque: also backs the mobile drawer */
   --ifm-toc-border-color: var(--vela-border);
   --ifm-color-emphasis-200: #f1f1f4;
   --ifm-color-emphasis-300: var(--vela-border);
@@ -93,7 +93,7 @@
   --vela-muted: #9a9da6;
   --vela-border: #23252b;
   --vela-subtle: #14151a;
-  --ifm-navbar-background-color: rgba(11, 12, 14, 0.72);
+  --ifm-navbar-background-color: #0b0c0e;
   --ifm-toc-border-color: #23252b;
   --ifm-color-emphasis-200: #1a1c21;
   --ifm-color-emphasis-300: #23252b;
@@ -354,6 +354,16 @@ article { max-width: 56rem; }
   filter: none !important;
 }
 .navbar.navbar--fixed-top { position: sticky; }
+
+/* Mobile drawer: force a fully opaque panel (the page content must not show
+   through it) with a clean separating edge. */
+.navbar-sidebar {
+  background: #ffffff;
+  box-shadow: 0 0 40px -8px rgba(0, 0, 0, 0.25);
+}
+.navbar-sidebar__backdrop {
+  background: rgba(11, 12, 14, 0.5);
+}
 
 /* ============================================================= Footer */
 .footer {

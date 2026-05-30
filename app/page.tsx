@@ -1,4 +1,13 @@
-import { ArrowUpRight } from "lucide-react";
+import {
+  ArrowUpRight,
+  Lock,
+  ImageOff,
+  ShieldCheck,
+  Sparkles,
+  Package,
+  Webhook,
+  RefreshCw,
+} from "lucide-react";
 import { Container, SectionHeading } from "@/components/ui/primitives";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
@@ -8,15 +17,28 @@ import { HeroRotator } from "@/components/sections/hero-rotator";
 import { Testimonials } from "@/components/sections/testimonials";
 import { StatsShowcase } from "@/components/sections/stats-showcase";
 import { CategoryShowcase } from "@/components/sections/category-showcase";
-import { StatsBand } from "@/components/sections/stats-band";
+import { CountUp } from "@/components/ui/count-up";
 import { CtaSection } from "@/components/sections/cta";
-import { logoCloud } from "@/lib/site";
+import { logoCloud, stats } from "@/lib/site";
+
+const trustPoints = [
+  { icon: Lock, title: "100% privacy", desc: "Yours, end to end." },
+  { icon: ImageOff, title: "We don't store your images", desc: "Never retained." },
+  { icon: ShieldCheck, title: "SOC 2 compliant", desc: "Audited controls." },
+  { icon: Sparkles, title: "Responsible AI", desc: "Provenance built in." },
+];
+
+const devPoints = [
+  { icon: Package, title: "Python & JS SDKs", desc: "Drop-in typed clients." },
+  { icon: Webhook, title: "Webhooks on output", desc: "Callback when a job lands." },
+  { icon: RefreshCw, title: "Poll or no-poll", desc: "Poll status, or skip it." },
+];
 
 export default function HomePage() {
   return (
     <>
       {/* ── Hero (editorial, image-led) ─────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#F0F0F0] pt-24 sm:pt-24 lg:pt-0">
+      <section className="relative overflow-hidden bg-[#F0F0F0] pt-32 sm:pt-32 lg:pt-0">
         <Container>
           <div className="grid items-center gap-2 lg:grid-cols-[0.8fr_1.2fr] lg:gap-10">
             {/* Copy */}
@@ -100,6 +122,39 @@ export default function HomePage() {
         </Reveal>
       </section>
 
+      {/* ── Built for developers ───────────────────────────────────────── */}
+      <section className="py-16">
+        <Container className="flex flex-col items-center gap-10">
+          <Reveal className="text-center">
+            <h2 className="font-display text-3xl font-medium tracking-tight text-fill sm:text-4xl">
+              Built for developers
+            </h2>
+          </Reveal>
+          <Reveal delay={0.06} className="w-full">
+            <div className="mx-auto grid max-w-4xl gap-x-8 gap-y-10 sm:grid-cols-3">
+              {devPoints.map(({ icon: Icon, title, desc }) => (
+                <div
+                  key={title}
+                  className="flex flex-col items-center gap-3 text-center"
+                >
+                  <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-key-soft text-key">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <h3 className="text-base font-semibold text-fg">{title}</h3>
+                  <p className="text-sm leading-relaxed text-muted">{desc}</p>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+          <Reveal delay={0.12}>
+            <Button href="/docs" variant="ghost">
+              Learn more
+              <ArrowUpRight className="h-4 w-4" />
+            </Button>
+          </Reveal>
+        </Container>
+      </section>
+
       {/* ── Stats over imagery ─────────────────────────────────────────── */}
       <StatsShowcase />
 
@@ -141,9 +196,40 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* ── Stats ──────────────────────────────────────────────────────── */}
-      <section className="py-12">
-        <StatsBand />
+      {/* ── Built for trust (4 points + 4 stats, one bordered grid) ────── */}
+      <section className="py-16">
+        <Container>
+          <Reveal>
+            <div className="card overflow-hidden">
+              <div className="grid grid-cols-2 gap-px bg-line sm:grid-cols-4">
+                {trustPoints.map(({ icon: Icon, title, desc }) => (
+                  <div
+                    key={title}
+                    className="flex flex-col items-center gap-3 bg-surface p-6 text-center sm:p-7"
+                  >
+                    <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-key-soft text-key">
+                      <Icon className="h-5 w-5" />
+                    </span>
+                    <h3 className="text-base font-semibold text-fg">{title}</h3>
+                    <p className="text-sm leading-relaxed text-muted">{desc}</p>
+                  </div>
+                ))}
+                {stats.map((s) => (
+                  <div
+                    key={s.label}
+                    className="flex flex-col items-center gap-1.5 bg-surface p-6 text-center sm:p-7"
+                  >
+                    <CountUp
+                      value={s.value}
+                      className="font-display text-3xl font-medium tracking-tight text-fill sm:text-4xl"
+                    />
+                    <span className="text-sm text-muted">{s.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        </Container>
       </section>
 
       {/* ── CTA ────────────────────────────────────────────────────────── */}

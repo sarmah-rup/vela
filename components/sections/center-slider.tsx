@@ -4,6 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { DevTag } from "@/components/ui/dev-tag";
 import { cn } from "@/lib/utils";
 
 // Center-focused, infinitely looping carousel. The middle slide is zoomed in,
@@ -140,6 +141,7 @@ export function CenterSlider() {
                       <span className="h-1.5 w-1.5 rounded-full bg-white" />
                       {s.brand}
                     </motion.span>
+                    {isActive ? <DevTag path="/generate/image/v1" /> : null}
                   </div>
                 </div>
               </motion.button>

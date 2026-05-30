@@ -4,6 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import { Container, SectionHeading } from "@/components/ui/primitives";
 import { Reveal } from "@/components/ui/reveal";
+import { DevTag } from "@/components/ui/dev-tag";
 import { cn } from "@/lib/utils";
 
 // Category switcher: pick a use-case pill and the showcase image swaps, with a
@@ -14,30 +15,35 @@ const categories = [
     label: "Lifestyle",
     src: "/img/ip2/697623e2c1bb8c1db4a9c872_Botika_Homepage_BotikaCreatorProgram.avif",
     inset: "/img/ip/flat-jacket.webp",
+    prompt: "candid lifestyle, natural daylight, city street...",
   },
   {
     id: "editorial",
     label: "Editorial",
     src: "/img/ip2/6976234b84e6fbece572e594_Botika_HomePage_Editorials.avif",
     inset: "/img/ip/flat-dress.webp",
+    prompt: "high-fashion editorial, dramatic rim light...",
   },
   {
     id: "on-model",
     label: "On-model",
     src: "/img/ip2/694d1aba6f75e6997aa01475_Botika_Homepage_Client_Forever21.avif",
     inset: "/img/ip/flat-shirt.avif",
+    prompt: "on-model flat-lay, neutral studio, full body...",
   },
   {
     id: "studio",
     label: "Studio",
     src: "/img/ip2/6976234bc173726a3281e3e5_Botika_HomePage_IncreaseDiversity.avif",
     inset: "/img/ip/product-bag.webp",
+    prompt: "studio product, seamless backdrop, soft shadow...",
   },
   {
     id: "campaign",
     label: "Campaign",
     src: "/img/ip2/6976234b086075b0811ad678_Botika_HomePage_GetToMarketFaster.avif",
     inset: "/img/ip/flat-jacket.webp",
+    prompt: "campaign hero, bold styling, wide crop...",
   },
 ];
 
@@ -106,6 +112,18 @@ export function CategoryShowcase() {
                 />
               ))}
             </div>
+
+            {categories.map((c, i) => (
+              <DevTag
+                key={c.id}
+                path="/generate/image/v1"
+                prompt={c.prompt}
+                className={cn(
+                  "transition-opacity duration-700 ease-out",
+                  i === active ? "opacity-100" : "opacity-0",
+                )}
+              />
+            ))}
           </div>
         </Reveal>
       </Container>

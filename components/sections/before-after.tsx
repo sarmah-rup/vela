@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Placeholder } from "@/components/ui/placeholder";
+import { DevTag } from "@/components/ui/dev-tag";
 import { cn } from "@/lib/utils";
 
 // Interactive before/after reveal slider. Drag the handle or use arrow keys.
@@ -109,6 +110,8 @@ export function BeforeAfter({
           </svg>
         </button>
       </div>
+
+      <DevTag compact />
     </div>
   );
 }

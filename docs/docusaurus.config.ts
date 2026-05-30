@@ -105,12 +105,14 @@ const config: Config = {
     navbar: {
       items: [
         { to: '/', label: 'Docs' },
-        // The marketing pages live outside the docs baseUrl (/docs/), on the Next
-        // app at the site root. `pathname://` tells Docusaurus to link to the raw
-        // path without prepending baseUrl (otherwise /pricing → /docs/pricing).
-        { to: 'pathname:///pricing', label: 'Pricing' },
-        { to: 'pathname:///sign-in', label: 'Sign in' },
-        { to: 'pathname:///sign-up', label: 'Try the API' },
+        // The marketing pages live OUTSIDE the docs baseUrl (/docs/), at the Next
+        // app's site root. Docusaurus link items always prepend baseUrl (even
+        // `pathname://` does — it only disables client routing), turning /pricing
+        // into /docs/pricing. Raw `html` items bypass all link processing, so the
+        // anchors hit the site root as intended.
+        { type: 'html', value: '<a class="menu__link" href="/pricing">Pricing</a>' },
+        { type: 'html', value: '<a class="menu__link" href="/sign-in">Sign in</a>' },
+        { type: 'html', value: '<a class="menu__link" href="/sign-up">Try the API</a>' },
       ],
     },
     footer: {

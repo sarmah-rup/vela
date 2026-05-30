@@ -3,15 +3,32 @@
 import * as React from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { DevTag } from "@/components/ui/dev-tag";
 
 // Rotating hero image, à la Botika: the on-model shot cross-fades through a
 // set of AI-generated looks. Portrait crops (900×1470) so the model stays
 // framed inside the tall hero card.
 const looks = [
-  { src: "/img/ip2/697a476b34d4315d5a3e2b99_Botika_Home_AIGeneratedModels_Header_2_Mobile.avif", brand: "Anna Nova" },
-  { src: "/img/ip2/69773c05e94e992c715a0315_Botika_Homepage_BruneteAIModel.avif", brand: "Marisol" },
-  { src: "/img/ip2/697a476bdb5b305997956a82_Botika_Home_AIGeneratedModels_Header_6_Mobile.avif", brand: "Northwind" },
-  { src: "/img/ip2/69773c05ff330c75b2550fc3_Botika_Homepage_WhiteCurlyAIModel_Mobile.avif", brand: "Kestrel" },
+  {
+    src: "/img/ip2/697a476b34d4315d5a3e2b99_Botika_Home_AIGeneratedModels_Header_2_Mobile.avif",
+    brand: "Anna Nova",
+    prompt: "full-body on-model, soft window light, linen set...",
+  },
+  {
+    src: "/img/ip2/69773c05e94e992c715a0315_Botika_Homepage_BruneteAIModel.avif",
+    brand: "Marisol",
+    prompt: "brunette model, warm studio tone, editorial...",
+  },
+  {
+    src: "/img/ip2/697a476bdb5b305997956a82_Botika_Home_AIGeneratedModels_Header_6_Mobile.avif",
+    brand: "Northwind",
+    prompt: "outdoor lifestyle, golden-hour denim...",
+  },
+  {
+    src: "/img/ip2/69773c05ff330c75b2550fc3_Botika_Homepage_WhiteCurlyAIModel_Mobile.avif",
+    brand: "Kestrel",
+    prompt: "curly hair, clean pastel studio, beauty...",
+  },
 ];
 
 export function HeroRotator() {
@@ -43,6 +60,8 @@ export function HeroRotator() {
             className="object-cover object-bottom"
             priority={i === 0}
           />
+          {/* Inside the cross-fading layer, so the prompt fades with its image. */}
+          <DevTag path="/generate/image/v1" prompt={looks[i].prompt} />
         </motion.div>
       </AnimatePresence>
     </div>

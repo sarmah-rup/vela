@@ -32,9 +32,7 @@
   gap: 1rem;
   padding: 0.5rem 0.75rem 0.5rem 1rem;
   border-radius: 999px;
-  background: color-mix(in oklab, #ffffff 99%, transparent);
-  backdrop-filter: blur(16px) saturate(1.2);
-  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  background: #ffffff;
   border: 1px solid var(--m-line);
   box-shadow: 0 20px 50px -30px rgba(0, 0, 0, 0.5);
 }
@@ -51,19 +49,13 @@
   text-decoration: none;
 }
 .logoMark {
-  display: grid;
-  place-items: center;
-  height: 2rem;
-  width: 2rem;
-  border-radius: 10px;
-  background: var(--m-key);
-  color: #fff;
-  font-weight: 700;
-  font-size: 1rem;
+  height: 1.75rem;
+  width: 1.75rem;
 }
 .logoWord {
   font-weight: 600;
-  font-size: 1.125rem;
+  font-size: 1.5rem;
+  line-height: 1;
   letter-spacing: -0.03em;
   color: var(--m-fg);
 }
@@ -150,7 +142,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  border-radius: 999px;
+  border-radius: 12px; /* match the homepage rounded-xl Button */
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
   font-weight: 600;
@@ -180,4 +172,53 @@
   .nav { display: flex; }
   .cta { display: flex; }
   .burger { display: none; }
+  .mobileMenu { display: none; }
+}
+
+/* Landing-page mobile dropdown — a home-style card under the pill. */
+.mobileMenu {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  background: #ffffff;
+  border: 1px solid var(--m-line);
+  border-radius: 22px;
+  box-shadow: 0 24px 60px -32px rgba(0, 0, 0, 0.55);
+}
+.mobileItem {
+  display: block;
+  border-radius: 12px;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.95rem;
+  color: var(--m-fg);
+  text-decoration: none;
+}
+.mobileItem:hover {
+  background: var(--m-bg-soft);
+  text-decoration: none;
+}
+.mobileDivider {
+  height: 1px;
+  background: var(--m-line);
+  margin: 0.5rem 0;
+}
+.mobileTryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.25rem;
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: var(--m-key);
+  color: #fff;
+  text-decoration: none;
+}
+.mobileTryBtn:hover {
+  background: var(--m-key-deep);
+  color: #fff;
+  text-decoration: none;
 }
