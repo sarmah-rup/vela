@@ -12,12 +12,15 @@ const corners = {
 export function DevTag({
   path,
   prompt,
+  body,
   corner = "br",
   compact = false,
   className,
 }: {
   path?: string;
   prompt?: string;
+  /** Multi-line JSON request body for the larger "developer" block. */
+  body?: string;
   corner?: keyof typeof corners;
   compact?: boolean;
   className?: string;
@@ -36,7 +39,10 @@ export function DevTag({
         <span className="font-semibold text-emerald-400/90">POST</span>
         {!compact && path ? <span className="text-white/60">{path}</span> : null}
       </span>
-      {!compact && prompt ? (
+      {!compact && body ? (
+        <pre className="mt-1 whitespace-pre text-white/45">{body}</pre>
+      ) : null}
+      {!compact && !body && prompt ? (
         <span className="text-white/40">
           prompt: &quot;{prompt}&quot;
           <span className="ml-px inline-block animate-pulse text-emerald-400/80">▋</span>

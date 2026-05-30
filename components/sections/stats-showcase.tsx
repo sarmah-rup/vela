@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Container } from "@/components/ui/primitives";
 import { Reveal } from "@/components/ui/reveal";
+import { DevTag } from "@/components/ui/dev-tag";
 
 const stats = ["100M+ images edited"];
 
@@ -31,6 +32,18 @@ export function StatsShowcase() {
           </div>
         </Reveal>
       </Container>
+
+      {/* Developer payload cue, larger than the imagery chips. */}
+      <DevTag
+        corner="br"
+        className="hidden sm:flex sm:right-10 sm:bottom-14"
+        path="/generate/image/v1"
+        body={`{
+  "product_url": "https://cdn.brand.com/product-image.jpg",
+  "prompt": "on-model, soft daylight...",
+  "num_images": 1
+}`}
+      />
     </section>
   );
 }
