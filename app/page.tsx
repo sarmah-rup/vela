@@ -1,9 +1,10 @@
+import { ArrowUpRight } from "lucide-react";
 import { Container, SectionHeading } from "@/components/ui/primitives";
+import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
 import { CenterSlider } from "@/components/sections/center-slider";
 import { BeforeAfter } from "@/components/sections/before-after";
 import { HeroRotator } from "@/components/sections/hero-rotator";
-import { WorkflowTabs } from "@/components/sections/workflow-tabs";
 import { Testimonials } from "@/components/sections/testimonials";
 import { StatsShowcase } from "@/components/sections/stats-showcase";
 import { CategoryShowcase } from "@/components/sections/category-showcase";
@@ -15,11 +16,11 @@ export default function HomePage() {
   return (
     <>
       {/* ── Hero (editorial, image-led) ─────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#F0F0F0] pt-16 sm:pt-20">
+      <section className="relative overflow-hidden bg-[#F0F0F0] pt-16 sm:pt-20 lg:pt-0">
         <Container>
           <div className="grid items-center gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-10">
             {/* Copy */}
-            <div className="flex flex-col items-start gap-6 pb-10 lg:pb-16">
+            <div className="flex flex-col items-start gap-6 pb-10 lg:mt-4 lg:pb-16">
               <Reveal delay={0.04}>
                 <h1 className="font-display text-4xl leading-[1.06] tracking-tight sm:text-5xl">
                   <span className="font-normal text-muted">On-model imagery</span>
@@ -34,10 +35,21 @@ export default function HomePage() {
                   studio, no photoshoot.
                 </p>
               </Reveal>
+              <Reveal delay={0.18}>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Button href="/contact" size="lg" className="group">
+                    Book a Call
+                    <ArrowUpRight className="h-4 w-4 transition-transform duration-200 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </Button>
+                  <Button href="/docs" variant="soft" size="lg">
+                    Docs
+                  </Button>
+                </div>
+              </Reveal>
             </div>
 
             {/* Image — rotating AI-generated looks */}
-            <Reveal delay={0.1}>
+            <Reveal delay={0.1} className="w-full lg:-mt-16">
               <HeroRotator />
             </Reveal>
           </div>
@@ -65,20 +77,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── One platform (catalogue tabs) ──────────────────────────────── */}
-      <section className="py-20">
-        <Container className="flex flex-col items-center gap-8">
-          <Reveal>
-            <SectionHeading
-              eyebrow="One platform"
-              title="One platform for every fashion workflow."
-            />
-          </Reveal>
-          <Reveal delay={0.12} className="w-full">
-            <WorkflowTabs />
-          </Reveal>
-        </Container>
-      </section>
+      {/* ── Category showcase ──────────────────────────────────────────── */}
+      <CategoryShowcase />
 
       {/* ── Editorial gallery ──────────────────────────────────────────── */}
       <section className="py-12">
@@ -105,9 +105,6 @@ export default function HomePage() {
 
       {/* ── Testimonials ───────────────────────────────────────────────── */}
       <Testimonials />
-
-      {/* ── Category showcase ──────────────────────────────────────────── */}
-      <CategoryShowcase />
 
       {/* ── Before / after ─────────────────────────────────────────────── */}
       <section className="py-20">
@@ -154,7 +151,7 @@ export default function HomePage() {
         <CtaSection
           title="Replace the photoshoot with an API call."
           subtitle="Start free with 250 generations. Bring a flat-lay and see it come back on-model in minutes."
-          primary={null}
+          primary={{ label: "Talk to us", href: "/contact" }}
           secondary={null}
         />
       </section>

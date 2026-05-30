@@ -118,7 +118,7 @@ export function Pricing() {
   const [yearly, setYearly] = React.useState(true);
 
   return (
-    <section className="relative py-20 sm:py-28">
+    <section className="relative pb-20 pt-24 sm:pb-28 sm:pt-24">
       <Container>
         <div className="mx-auto mb-10 max-w-2xl text-center">
           <Reveal>

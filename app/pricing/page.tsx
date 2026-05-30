@@ -39,7 +39,6 @@ export default function PricingPage() {
   return (
     <>
       {/* Pricing renders its own eyebrow + heading + toggle (see components/sections/pricing.tsx). */}
-      <div className="pt-28 sm:pt-36" />
       <Pricing />
 
       <section className="py-20">
