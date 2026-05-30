@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { getOrCreateUser } from "@/lib/user";
+import { getAppUser } from "@/lib/user";
 import { stripe } from "@/lib/stripe";
 
 // POST /api/billing/portal — open the Stripe Customer Portal to manage/cancel a plan.
 export async function POST() {
-  const user = await getOrCreateUser();
+  const user = await getAppUser();
   if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   if (!user.stripeCustomerId) {
     return NextResponse.json({ error: "no_subscription" }, { status: 400 });

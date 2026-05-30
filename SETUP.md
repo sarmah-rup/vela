@@ -1,8 +1,10 @@
-# Auth + Billing setup (Clerk · Neon · Stripe)
+# Auth + Billing setup (Clerk · Stripe)
 
-The dashboard at **`/app`** lets a signed-in user create/revoke **API keys** and manage a
-**subscription**. Auth is Clerk (Google + GitHub), data is Neon Postgres (Drizzle), billing
-is Stripe subscriptions. Everything reads from `.env.local` — fill in the placeholders below.
+The dashboard at **`/app`** lets a signed-in user view and manage their **subscription**.
+Auth is Clerk (Google + GitHub), billing is Stripe subscriptions. **There is no database** —
+subscription state is stored in the Clerk user's `privateMetadata`, kept in sync by the Stripe
+webhook. API keys are issued out-of-band (AWS); this app does not store them. Everything reads
+from `.env.local` — fill in the placeholders below.
 
 ```
 localhost:3000        → marketing site (Vela)
@@ -10,6 +12,9 @@ localhost:3000/docs   → ImagePipeline docs
 localhost:3000/app    → dashboard (protected — sign in required)
 localhost:3000/sign-in, /sign-up → Clerk auth (Google + GitHub)
 ```
+
+The frontend authenticates to your backend with the **Clerk session token (bearer)**; API
+calls from outside the browser use an **API key issued by AWS** — neither is managed here.
 
 ## 1. Clerk (auth)
 
@@ -20,21 +25,10 @@ localhost:3000/sign-in, /sign-up → Clerk auth (Google + GitHub)
    - `CLERK_SECRET_KEY`
 
 The sign-in/up routes and redirects are already configured via env. `proxy.ts` protects
-`/app`, `/api/keys`, and `/api/billing`.
+`/app` and `/api/billing`. Subscription state is written to the user's `privateMetadata`
+(`plan`, `planStatus`, `stripeCustomerId`, `stripeSubscriptionId`, `currentPeriodEnd`).
 
-## 2. Neon Postgres (database)
-
-1. Create a project at <https://console.neon.tech> and copy the connection string into
-   `DATABASE_URL` in `.env.local`.
-2. Create the tables:
-   ```bash
-   npx drizzle-kit push
-   ```
-   (Browse data any time with `npx drizzle-kit studio`.)
-
-Schema lives in `lib/db/schema.ts`: `users`, `api_keys`, `processed_stripe_events`.
-
-## 3. Stripe (billing)
+## 2. Stripe (billing)
 
 1. In the Stripe dashboard, create **two recurring Products/Prices** (Pro, Scale) and copy
    their price IDs into `NEXT_PUBLIC_STRIPE_PRICE_PRO` / `NEXT_PUBLIC_STRIPE_PRICE_SCALE`.
@@ -48,21 +42,20 @@ Schema lives in `lib/db/schema.ts`: `users`, `api_keys`, `processed_stripe_event
    Events handled: `checkout.session.completed`,
    `customer.subscription.created|updated|deleted`.
 
-## 4. Run
+The webhook maps a Stripe subscription back to its Clerk user via the `userId` we stamp on
+both the subscription and customer metadata, then writes the plan into Clerk. Re-delivered
+events are safe to reprocess (writing the same plan twice is a no-op), so no idempotency log
+is needed.
+
+## 3. Run
 
 ```bash
 npm run dev          # http://localhost:3000
 ```
 
-Sign up → land on `/app` → **Create key** (copy it once) and **Choose Pro/Scale** to run a
-real Stripe Checkout. After payment, the webhook syncs `users.plan` and the dashboard shows
-the active plan. **Manage billing** opens the Stripe Customer Portal.
-
-## How API-key auth works
-
-Keys are issued as `sk_live_<random>`. Only a **SHA-256 hash** is stored (`lib/api-keys.ts`);
-the plaintext is shown exactly once. To authenticate an incoming API request on your
-backend, hash the presented key and look it up in `api_keys` (ignoring `revoked_at` rows).
+Sign up → land on `/app` → **Choose Pro/Scale** to run a real Stripe Checkout. After payment,
+the webhook syncs the plan into Clerk metadata and the dashboard shows the active plan.
+**Manage billing** opens the Stripe Customer Portal.
 
 ## Files
 
@@ -71,11 +64,9 @@ proxy.ts                         Clerk middleware (Next 16 convention)
 app/layout.tsx                   ClerkProvider + SiteChrome
 app/sign-in, app/sign-up         Clerk auth pages (Google + GitHub)
 app/app/                         Dashboard (layout, page, dashboard-client)
-app/api/keys/                    Create / list / revoke API keys
 app/api/billing/checkout         Start a subscription Checkout
 app/api/billing/portal           Open the Stripe Customer Portal
-app/api/stripe/webhook           Sync subscription state (signature-verified)
-lib/db/                          Drizzle schema + Neon client
+app/api/stripe/webhook           Sync subscription state into Clerk (signature-verified)
+lib/user.ts                      Read/write billing state on Clerk privateMetadata
 lib/stripe.ts, lib/plans.ts      Stripe client + subscription tiers
-lib/api-keys.ts, lib/user.ts     Key generation + user resolution
 ```

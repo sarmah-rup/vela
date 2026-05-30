@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
-import { eq } from "drizzle-orm";
-import { db } from "@/lib/db";
-import { users, processedStripeEvents } from "@/lib/db/schema";
 import { stripe } from "@/lib/stripe";
 import { planByPriceId } from "@/lib/plans";
+import { setBillingMetadata } from "@/lib/user";
 
 // Stripe needs the raw body to verify the signature — read it as text, don't parse.
 export async function POST(req: Request) {
@@ -25,34 +23,39 @@ export async function POST(req: Request) {
     );
   }
 
-  // Idempotency — ignore an event we've already handled.
-  const seen = await db
-    .insert(processedStripeEvents)
-    .values({ id: event.id })
-    .onConflictDoNothing()
-    .returning();
-  if (seen.length === 0) return NextResponse.json({ received: true, duplicate: true });
+  // Map a subscription back to its Clerk user. We stamp `userId` on both the
+  // subscription metadata (at checkout) and the customer metadata (at creation),
+  // so either is enough — no local lookup table needed.
+  async function resolveUserId(sub: Stripe.Subscription): Promise<string | null> {
+    if (typeof sub.metadata?.userId === "string") return sub.metadata.userId;
+    const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
+    const customer = await stripe.customers.retrieve(customerId);
+    if (!customer.deleted && typeof customer.metadata?.userId === "string") {
+      return customer.metadata.userId;
+    }
+    return null;
+  }
 
   async function syncSubscription(sub: Stripe.Subscription) {
-    const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
+    const userId = await resolveUserId(sub);
+    if (!userId) return; // nothing we can attribute this to
+
     const priceId = sub.items.data[0]?.price?.id ?? null;
-    const plan = sub.status === "active" || sub.status === "trialing" ? planByPriceId(priceId) : "free";
+    const plan =
+      sub.status === "active" || sub.status === "trialing" ? planByPriceId(priceId) : "free";
     // `current_period_end` lives on the subscription (older API) or its items (newer).
     const periodEnd =
       (sub as { current_period_end?: number }).current_period_end ??
       (sub.items.data[0] as { current_period_end?: number } | undefined)?.current_period_end ??
       null;
 
-    await db
-      .update(users)
-      .set({
-        plan,
-        planStatus: sub.status,
-        stripeSubscriptionId: sub.id,
-        currentPeriodEnd: periodEnd ? new Date(periodEnd * 1000) : null,
-        updatedAt: new Date(),
-      })
-      .where(eq(users.stripeCustomerId, customerId));
+    // Writing the same plan twice is harmless, so re-delivered events need no dedupe log.
+    await setBillingMetadata(userId, {
+      plan,
+      planStatus: sub.status,
+      stripeSubscriptionId: sub.id,
+      currentPeriodEnd: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
+    });
   }
 
   switch (event.type) {

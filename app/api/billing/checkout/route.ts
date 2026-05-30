@@ -1,15 +1,12 @@
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
-import { db } from "@/lib/db";
-import { users } from "@/lib/db/schema";
-import { getOrCreateUser } from "@/lib/user";
+import { getAppUser, setBillingMetadata } from "@/lib/user";
 import { stripe } from "@/lib/stripe";
 import { PLANS, type PlanKey } from "@/lib/plans";
 
 // POST /api/billing/checkout { plan: "pro" | "scale" }
 // Creates (or reuses) a Stripe customer and returns a subscription Checkout URL.
 export async function POST(req: Request) {
-  const user = await getOrCreateUser();
+  const user = await getAppUser();
   if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
   const { plan } = (await req.json().catch(() => ({}))) as { plan?: PlanKey };
@@ -18,7 +15,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "invalid_plan" }, { status: 400 });
   }
 
-  // Ensure a Stripe customer exists for this user.
+  // Ensure a Stripe customer exists for this user; remember it on the Clerk user so
+  // the portal and webhook can map customer ⇆ user without a database.
   let customerId = user.stripeCustomerId;
   if (!customerId) {
     const customer = await stripe.customers.create({
@@ -26,7 +24,7 @@ export async function POST(req: Request) {
       metadata: { userId: user.id },
     });
     customerId = customer.id;
-    await db.update(users).set({ stripeCustomerId: customerId }).where(eq(users.id, user.id));
+    await setBillingMetadata(user.id, { stripeCustomerId: customerId });
   }
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";

@@ -9,7 +9,6 @@ const clerkConfigured =
 
 const isProtected = createRouteMatcher([
   "/app(.*)",
-  "/api/keys(.*)",
   "/api/billing(.*)",
 ]);
 
