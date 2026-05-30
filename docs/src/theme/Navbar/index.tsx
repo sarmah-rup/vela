@@ -40,7 +40,11 @@ export default function Navbar(): ReactNode {
   return (
     // Keep the `navbar` class — Docusaurus's TOC-highlight hook measures
     // `.navbar`.clientHeight; without it, scroll pages (e.g. quickstart) crash.
-    <header className={`navbar ${styles.wrap}`}>
+    <header
+      className={`navbar ${styles.wrap}${
+        mobileSidebar.shown ? " navbar-sidebar--show" : ""
+      }`}
+    >
       <div className={styles.inner}>
         <div className={styles.pill}>
           {/* Logo — matches the marketing wordmark */}
@@ -78,7 +82,14 @@ export default function Navbar(): ReactNode {
           </button>
         </div>
       </div>
-      {/* Keep Docusaurus's mobile drawer (holds the docs sidebar on small screens). */}
+      {/* Backdrop + Docusaurus mobile drawer (holds the docs sidebar on small
+          screens). The `navbar-sidebar--show` class on the header above is what
+          reveals the drawer; without the backdrop the open sidebar can't be closed. */}
+      <div
+        role="presentation"
+        className="navbar-sidebar__backdrop"
+        onClick={() => mobileSidebar.toggle()}
+      />
       <NavbarMobileSidebar />
     </header>
   );

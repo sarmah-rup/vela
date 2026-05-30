@@ -125,6 +125,9 @@
 
 /* ---------------------------------------------------------- Quickstart row */
 .codeRow { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 3.5rem; align-items: center; }
+/* Let the code column shrink instead of forcing the grid wider than the viewport
+   (grid items default to min-width:auto, which overflows on long code lines). */
+.codeRow > * { min-width: 0; }
 .codeCopy .kicker { text-align: left; }
 .codeCopy .sectionTitle { font-size: clamp(1.7rem, 3vw, 2.2rem); }
 .codeCopy .sectionLede { margin-left: 0; }

@@ -99,8 +99,17 @@ const config: Config = {
       disableSwitch: true, // light-only, matching the marketing site
       respectPrefersColorScheme: false,
     },
-    // The navbar is fully replaced by the swizzled marketing header at
-    // src/theme/Navbar — no default Docusaurus navbar items are used.
+    // The DESKTOP navbar is fully replaced by the swizzled marketing header at
+    // src/theme/Navbar (it hardcodes its links and ignores these items). These
+    // items exist so the default mobile sidebar drawer has something to show.
+    navbar: {
+      items: [
+        { to: '/', label: 'Docs' },
+        { href: '/pricing', label: 'Pricing' },
+        { href: '/sign-in', label: 'Sign in' },
+        { href: '/sign-up', label: 'Try the API' },
+      ],
+    },
     footer: {
       style: 'light',
       links: [

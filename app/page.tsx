@@ -16,11 +16,11 @@ export default function HomePage() {
   return (
     <>
       {/* ── Hero (editorial, image-led) ─────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#F0F0F0] pt-16 sm:pt-20 lg:pt-0">
+      <section className="relative overflow-hidden bg-[#F0F0F0] pt-24 sm:pt-24 lg:pt-0">
         <Container>
-          <div className="grid items-center gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-10">
+          <div className="grid items-center gap-2 lg:grid-cols-[0.8fr_1.2fr] lg:gap-10">
             {/* Copy */}
-            <div className="flex flex-col items-start gap-6 pb-10 lg:mt-4 lg:pb-16">
+            <div className="flex flex-col items-start gap-6 pb-0 lg:mt-4 lg:pb-16">
               <Reveal delay={0.04}>
                 <h1 className="font-display text-4xl leading-[1.06] tracking-tight sm:text-5xl">
                   <span className="font-normal text-muted">On-model imagery</span>
