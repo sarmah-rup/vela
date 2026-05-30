@@ -12,20 +12,9 @@ import styles from './styles.module.css';
 
 type Item = {label: string; href: string; external?: boolean};
 
-const PRODUCT: Item[] = [
-  {label: 'On-Model Imagery', href: '/features/on-model'},
-  {label: 'Virtual Try-On', href: '/features/try-on'},
-  {label: 'Editing & Background', href: '/features/editing'},
-  {label: 'Ad Creative', href: '/features/ad-creative'},
-  {label: 'Enterprise API', href: '/features/enterprise-api'},
-];
-
-// Mirrors mainNav in the Next app (Platform → Docs).
+// Mirrors mainNav in the Next app.
 const MAIN: Item[] = [
   {label: 'Docs', href: '/docs/intro'},
-  {label: 'Solutions', href: '/solutions'},
-  {label: 'Use cases', href: '/use-cases'},
-  {label: 'Developers', href: '/developers'},
   {label: 'Pricing', href: '/pricing'},
 ];
 
@@ -47,7 +36,6 @@ function NavLink({item, className}: {item: Item; className?: string}) {
 
 export default function Navbar(): ReactNode {
   const mobileSidebar = useNavbarMobileSidebar();
-  const [productOpen, setProductOpen] = React.useState(false);
 
   return (
     // Keep the `navbar` class — Docusaurus's TOC-highlight hook measures
@@ -61,39 +49,13 @@ export default function Navbar(): ReactNode {
             <span className={styles.logoWord}>Vela</span>
           </a>
 
-          {/* Desktop nav */}
-          <nav className={styles.nav}>
-            <div
-              className={styles.productWrap}
-              onMouseEnter={() => setProductOpen(true)}
-              onMouseLeave={() => setProductOpen(false)}>
-              <button className={styles.navBtn} aria-expanded={productOpen}>
-                Product
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className={productOpen ? styles.chevUp : styles.chev}>
-                  <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-              {productOpen && (
-                <div className={styles.dropdown}>
-                  <div className={styles.dropdownCard}>
-                    {PRODUCT.map((p) => (
-                      <a key={p.href} href={p.href} className={styles.dropdownItem}>
-                        <span className={styles.dot} />
-                        {p.label}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {MAIN.map((item) => (
-              <NavLink key={item.href} item={item} className={styles.navLink} />
-            ))}
-          </nav>
-
-          {/* CTAs */}
+          {/* Nav + CTAs, grouped on the right */}
           <div className={styles.cta}>
+            <nav className={styles.nav}>
+              {MAIN.map((item) => (
+                <NavLink key={item.href} item={item} className={styles.navLink} />
+              ))}
+            </nav>
             <a href="/sign-in" className={styles.signin}>
               Sign in
             </a>

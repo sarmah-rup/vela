@@ -40,28 +40,27 @@ export function SiteHeader() {
         >
           <Logo />
 
-          <nav className="hidden items-center gap-1 lg:flex">
-            {mainNav.map((item) => {
-              const active = pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "relative rounded-pill px-3.5 py-2 text-sm transition-colors",
-                    active ? "text-fg" : "text-muted hover:text-fg",
-                  )}
-                >
-                  {item.label}
-                  {active ? (
-                    <span className="absolute inset-x-3.5 -bottom-0.5 h-0.5 rounded-full bg-key" />
-                  ) : null}
-                </Link>
-              );
-            })}
-          </nav>
-
           <div className="hidden items-center gap-2 lg:flex">
+            <nav className="flex items-center gap-1">
+              {mainNav.map((item) => {
+                const active = pathname === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                      "relative rounded-pill px-3.5 py-2 text-sm transition-colors",
+                      active ? "text-fg" : "text-muted hover:text-fg",
+                    )}
+                  >
+                    {item.label}
+                    {active ? (
+                      <span className="absolute inset-x-3.5 -bottom-0.5 h-0.5 rounded-full bg-key" />
+                    ) : null}
+                  </Link>
+                );
+              })}
+            </nav>
             <Link
               href="/sign-in"
               className="rounded-pill px-3.5 py-2 text-sm text-muted transition-colors hover:text-fg"
