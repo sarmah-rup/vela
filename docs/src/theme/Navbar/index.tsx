@@ -14,7 +14,7 @@ type Item = {label: string; href: string; external?: boolean};
 
 // Mirrors mainNav in the Next app.
 const MAIN: Item[] = [
-  {label: 'Docs', href: '/docs/intro'},
+  {label: 'Docs', href: '/docs'},
   {label: 'Pricing', href: '/pricing'},
 ];
 

@@ -46,6 +46,10 @@
   gap: 0.5rem;
   text-decoration: none;
 }
+.logo:hover,
+.logo:hover .logoWord {
+  text-decoration: none;
+}
 .logoMark {
   display: grid;
   place-items: center;

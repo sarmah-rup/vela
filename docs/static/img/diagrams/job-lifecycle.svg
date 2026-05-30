@@ -22,9 +22,9 @@
   <text x="80" y="77" font-size="15" font-weight="500" fill="#6b7280">queued</text>
 
   <!-- processing -->
-  <rect x="368" y="50" width="136" height="44" rx="22" fill="#5b5bd6" fill-opacity="0.12" stroke="#5b5bd6" stroke-opacity="0.55"/>
-  <circle cx="398" cy="72" r="5" fill="#5b5bd6"/>
-  <text x="416" y="77" font-size="15" font-weight="500" fill="#5b5bd6">processing</text>
+  <rect x="368" y="50" width="136" height="44" rx="22" fill="#111317" fill-opacity="0.12" stroke="#111317" stroke-opacity="0.55"/>
+  <circle cx="398" cy="72" r="5" fill="#111317"/>
+  <text x="416" y="77" font-size="15" font-weight="500" fill="#111317">processing</text>
 
   <!-- pending (between) -->
   <rect x="232" y="50" width="136" height="44" rx="22" fill="#9ca3af" fill-opacity="0.12" stroke="#9ca3af" stroke-opacity="0.5"/>

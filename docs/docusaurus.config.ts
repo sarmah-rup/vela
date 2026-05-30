@@ -96,7 +96,8 @@ const config: Config = {
     image: 'img/social-card.svg',
     colorMode: {
       defaultMode: 'light',
-      respectPrefersColorScheme: false, // force light as default
+      disableSwitch: true, // light-only, matching the marketing site
+      respectPrefersColorScheme: false,
     },
     // The navbar is fully replaced by the swizzled marketing header at
     // src/theme/Navbar — no default Docusaurus navbar items are used.
