@@ -105,9 +105,12 @@ const config: Config = {
     navbar: {
       items: [
         { to: '/', label: 'Docs' },
-        { href: '/pricing', label: 'Pricing' },
-        { href: '/sign-in', label: 'Sign in' },
-        { href: '/sign-up', label: 'Try the API' },
+        // The marketing pages live outside the docs baseUrl (/docs/), on the Next
+        // app at the site root. `pathname://` tells Docusaurus to link to the raw
+        // path without prepending baseUrl (otherwise /pricing → /docs/pricing).
+        { to: 'pathname:///pricing', label: 'Pricing' },
+        { to: 'pathname:///sign-in', label: 'Sign in' },
+        { to: 'pathname:///sign-up', label: 'Try the API' },
       ],
     },
     footer: {
