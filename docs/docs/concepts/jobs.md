@@ -30,7 +30,7 @@ Every compute `POST` returns a `JobQueuedResponse`:
 }
 ```
 
-## Option A — Poll
+## Option A, Poll
 
 Each compute endpoint has a matching status endpoint:
 `GET /{endpoint}/status/{job_id}`. Poll it until `status` is terminal.
@@ -40,7 +40,7 @@ curl https://api.imagepipeline.io/generate/image/v1/status/job_a1b2c3 \
   -H "X-API-Key: $IMAGEPIPELINE_API_KEY"
 ```
 
-The `JobStatusResponse` carries progress, timing, credits, and — on success — the
+The `JobStatusResponse` carries progress, timing, credits, and, on success, the
 result:
 
 ```json
@@ -59,14 +59,14 @@ result:
 ```
 
 On failure you get an `error`, a machine-readable `failure_reason_code`, and a
-`retryable` flag — see [Errors](/reference/errors).
+`retryable` flag, see [Errors](/reference/errors).
 
 :::tip
 Use polling for development. Poll at a sensible interval (e.g. every 1–2s) rather than
 in a tight loop.
 :::
 
-## Option B — Webhooks {#webhooks}
+## Option B, Webhooks {#webhooks}
 
 Pass a `callback_url` in any compute request body and ImagePipeline `POST`s a
 `WebhookEvent` to it when the job reaches a terminal state. **Recommended for production.**
@@ -95,7 +95,7 @@ curl https://api.imagepipeline.io/webhooks/event-schema \
 
 :::warning Result URLs expire within 24 hours
 `result_url` is a **temporary pre-signed download link**. Download and store the file in
-your own storage immediately after the job completes — do not persist the URL itself, it
+your own storage immediately after the job completes, do not persist the URL itself, it
 will stop working.
 :::
 

@@ -7,7 +7,7 @@ import { themes as prismThemes } from 'prism-react-renderer';
 //   Geist Sans + Geist Mono · tight tracking · 8px radius
 // Served under the Next app at http://localhost:3000/docs via a next.config rewrite.
 // The interactive API reference is a Swagger UI page (src/pages/api.tsx) reading
-// the OpenAPI spec — Authorize with X-API-Key, edit JSON, Try it out.
+// the OpenAPI spec, Authorize with X-API-Key, edit JSON, Try it out.
 const config: Config = {
   title: 'ImagePipeline',
   tagline: 'Identity generation API for developers and product teams',
@@ -136,12 +136,12 @@ const config: Config = {
         { to: '/', label: 'Docs' },
         // The marketing pages live OUTSIDE the docs baseUrl (/docs/), at the Next
         // app's site root. Docusaurus link items always prepend baseUrl (even
-        // `pathname://` does — it only disables client routing), turning /pricing
+        // `pathname://` does, it only disables client routing), turning /pricing
         // into /docs/pricing. Raw `html` items bypass all link processing, so the
         // anchors hit the site root as intended.
         { type: 'html', value: '<a class="menu__link" href="/pricing">Pricing</a>' },
         { type: 'html', value: '<a class="menu__link" href="/sign-in">Sign in</a>' },
-        { type: 'html', value: '<a class="menu__link" href="/sign-up">Try the API</a>' },
+        { type: 'html', value: '<a class="menu__link" href="https://cal.com/imagepipeline/30min">Try the API</a>' },
       ],
     },
     footer: {

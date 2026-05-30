@@ -96,7 +96,7 @@ export function CategoryShowcase() {
               />
             ))}
 
-            {/* "plain product" before inset — swaps with the active category */}
+            {/* "plain product" before inset, swaps with the active category */}
             <div className="absolute left-5 top-1/2 hidden h-44 w-36 -translate-y-1/2 overflow-hidden rounded-xl border-4 border-white bg-white shadow-2xl sm:block">
               {categories.map((c, i) => (
                 <Image

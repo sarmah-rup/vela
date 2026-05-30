@@ -32,7 +32,7 @@ curl https://api.imagepipeline.io/health \
 
 ## Handling keys safely
 
-- Treat your API key as a secret — never commit it or ship it in client-side code.
+- Treat your API key as a secret, never commit it or ship it in client-side code.
 - Store it in an environment variable:
 
 ```bash

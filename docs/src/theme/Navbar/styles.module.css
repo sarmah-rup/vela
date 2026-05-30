@@ -175,7 +175,7 @@
   .mobileMenu { display: none; }
 }
 
-/* Landing-page mobile dropdown — a home-style card under the pill. */
+/* Landing-page mobile dropdown, a home-style card under the pill. */
 .mobileMenu {
   margin-top: 0.5rem;
   display: flex;

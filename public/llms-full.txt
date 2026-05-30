@@ -1,4 +1,4 @@
-# ImagePipeline — Full Documentation
+# ImagePipeline: Full Documentation
 
 > ImagePipeline is the image AI API for ecommerce and fashion teams: on-model imagery, virtual try-on, background & relight, and ad creative. This file concatenates the full documentation for LLMs and agents.
 
@@ -22,8 +22,8 @@ into full content workflows.
 ```
 Base path   /<resource>/v1
 Auth        X-API-Key: <your_api_key>
-Format      flat JSON — no nested "payload" wrapper
-Jobs        asynchronous — poll or receive a webhook
+Format      flat JSON, no nested "payload" wrapper
+Jobs        asynchronous, poll or receive a webhook
 ```
 
 ## What you can build
@@ -40,22 +40,22 @@ Jobs        asynchronous — poll or receive a webhook
 ## How it works
 
 1. **Authenticate** every request with an [`X-API-Key`](/authentication) header.
-2. **Call a compute endpoint** — it returns immediately with a `job_id` and
+2. **Call a compute endpoint**, it returns immediately with a `job_id` and
    `status: queued`. See [Jobs & Webhooks](/concepts/jobs).
 3. **Get the result** by polling the status endpoint or receiving a
    [webhook](/concepts/jobs#webhooks).
-4. **Download the file immediately** — `result_url` is a temporary pre-signed link that
+4. **Download the file immediately**, `result_url` is a temporary pre-signed link that
    [expires within 24 hours](/concepts/jobs#result-url-lifecycle).
 
 ## Where to go next
 
-- **[Quickstart](/quickstart)** — generate your first image in a few minutes.
-- **[Composable Workflows](/concepts/workflows)** — chain primitives into pipelines.
-- **[API Reference](/api/)** — the complete reference, generated from the OpenAPI spec.
+- **[Quickstart](/quickstart)**, generate your first image in a few minutes.
+- **[Composable Workflows](/concepts/workflows)**, chain primitives into pipelines.
+- **[API Reference](/api/)**, the complete reference, generated from the OpenAPI spec.
 
 :::tip Compliance built in
 All outputs embed **C2PA provenance metadata** satisfying EU AI Act Article 50.
-ImagePipeline processes media ephemerally — see [Compliance](/reference/compliance).
+ImagePipeline processes media ephemerally, see [Compliance](/reference/compliance).
 :::
 
 
@@ -66,7 +66,7 @@ ImagePipeline processes media ephemerally — see [Compliance](/reference/compli
 # Quickstart
 
 Generate your first image in a few minutes. You'll need an API key from the
-[dashboard](https://imagepipeline.io/dashboard) — see [Authentication](/authentication).
+[dashboard](https://imagepipeline.io/dashboard), see [Authentication](/authentication).
 
 ```bash
 export IMAGEPIPELINE_API_KEY="<your_api_key>"
@@ -128,7 +128,7 @@ curl -o output.webp "<result_url>"
 
 :::warning Result URLs expire
 `result_url` is a temporary pre-signed link that **expires within 24 hours**. Download
-and store the file in your own storage right away — don't persist the URL.
+and store the file in your own storage right away, don't persist the URL.
 :::
 
 ## Prefer webhooks in production
@@ -182,7 +182,7 @@ curl https://api.imagepipeline.io/health \
 
 ## Handling keys safely
 
-- Treat your API key as a secret — never commit it or ship it in client-side code.
+- Treat your API key as a secret, never commit it or ship it in client-side code.
 - Store it in an environment variable:
 
 ```bash
@@ -227,7 +227,7 @@ Every compute `POST` returns a `JobQueuedResponse`:
 }
 ```
 
-## Option A — Poll
+## Option A, Poll
 
 Each compute endpoint has a matching status endpoint:
 `GET /{endpoint}/status/{job_id}`. Poll it until `status` is terminal.
@@ -237,7 +237,7 @@ curl https://api.imagepipeline.io/generate/image/v1/status/job_a1b2c3 \
   -H "X-API-Key: $IMAGEPIPELINE_API_KEY"
 ```
 
-The `JobStatusResponse` carries progress, timing, credits, and — on success — the
+The `JobStatusResponse` carries progress, timing, credits, and, on success, the
 result:
 
 ```json
@@ -256,14 +256,14 @@ result:
 ```
 
 On failure you get an `error`, a machine-readable `failure_reason_code`, and a
-`retryable` flag — see [Errors](/reference/errors).
+`retryable` flag, see [Errors](/reference/errors).
 
 :::tip
 Use polling for development. Poll at a sensible interval (e.g. every 1–2s) rather than
 in a tight loop.
 :::
 
-## Option B — Webhooks {#webhooks}
+## Option B, Webhooks {#webhooks}
 
 Pass a `callback_url` in any compute request body and ImagePipeline `POST`s a
 `WebhookEvent` to it when the job reaches a terminal state. **Recommended for production.**
@@ -292,7 +292,7 @@ curl https://api.imagepipeline.io/webhooks/event-schema \
 
 :::warning Result URLs expire within 24 hours
 `result_url` is a **temporary pre-signed download link**. Download and store the file in
-your own storage immediately after the job completes — do not persist the URL itself, it
+your own storage immediately after the job completes, do not persist the URL itself, it
 will stop working.
 :::
 
@@ -306,13 +306,13 @@ second download round-trip.
 
 # Identity Profiles
 
-An **identity profile** is a named, reusable configuration snapshot — generation
-defaults plus an adapter config — that you can pass to any identity endpoint via
+An **identity profile** is a named, reusable configuration snapshot, generation
+defaults plus an adapter config, that you can pass to any identity endpoint via
 `profile_id`. Create it once, reference it everywhere.
 
 :::tip Zero data retention
 ImagePipeline **never stores face images**. A profile's storage config is a *pointer to
-your own bucket* — the API never accesses it, and your encryption key is never sent to or
+your own bucket*, the API never accesses it, and your encryption key is never sent to or
 stored by the API.
 :::
 
@@ -326,7 +326,7 @@ curl https://api.imagepipeline.io/profiles/v1 \
   -H "X-API-Key: $IMAGEPIPELINE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Spokesperson — Maya",
+    "name": "Spokesperson, Maya",
     "description": "Brand spokesperson identity",
     "tags": ["brand", "spokesperson"],
     "prompt_template": ", studio lighting, editorial photography",
@@ -409,7 +409,7 @@ print(final)
 
 :::tip
 For long chains in production, use [webhooks](/concepts/jobs#webhooks) and a small
-state machine instead of blocking polls — each step kicks off the next on callback.
+state machine instead of blocking polls, each step kicks off the next on callback.
 :::
 
 
@@ -424,7 +424,7 @@ as the **starting point** for most [workflows](/concepts/workflows).
 
 ## Text → Image
 
-`POST /generate/image/v1` — only `prompt` is required.
+`POST /generate/image/v1`, only `prompt` is required.
 
 ```bash
 curl https://api.imagepipeline.io/generate/image/v1 \
@@ -442,19 +442,19 @@ curl https://api.imagepipeline.io/generate/image/v1 \
 
 | Field | Default | Notes |
 | --- | --- | --- |
-| `prompt` | — | **Required.** |
+| `prompt` |, | **Required.** |
 | `width` / `height` | `1024` | Output dimensions. |
 | `num_inference_steps` | model | More steps = more detail, slower. |
 | `guidance_scale` | model | How strictly to follow the prompt. |
 | `seed` | `-1` | `-1` randomizes; set a value for reproducibility. |
 | `output_format` | `webp` | `webp`, `jpeg`, or `png`. |
-| `palette` | — | Constrain output to brand colors. |
-| `profile_id` | — | Apply an [identity profile](/concepts/profiles). |
-| `callback_url` | — | Receive a [webhook](/concepts/jobs#webhooks). |
+| `palette` |, | Constrain output to brand colors. |
+| `profile_id` |, | Apply an [identity profile](/concepts/profiles). |
+| `callback_url` |, | Receive a [webhook](/concepts/jobs#webhooks). |
 
 ## Image → Video
 
-`POST /generate/video/v1` — animate a still image (`input_image` required).
+`POST /generate/video/v1`, animate a still image (`input_image` required).
 
 ```json
 {
@@ -468,7 +468,7 @@ curl https://api.imagepipeline.io/generate/image/v1 \
 
 ## Text → Speech
 
-`POST /generate/speech/v1` — synthesize speech from `text`.
+`POST /generate/speech/v1`, synthesize speech from `text`.
 
 ```json
 { "text": "Welcome to ImagePipeline.", "language_id": "en", "exaggeration": 0.5 }
@@ -476,13 +476,13 @@ curl https://api.imagepipeline.io/generate/image/v1 \
 
 ## Image → 3D
 
-`POST /generate/3d/v1` — turn an image into a 3D mesh (`image_path` required).
+`POST /generate/3d/v1`, turn an image into a 3D mesh (`image_path` required).
 
 ```json
 { "image_path": "https://.../object.webp", "mode": "generate" }
 ```
 
-Each endpoint has a matching `…/status/{job_id}` route — see [Jobs](/concepts/jobs)
+Each endpoint has a matching `…/status/{job_id}` route, see [Jobs](/concepts/jobs)
 and the full [API Reference](/api/).
 
 
@@ -498,7 +498,7 @@ virtual try-on, and voice clone. Pair any of these with an
 
 ## Faceswap
 
-`POST /identity/faceswap/image/v1` — swap the `source` face onto the `target` image.
+`POST /identity/faceswap/image/v1`, swap the `source` face onto the `target` image.
 
 ```bash
 curl https://api.imagepipeline.io/identity/faceswap/image/v1 \
@@ -514,7 +514,7 @@ curl https://api.imagepipeline.io/identity/faceswap/image/v1 \
 
 ## Identity Lock
 
-`POST /identity/lock/image/v1` — generate a new image that **preserves** a person's
+`POST /identity/lock/image/v1`, generate a new image that **preserves** a person's
 identity from `input_image`, guided by `prompt`.
 
 ```json
@@ -523,12 +523,12 @@ identity from `input_image`, guided by `prompt`.
 
 ## Identity Replace
 
-`POST /identity/replace/image/v1` — replace the identity in an existing image while
+`POST /identity/replace/image/v1`, replace the identity in an existing image while
 keeping pose and composition.
 
 ## Instamodel
 
-`POST /creator/instamodel/image/v1` — generate social-ready model shots from a single
+`POST /creator/instamodel/image/v1`, generate social-ready model shots from a single
 `input_face` and a `prompt`.
 
 ```json
@@ -537,7 +537,7 @@ keeping pose and composition.
 
 ## Virtual Try-On
 
-`POST /creator/tryon/image/v1` — dress a `person_image` in a `clothing_image`.
+`POST /creator/tryon/image/v1`, dress a `person_image` in a `clothing_image`.
 
 ```json
 {
@@ -550,24 +550,24 @@ keeping pose and composition.
 <div className="ba-grid">
   <figure>
     <img src="/docs/img/examples/tryon-flat.avif" alt="Garment flat lay" />
-    <figcaption>Input — garment flat lay</figcaption>
+    <figcaption>Input, garment flat lay</figcaption>
   </figure>
   <figure>
     <img src="/docs/img/examples/tryon-model.avif" alt="On-model render" />
-    <figcaption>Output — on-model render</figcaption>
+    <figcaption>Output, on-model render</figcaption>
   </figure>
 </div>
 
 ## Voice Clone
 
-`POST /identity/voice/clone/v1` — clone a voice from `reference_voice_url` and speak
+`POST /identity/voice/clone/v1`, clone a voice from `reference_voice_url` and speak
 `text`. Outputs are watermarked by default.
 
 ```json
 { "text": "Hello from my cloned voice.", "reference_voice_url": "https://.../sample.wav" }
 ```
 
-Every endpoint returns a `job_id` and has a matching `…/status/{job_id}` route — see
+Every endpoint returns a `job_id` and has a matching `…/status/{job_id}` route, see
 [Jobs](/concepts/jobs).
 
 
@@ -580,7 +580,7 @@ Every endpoint returns a `job_id` and has a matching `…/status/{job_id}` route
 Instruction-based image editing via natural-language prompts. Change scenes, swap
 objects, and adjust composition without masks.
 
-`POST /edit/image/v1` — edit `input_image` according to `prompt`.
+`POST /edit/image/v1`, edit `input_image` according to `prompt`.
 
 ```bash
 curl https://api.imagepipeline.io/edit/image/v1 \
@@ -595,10 +595,10 @@ curl https://api.imagepipeline.io/edit/image/v1 \
 
 | Field | Default | Notes |
 | --- | --- | --- |
-| `prompt` | — | **Required.** The edit instruction. |
-| `input_image` | — | Image to edit. |
-| `mode` | — | Optional editing mode. |
-| `refine_strength` | — | How aggressively to apply the edit. |
+| `prompt` |, | **Required.** The edit instruction. |
+| `input_image` |, | Image to edit. |
+| `mode` |, | Optional editing mode. |
+| `refine_strength` |, | How aggressively to apply the edit. |
 | `faster_inference` | `true` | Trade a little quality for speed. |
 | `output_format` | `webp` | `webp`, `jpeg`, or `png`. |
 | `seed` | `-1` | Set for reproducibility. |
@@ -613,9 +613,9 @@ Returns a `job_id`; poll `GET /edit/image/v1/status/{job_id}` or use a
 
 # Background
 
-Background replacement and relighting. Works on any image — generated or uploaded.
+Background replacement and relighting. Works on any image, generated or uploaded.
 
-`POST /background/change/image/v1` — replace the background of `input_image`, described
+`POST /background/change/image/v1`, replace the background of `input_image`, described
 by `prompt`.
 
 ```bash
@@ -629,7 +629,7 @@ curl https://api.imagepipeline.io/background/change/image/v1 \
   }'
 ```
 
-Commonly used mid-[workflow](/concepts/workflows) — for example
+Commonly used mid-[workflow](/concepts/workflows), for example
 **Generate → Background → Upscale** to stage a product shot, then sharpen it.
 
 Returns a `job_id`; poll `GET /background/change/image/v1/status/{job_id}` or use a
@@ -647,7 +647,7 @@ the `palette` and `logo_url` fields.
 
 ## Generate a logo
 
-`POST /branding/logo/image/v1` — generate a logo from `prompt`.
+`POST /branding/logo/image/v1`, generate a logo from `prompt`.
 
 ```bash
 curl https://api.imagepipeline.io/branding/logo/image/v1 \
@@ -663,7 +663,7 @@ curl https://api.imagepipeline.io/branding/logo/image/v1 \
 
 ## Generate a branded template
 
-`POST /branding/template/image/v1` — generate a branded layout/template from `prompt`,
+`POST /branding/template/image/v1`, generate a branded layout/template from `prompt`,
 honoring your `palette`.
 
 ```json
@@ -683,7 +683,7 @@ Both return a `job_id` with matching `…/status/{job_id}` routes. Pass an exist
 Resolution upscaling and detail enhancement. Use it as the **final step** in almost any
 [workflow](/concepts/workflows).
 
-`POST /upscale/image/v1` — upscale `input_image` to the target `width` × `height`.
+`POST /upscale/image/v1`, upscale `input_image` to the target `width` × `height`.
 
 ```bash
 curl https://api.imagepipeline.io/upscale/image/v1 \
@@ -699,11 +699,11 @@ curl https://api.imagepipeline.io/upscale/image/v1 \
 
 | Field | Default | Notes |
 | --- | --- | --- |
-| `input_image` | — | Image to upscale. |
+| `input_image` |, | Image to upscale. |
 | `width` / `height` | `1024` | Target dimensions. |
 | `output_format` | `webp` | `webp`, `jpeg`, or `png`. |
 | `seed` | `-1` | Set for reproducibility. |
-| `profile_id` | — | Apply an [identity profile](/concepts/profiles). |
+| `profile_id` |, | Apply an [identity profile](/concepts/profiles). |
 
 Returns a `job_id`; poll `GET /upscale/image/v1/status/{job_id}` or use a
 [webhook](/concepts/jobs#webhooks).
@@ -756,7 +756,7 @@ carry a human-readable `error`, a machine-readable `failure_reason_code`, and a
 
 | Code | Retryable | Meaning |
 | --- | --- | --- |
-| `RATE_LIMIT_EXCEEDED` | ✅ | Too many requests — back off and retry. |
+| `RATE_LIMIT_EXCEEDED` | ✅ | Too many requests, back off and retry. |
 | `CONCURRENT_JOBS_EXCEEDED` | ✅ | Too many in-flight jobs for your plan. |
 | `INSUFFICIENT_CREDITS` | ❌ | Top up credits in the dashboard. |
 | `CREDIT_CHARGE_FAILED` | ❌ | Billing could not be completed. |
@@ -766,13 +766,13 @@ carry a human-readable `error`, a machine-readable `failure_reason_code`, and a
 | `STORAGE_ERROR` | ✅ | Result could not be stored. |
 | `TIMEOUT` | ✅ | The job exceeded its time budget. |
 | `INTERNAL_ERROR` | ✅ | Something went wrong on our side. |
-| `CANCELLED` | — | The job was cancelled. |
+| `CANCELLED` |, | The job was cancelled. |
 
 ## Retry guidance
 
 - **Retryable codes:** retry with exponential backoff and jitter.
 - **`RATE_LIMIT_EXCEEDED` / `CONCURRENT_JOBS_EXCEEDED`:** slow down and reduce concurrency.
-- **Non-retryable codes:** fix the input or your account state — retrying won't help.
+- **Non-retryable codes:** fix the input or your account state, retrying won't help.
 
 ```bash
 # exponential backoff on a retryable failure
@@ -806,13 +806,13 @@ it enabled unless you have a specific, compliant reason not to.
 
 ## Ephemeral processing & data retention
 
-ImagePipeline processes media **ephemerally** — it acts as a **data processor**, not a
+ImagePipeline processes media **ephemerally**, it acts as a **data processor**, not a
 data controller. Your inputs and outputs are never stored long-term.
 
 - **Faces are never stored.** [Identity profiles](/concepts/profiles) reference your
   own storage via a pointer; the API never accesses it and never holds your encryption key.
 - **Results are temporary.** `result_url` is a pre-signed link that
-  [expires within 24 hours](/concepts/jobs#result-url-lifecycle) — download and store
+  [expires within 24 hours](/concepts/jobs#result-url-lifecycle), download and store
   outputs in your own storage.
 
 :::tip

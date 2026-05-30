@@ -7,7 +7,7 @@ sidebar_label: Quickstart
 # Quickstart
 
 Generate your first image in a few minutes. You'll need an API key from the
-[dashboard](https://imagepipeline.io/dashboard) — see [Authentication](/authentication).
+[dashboard](https://imagepipeline.io/dashboard), see [Authentication](/authentication).
 
 ```bash
 export IMAGEPIPELINE_API_KEY="<your_api_key>"
@@ -69,7 +69,7 @@ curl -o output.webp "<result_url>"
 
 :::warning Result URLs expire
 `result_url` is a temporary pre-signed link that **expires within 24 hours**. Download
-and store the file in your own storage right away — don't persist the URL.
+and store the file in your own storage right away, don't persist the URL.
 :::
 
 ## Prefer webhooks in production

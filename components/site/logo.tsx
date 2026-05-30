@@ -3,7 +3,7 @@ import { brand } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 /**
- * ImagePipeline mark — three cascading rounded frames (image layers flowing
+ * ImagePipeline mark, three cascading rounded frames (image layers flowing
  * through a pipeline) with an aperture dot. Paired with a two-tone wordmark so
  * it doesn't read as a generic system-font logotype.
  */

@@ -4,7 +4,7 @@ import { stripe } from "@/lib/stripe";
 import { planByPriceId } from "@/lib/plans";
 import { setBillingMetadata } from "@/lib/user";
 
-// Stripe needs the raw body to verify the signature — read it as text, don't parse.
+// Stripe needs the raw body to verify the signature, read it as text, don't parse.
 export async function POST(req: Request) {
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 
   // Map a subscription back to its Clerk user. We stamp `userId` on both the
   // subscription metadata (at checkout) and the customer metadata (at creation),
-  // so either is enough — no local lookup table needed.
+  // so either is enough, no local lookup table needed.
   async function resolveUserId(sub: Stripe.Subscription): Promise<string | null> {
     if (typeof sub.metadata?.userId === "string") return sub.metadata.userId;
     const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;

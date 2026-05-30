@@ -9,12 +9,12 @@ const OUT = join(ROOT, "content", "legal");
 mkdirSync(OUT, { recursive: true });
 
 const FILES = [
-  { file: "Privacy Policy — ImagePipeline.html", slug: "privacy" },
-  { file: "Terms of Service — ImagePipeline.html", slug: "terms" },
-  { file: "Acceptable Use Policy — ImagePipeline.html", slug: "acceptable-use" },
-  { file: "Copyright & DMCA Policy — ImagePipeline.html", slug: "copyright-dmca" },
-  { file: "Security — ImagePipeline.html", slug: "security" },
-  { file: "Responsible AI — ImagePipeline.html", slug: "responsible-ai" },
+  { file: "Privacy Policy, ImagePipeline.html", slug: "privacy" },
+  { file: "Terms of Service, ImagePipeline.html", slug: "terms" },
+  { file: "Acceptable Use Policy, ImagePipeline.html", slug: "acceptable-use" },
+  { file: "Copyright & DMCA Policy, ImagePipeline.html", slug: "copyright-dmca" },
+  { file: "Security, ImagePipeline.html", slug: "security" },
+  { file: "Responsible AI, ImagePipeline.html", slug: "responsible-ai" },
 ];
 
 function extractMain(html) {

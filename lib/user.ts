@@ -1,7 +1,7 @@
 import { auth, currentUser, clerkClient } from "@clerk/nextjs/server";
 import type { PlanKey } from "@/lib/plans";
 
-// Subscription state lives in the Clerk user's privateMetadata — there is no local
+// Subscription state lives in the Clerk user's privateMetadata, there is no local
 // database. Clerk is the user store (auth tokens for the backend); Stripe is billing.
 // API keys are issued out-of-band (AWS), so this app never persists them.
 export type BillingMetadata = {

@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 /* ───────────────────────────────────────────────────────────────────────
-   VELA design system — clean, light, image-forward.
+   VELA design system, clean, light, image-forward.
    Lots of whitespace, soft surfaces, one confident accent. No noise.
    ─────────────────────────────────────────────────────────────────────── */
 
 @theme {
-  /* Surfaces — near-monochrome, photography carries the colour */
+  /* Surfaces, near-monochrome, photography carries the colour */
   --color-ink: #0b0c0e;
   --color-bg: #ffffff;
   --color-bg-soft: #f4f4f2;
@@ -20,12 +20,12 @@
   --color-muted: #5f626b;
   --color-faint: #9a9da6;
 
-  /* Accent — refined near-black (buttons, stats, links read monochrome) */
+  /* Accent, refined near-black (buttons, stats, links read monochrome) */
   --color-key: #111317;
   --color-key-deep: #000000;
   --color-key-soft: #f0f0ee;
 
-  /* Secondary — mid grey for supporting icons */
+  /* Secondary, mid grey for supporting icons */
   --color-fill: #4a4d55;
   --color-fill-deep: #2c2e34;
 

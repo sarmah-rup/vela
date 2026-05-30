@@ -1,4 +1,4 @@
-# ImagePipeline — the image AI API for product & fashion commerce.
+# ImagePipeline, the image AI API for product & fashion commerce.
 # Search + AI crawlers are welcome.
 
 User-agent: *

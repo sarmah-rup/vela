@@ -10,6 +10,12 @@ type RevealProps = {
   delay?: number;
   y?: number;
   as?: "div" | "section" | "li" | "span";
+  /**
+   * For above-the-fold content. Keeps opacity at 1 (so the content is painted at
+   * SSR, better FCP, and visible to render-based crawlers / no-JS) and only
+   * animates a subtle slide on mount instead of fading in on scroll.
+   */
+  immediate?: boolean;
 };
 
 export function Reveal({
@@ -18,9 +24,17 @@ export function Reveal({
   delay = 0,
   y = 18,
   as = "div",
+  immediate = false,
 }: RevealProps) {
   const reduce = useReducedMotion();
   const Comp = motion[as];
+
+  if (immediate) {
+    // Above-the-fold: render fully visible and static, no opacity gating and no
+    // transform, so there's no entrance movement / layout shift.
+    return <Comp className={cn(className)} initial={false}>{children}</Comp>;
+  }
+
   return (
     <Comp
       className={cn(className)}

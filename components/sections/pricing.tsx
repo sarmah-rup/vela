@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Check, ArrowUpRight } from "lucide-react";
 import { Container, Eyebrow, SectionHeading } from "@/components/ui/primitives";
 import { Reveal } from "@/components/ui/reveal";
+import { CAL_URL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 type Tier = {
@@ -63,7 +64,7 @@ const tiers: Tier[] = [
     blurb: "For high-volume teams with strict brand requirements.",
     custom: true,
     cta: "Book a call",
-    href: "/contact",
+    href: CAL_URL,
     featuresLead: "Everything in Scale, plus",
     features: [
       "Volume credit pricing",
@@ -279,7 +280,7 @@ export function Pricing() {
   );
 }
 
-// Price block on the dark (popular) card — same layout, light-on-dark colors.
+// Price block on the dark (popular) card, same layout, light-on-dark colors.
 function PriceDark({ tier, yearly }: { tier: Tier; yearly: boolean }) {
   const perMonth = yearly ? tier.yearly! : tier.monthly!;
   const showStrike = yearly && tier.monthly! > tier.yearly!;

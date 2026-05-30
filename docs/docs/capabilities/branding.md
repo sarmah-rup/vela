@@ -11,7 +11,7 @@ the `palette` and `logo_url` fields.
 
 ## Generate a logo
 
-`POST /branding/logo/image/v1` — generate a logo from `prompt`.
+`POST /branding/logo/image/v1`, generate a logo from `prompt`.
 
 ```bash
 curl https://api.imagepipeline.io/branding/logo/image/v1 \
@@ -27,7 +27,7 @@ curl https://api.imagepipeline.io/branding/logo/image/v1 \
 
 ## Generate a branded template
 
-`POST /branding/template/image/v1` — generate a branded layout/template from `prompt`,
+`POST /branding/template/image/v1`, generate a branded layout/template from `prompt`,
 honoring your `palette`.
 
 ```json

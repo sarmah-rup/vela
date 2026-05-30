@@ -28,7 +28,7 @@ const ORDER = [
 const stripFrontmatter = (s) => s.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
 
 let out =
-  "# ImagePipeline — Full Documentation\n\n" +
+  "# ImagePipeline: Full Documentation\n\n" +
   "> ImagePipeline is the image AI API for ecommerce and fashion teams: on-model imagery, virtual try-on, background & relight, and ad creative. This file concatenates the full documentation for LLMs and agents.\n\n" +
   "Canonical site: https://imagepipeline.io · OpenAPI: https://imagepipeline.io/docs/openapi.json\n";
 

@@ -15,7 +15,7 @@ const CAPABILITIES: Capability[] = [
     title: 'Generate',
     href: '/capabilities/generate',
     icon: '/img/icons/generate.svg',
-    body: 'Text-to-image, image-to-video, text-to-speech, and image-to-3D — the start of most pipelines.',
+    body: 'Text-to-image, image-to-video, text-to-speech, and image-to-3D, the start of most pipelines.',
   },
   {
     title: 'Identity',
@@ -27,7 +27,7 @@ const CAPABILITIES: Capability[] = [
     title: 'Editing',
     href: '/capabilities/editing',
     icon: '/img/icons/editing.svg',
-    body: 'Instruction-based image editing in natural language — no masks required.',
+    body: 'Instruction-based image editing in natural language, no masks required.',
   },
   {
     title: 'Background',
@@ -45,7 +45,7 @@ const CAPABILITIES: Capability[] = [
     title: 'Upscale',
     href: '/capabilities/upscale',
     icon: '/img/icons/upscale.svg',
-    body: 'Resolution upscaling and detail enhancement — the perfect final step.',
+    body: 'Resolution upscaling and detail enhancement, the perfect final step.',
   },
 ];
 
@@ -69,7 +69,7 @@ function Hero() {
         </h1>
         <p className={styles.heroSubtitle}>
           An identity generation API built from independent primitives that compose into
-          full content workflows — with async jobs, webhooks, and provenance built in.
+          full content workflows, with async jobs, webhooks, and provenance built in.
         </p>
         <div className={styles.heroButtons}>
           <Link className="button button--primary button--lg" to="/quickstart">

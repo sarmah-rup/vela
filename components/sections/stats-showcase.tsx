@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Container } from "@/components/ui/primitives";
 import { Reveal } from "@/components/ui/reveal";
 
-const stats = ["10k+ customers", "200M+ images edited", "8+ years building AI"];
+const stats = ["100M+ images edited"];
 
 export function StatsShowcase() {
   return (
@@ -20,7 +20,7 @@ export function StatsShowcase() {
         <Reveal>
           <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-white/60">
             <span className="h-2 w-2 rounded-full bg-key" />
-            Building generative AI since 2019
+            Building generative AI since 2020
           </span>
         </Reveal>
         <Reveal delay={0.06}>

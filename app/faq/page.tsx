@@ -4,20 +4,21 @@ import { Faq } from "@/components/sections/faq";
 import { Reveal } from "@/components/ui/reveal";
 import { CtaSection } from "@/components/sections/cta";
 import { JsonLd } from "@/components/seo/json-ld";
+import { CAL_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "FAQ",
   description:
-    "Answers to common questions about ImagePipeline — the image AI API for product and fashion commerce: authentication, async jobs, pricing, data handling, and licensing.",
+    "Answers to common questions about ImagePipeline, the image AI API for product and fashion commerce: authentication, async jobs, pricing, data handling, and licensing.",
   alternates: { canonical: "/faq" },
 };
 
-// Answer-shaped, question-led copy — strong for both human readers and AI search
+// Answer-shaped, question-led copy, strong for both human readers and AI search
 // (this page also emits FAQPage structured data below).
 const faqs = [
   {
     q: "What is ImagePipeline?",
-    a: "ImagePipeline is an image AI API for ecommerce and fashion teams. It turns flat-lay product shots into on-model imagery, runs virtual try-on, replaces and relights backgrounds, and generates ad creative — all through one REST API.",
+    a: "ImagePipeline is an image AI API for ecommerce and fashion teams. It turns flat-lay product shots into on-model imagery, runs virtual try-on, replaces and relights backgrounds, and generates ad creative, all through one REST API.",
   },
   {
     q: "How do I authenticate?",
@@ -41,7 +42,7 @@ const faqs = [
   },
   {
     q: "How does pricing work?",
-    a: "Free includes 100 credits/month; Pro is $49/month and Scale is $199/month, with a custom Enterprise tier. One credit is roughly one successful generation — editing and background operations cost less, video and 3D cost more, and failed jobs are never charged.",
+    a: "Pro is $49/month and Scale is $199/month, with a custom Enterprise tier. One credit is roughly one successful generation. Editing and background operations cost less, video and 3D cost more, and failed jobs are never charged.",
   },
   {
     q: "How do I get started?",
@@ -80,9 +81,9 @@ export default function FaqPage() {
 
       <CtaSection
         title="Still have questions?"
-        subtitle="Read the docs or talk to us — we'll help you ship."
+        subtitle="Read the docs or talk to us, we'll help you ship."
         primary={{ label: "Read the docs", href: "/docs" }}
-        secondary={{ label: "Talk to us", href: "/contact" }}
+        secondary={{ label: "Talk to us", href: CAL_URL }}
       />
     </>
   );

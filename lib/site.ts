@@ -3,6 +3,10 @@
 // All copy lives in this file so it is trivial to swap for real content later.
 // ─────────────────────────────────────────────────────────────────────────
 
+// Booking link, every primary "talk to us / book a call / try the API / help"
+// CTA points here.
+export const CAL_URL = "https://cal.com/imagepipeline/30min";
+
 export const brand = {
   name: "ImagePipeline",
   wordmark: "ImagePipeline",
@@ -70,7 +74,7 @@ export const footerNav: NavGroup[] = [
       { label: "Sign in", href: "/sign-in" },
       { label: "Sign up", href: "/sign-up" },
       { label: "FAQ", href: "/faq" },
-      { label: "Help", href: "#" },
+      { label: "Help", href: CAL_URL },
     ],
   },
 ];

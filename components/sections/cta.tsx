@@ -2,12 +2,13 @@ import { ArrowRight } from "lucide-react";
 import { Container, Frame } from "@/components/ui/primitives";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
+import { CAL_URL } from "@/lib/site";
 
 export function CtaSection({
   title = "Ship your catalogue in a weekend, not a quarter.",
   subtitle = "Start free with 250 generations. No card, no sales call, just an API key and the docs.",
   primary = { label: "Get an API key", href: "/demo" },
-  secondary = { label: "Talk to us", href: "/contact" },
+  secondary = { label: "Talk to us", href: CAL_URL },
 }: {
   title?: string;
   subtitle?: string;

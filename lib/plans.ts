@@ -13,14 +13,9 @@ export type Plan = {
   popular?: boolean;
 };
 
+// There is no free tier; "free" remains only as the internal default state for a
+// user with no active subscription (set by the Stripe webhook).
 export const PLANS: Plan[] = [
-  {
-    key: "free",
-    name: "Free",
-    priceLabel: "$0",
-    blurb: "Kick the tires.",
-    features: ["100 credits / mo", "1 API key", "Community support"],
-  },
   {
     key: "pro",
     name: "Pro",

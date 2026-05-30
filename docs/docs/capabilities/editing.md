@@ -9,7 +9,7 @@ sidebar_label: Editing
 Instruction-based image editing via natural-language prompts. Change scenes, swap
 objects, and adjust composition without masks.
 
-`POST /edit/image/v1` — edit `input_image` according to `prompt`.
+`POST /edit/image/v1`, edit `input_image` according to `prompt`.
 
 ```bash
 curl https://api.imagepipeline.io/edit/image/v1 \
@@ -24,10 +24,10 @@ curl https://api.imagepipeline.io/edit/image/v1 \
 
 | Field | Default | Notes |
 | --- | --- | --- |
-| `prompt` | — | **Required.** The edit instruction. |
-| `input_image` | — | Image to edit. |
-| `mode` | — | Optional editing mode. |
-| `refine_strength` | — | How aggressively to apply the edit. |
+| `prompt` |, | **Required.** The edit instruction. |
+| `input_image` |, | Image to edit. |
+| `mode` |, | Optional editing mode. |
+| `refine_strength` |, | How aggressively to apply the edit. |
 | `faster_inference` | `true` | Trade a little quality for speed. |
 | `output_format` | `webp` | `webp`, `jpeg`, or `png`. |
 | `seed` | `-1` | Set for reproducibility. |

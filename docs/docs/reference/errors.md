@@ -47,7 +47,7 @@ carry a human-readable `error`, a machine-readable `failure_reason_code`, and a
 
 | Code | Retryable | Meaning |
 | --- | --- | --- |
-| `RATE_LIMIT_EXCEEDED` | ✅ | Too many requests — back off and retry. |
+| `RATE_LIMIT_EXCEEDED` | ✅ | Too many requests, back off and retry. |
 | `CONCURRENT_JOBS_EXCEEDED` | ✅ | Too many in-flight jobs for your plan. |
 | `INSUFFICIENT_CREDITS` | ❌ | Top up credits in the dashboard. |
 | `CREDIT_CHARGE_FAILED` | ❌ | Billing could not be completed. |
@@ -57,13 +57,13 @@ carry a human-readable `error`, a machine-readable `failure_reason_code`, and a
 | `STORAGE_ERROR` | ✅ | Result could not be stored. |
 | `TIMEOUT` | ✅ | The job exceeded its time budget. |
 | `INTERNAL_ERROR` | ✅ | Something went wrong on our side. |
-| `CANCELLED` | — | The job was cancelled. |
+| `CANCELLED` |, | The job was cancelled. |
 
 ## Retry guidance
 
 - **Retryable codes:** retry with exponential backoff and jitter.
 - **`RATE_LIMIT_EXCEEDED` / `CONCURRENT_JOBS_EXCEEDED`:** slow down and reduce concurrency.
-- **Non-retryable codes:** fix the input or your account state — retrying won't help.
+- **Non-retryable codes:** fix the input or your account state, retrying won't help.
 
 ```bash
 # exponential backoff on a retryable failure

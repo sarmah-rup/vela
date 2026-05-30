@@ -1,5 +1,5 @@
 /**
- * ImagePipeline docs — Vela luxury theme.
+ * ImagePipeline docs, Vela luxury theme.
  *
  * 1:1 with the Vela app design system (vela-site/app/globals.css):
  *   indigo #111317 · hover #000000 · glow #c9cac4 · ink #0a0a0f · slate #1a1a24
@@ -31,7 +31,7 @@
   --vela-border: #e6e5e1;
   --vela-subtle: #f4f4f2;
 
-  /* Typography — Geist, exactly as the app */
+  /* Typography, Geist, exactly as the app */
   --ifm-font-family-base: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --ifm-font-family-monospace: 'Geist Mono', ui-monospace, 'SF Mono', Monaco, monospace;
   --ifm-font-size-base: 16.5px;
@@ -336,7 +336,7 @@ article { max-width: 56rem; }
 
 /* ============================================================= Custom navbar reset
    The swizzled Navbar keeps the `.navbar` class (so Docusaurus can measure its
-   height), but we don't want Infima's default bar chrome — neutralize it so only
+   height), but we don't want Infima's default bar chrome, neutralize it so only
    the marketing "pill" header styling shows. */
 .navbar {
   height: auto;

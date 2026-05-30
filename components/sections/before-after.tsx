@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 // Interactive before/after reveal slider. A mouse drags immediately. On touch the
 // slider stays inert (touch-action: pan-y, so the page scrolls past it) until you
-// tap to activate — then dragging compares. The tap cue is shown only on coarse
+// tap to activate, then dragging compares. The tap cue is shown only on coarse
 // pointers via CSS, so no JS touch-detection / hydration juggling is needed.
 export function BeforeAfter({
   className,
@@ -62,7 +62,7 @@ export function BeforeAfter({
         className,
       )}
       // Inert (pan-y) lets touch scroll past; once active we capture the drag.
-      // touch-action only affects touch — a mouse drags regardless.
+      // touch-action only affects touch, a mouse drags regardless.
       style={{ aspectRatio: "4/5", touchAction: active ? "none" : "pan-y" }}
       onPointerDown={(e) => {
         if (active || e.pointerType === "mouse") {
@@ -119,7 +119,7 @@ export function BeforeAfter({
             if (e.key === "ArrowRight") setPos((p) => Math.min(98, p + 4));
           }}
         >
-          {/* Pulsing ring — coarse pointers only, until activated */}
+          {/* Pulsing ring, coarse pointers only, until activated */}
           {!active ? (
             <span className="absolute inset-0 hidden animate-ping rounded-full border border-white/50 [@media(pointer:coarse)]:block" />
           ) : null}
@@ -135,7 +135,7 @@ export function BeforeAfter({
         </button>
       </div>
 
-      {/* "Tap to compare" hint — coarse pointers only, until activated */}
+      {/* "Tap to compare" hint, coarse pointers only, until activated */}
       {!active ? (
         <span className="pointer-events-none absolute bottom-4 left-1/2 z-10 hidden -translate-x-1/2 items-center gap-2 rounded-pill bg-ink/70 px-3 py-1.5 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-white backdrop-blur [@media(pointer:coarse)]:inline-flex">
           <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-white" />

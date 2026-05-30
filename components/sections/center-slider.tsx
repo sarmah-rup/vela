@@ -69,7 +69,7 @@ export function CenterSlider() {
   );
 
   // After a move settles, if we've drifted near either edge, snap back a whole
-  // copy with no animation — content is identical so the jump is invisible.
+  // copy with no animation, content is identical so the jump is invisible.
   const handleRest = () => {
     if (pos < n || pos >= (REPS - 1) * n) {
       setNoAnim(true);

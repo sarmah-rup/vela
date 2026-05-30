@@ -54,7 +54,7 @@ export function HeroRotator() {
         >
           <Image
             src={looks[i].src}
-            alt={`${looks[i].brand} — AI-generated on-model look`}
+            alt={`${looks[i].brand}, AI-generated on-model look`}
             fill
             sizes="(max-width: 1024px) 100vw, 720px"
             className="object-cover object-bottom"

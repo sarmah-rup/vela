@@ -101,10 +101,31 @@ export const metadata: Metadata = {
     title: `${brand.name}, ${brand.tagline}`,
     description: brand.description,
     type: "website",
+    siteName: brand.name,
+    url: SITE_URL,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  // Drop your verification codes into env to verify ownership in Google Search
+  // Console / Bing Webmaster (then submit the sitemaps there).
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+      ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
+      : {},
   },
 };
 
-// Only mount ClerkProvider once real keys exist — otherwise an invalid placeholder key
+// Only mount ClerkProvider once real keys exist, otherwise an invalid placeholder key
 // would throw during render and break the marketing site. See SETUP.md.
 const clerkConfigured =
   !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY &&
@@ -122,7 +143,7 @@ export default function RootLayout({
     >
       <body className="relative min-h-full bg-bg text-fg">
         <JsonLd data={structuredData} />
-        {/* Google Tag Manager — loaded after the page is interactive so it never
+        {/* Google Tag Manager, loaded after the page is interactive so it never
             blocks FCP (the injected gtm.js is itself async). */}
         <Script id="gtm" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

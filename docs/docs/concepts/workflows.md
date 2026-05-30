@@ -51,5 +51,5 @@ print(final)
 
 :::tip
 For long chains in production, use [webhooks](/concepts/jobs#webhooks) and a small
-state machine instead of blocking polls — each step kicks off the next on callback.
+state machine instead of blocking polls, each step kicks off the next on callback.
 :::

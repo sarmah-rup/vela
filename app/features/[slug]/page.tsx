@@ -50,7 +50,7 @@ export default async function FeaturePage({
         data={{
           "@context": "https://schema.org",
           "@type": "Service",
-          name: `${f.nav} — ${brand.name}`,
+          name: `${f.nav}, ${brand.name}`,
           serviceType: "Image AI API",
           description: f.description,
           url: `${SITE_URL}/features/${slug}`,

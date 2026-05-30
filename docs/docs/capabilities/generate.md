@@ -11,7 +11,7 @@ as the **starting point** for most [workflows](/concepts/workflows).
 
 ## Text → Image
 
-`POST /generate/image/v1` — only `prompt` is required.
+`POST /generate/image/v1`, only `prompt` is required.
 
 ```bash
 curl https://api.imagepipeline.io/generate/image/v1 \
@@ -29,19 +29,19 @@ curl https://api.imagepipeline.io/generate/image/v1 \
 
 | Field | Default | Notes |
 | --- | --- | --- |
-| `prompt` | — | **Required.** |
+| `prompt` |, | **Required.** |
 | `width` / `height` | `1024` | Output dimensions. |
 | `num_inference_steps` | model | More steps = more detail, slower. |
 | `guidance_scale` | model | How strictly to follow the prompt. |
 | `seed` | `-1` | `-1` randomizes; set a value for reproducibility. |
 | `output_format` | `webp` | `webp`, `jpeg`, or `png`. |
-| `palette` | — | Constrain output to brand colors. |
-| `profile_id` | — | Apply an [identity profile](/concepts/profiles). |
-| `callback_url` | — | Receive a [webhook](/concepts/jobs#webhooks). |
+| `palette` |, | Constrain output to brand colors. |
+| `profile_id` |, | Apply an [identity profile](/concepts/profiles). |
+| `callback_url` |, | Receive a [webhook](/concepts/jobs#webhooks). |
 
 ## Image → Video
 
-`POST /generate/video/v1` — animate a still image (`input_image` required).
+`POST /generate/video/v1`, animate a still image (`input_image` required).
 
 ```json
 {
@@ -55,7 +55,7 @@ curl https://api.imagepipeline.io/generate/image/v1 \
 
 ## Text → Speech
 
-`POST /generate/speech/v1` — synthesize speech from `text`.
+`POST /generate/speech/v1`, synthesize speech from `text`.
 
 ```json
 { "text": "Welcome to ImagePipeline.", "language_id": "en", "exaggeration": 0.5 }
@@ -63,11 +63,11 @@ curl https://api.imagepipeline.io/generate/image/v1 \
 
 ## Image → 3D
 
-`POST /generate/3d/v1` — turn an image into a 3D mesh (`image_path` required).
+`POST /generate/3d/v1`, turn an image into a 3D mesh (`image_path` required).
 
 ```json
 { "image_path": "https://.../object.webp", "mode": "generate" }
 ```
 
-Each endpoint has a matching `…/status/{job_id}` route — see [Jobs](/concepts/jobs)
+Each endpoint has a matching `…/status/{job_id}` route, see [Jobs](/concepts/jobs)
 and the full [API Reference](/api/).

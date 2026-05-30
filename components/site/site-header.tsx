@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, X, ArrowUpRight } from "lucide-react";
-import { mainNav } from "@/lib/site";
+import { mainNav, CAL_URL } from "@/lib/site";
 import { Logo } from "./logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -67,7 +67,7 @@ export function SiteHeader() {
             >
               Sign in
             </Link>
-            <Button href="/sign-up" size="sm">
+            <Button href={CAL_URL} size="sm">
               Try the API
               <ArrowUpRight className="h-4 w-4" />
             </Button>
@@ -111,7 +111,7 @@ export function SiteHeader() {
                 >
                   Sign in
                 </Link>
-                <Button href="/sign-up" onClick={() => setMenuOpen(false)}>
+                <Button href={CAL_URL} onClick={() => setMenuOpen(false)}>
                   Try the API
                 </Button>
               </div>

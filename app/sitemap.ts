@@ -5,7 +5,7 @@ import { legalDocs } from "@/lib/legal";
 const SITE_URL = `https://${brand.domain}`;
 
 // Only the pages that are actually part of the live site (linked in the nav/footer)
-// are listed — we don't want crawlers indexing orphaned or placeholder routes.
+// are listed, we don't want crawlers indexing orphaned or placeholder routes.
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
     "",

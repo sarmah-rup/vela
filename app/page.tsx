@@ -20,7 +20,7 @@ import { StatsShowcase } from "@/components/sections/stats-showcase";
 import { CategoryShowcase } from "@/components/sections/category-showcase";
 import { CountUp } from "@/components/ui/count-up";
 import { CtaSection } from "@/components/sections/cta";
-import { logoCloud, stats } from "@/lib/site";
+import { logoCloud, stats, CAL_URL } from "@/lib/site";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
@@ -46,24 +46,24 @@ export default function HomePage() {
           <div className="grid items-center gap-2 lg:grid-cols-[0.8fr_1.2fr] lg:gap-10">
             {/* Copy */}
             <div className="flex flex-col items-start gap-6 pb-0 lg:mt-4 lg:pb-16">
-              <Reveal delay={0.04}>
+              <Reveal immediate delay={0.04}>
                 <h1 className="font-display text-4xl leading-[1.06] tracking-tight sm:text-5xl">
                   <span className="font-normal text-muted">On-model imagery</span>
                   <br />
                   <span className="font-medium text-fill">for fast brands.</span>
                 </h1>
               </Reveal>
-              <Reveal delay={0.12}>
+              <Reveal immediate delay={0.12}>
                 <p className="max-w-md text-pretty leading-relaxed text-muted">
-                  ImagePipeline is the image AI API for fashion and ecommerce —
-                  turn flat-lays into on-model shots, run virtual try-on, and
+                  ImagePipeline is the image AI API for fashion and ecommerce.
+                  Turn flat-lays into on-model shots, run virtual try-on, and
                   relight backgrounds from one API. No studio, no photoshoot.
                 </p>
               </Reveal>
-              <Reveal delay={0.18}>
+              <Reveal immediate delay={0.18}>
                 <div className="flex flex-wrap items-center gap-3">
-                  <Button href="/contact" size="lg" className="group">
-                    Book a Call
+                  <Button href={CAL_URL} size="lg" className="group">
+                    Book a Demo
                     <ArrowUpRight className="h-4 w-4 transition-transform duration-200 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </Button>
                   <Button href="/docs" variant="soft" size="lg">
@@ -73,8 +73,8 @@ export default function HomePage() {
               </Reveal>
             </div>
 
-            {/* Image — rotating AI-generated looks */}
-            <Reveal delay={0.1} className="w-full lg:-mt-16">
+            {/* Image, rotating AI-generated looks */}
+            <Reveal immediate delay={0.1} className="w-full lg:-mt-16">
               <HeroRotator />
             </Reveal>
           </div>
@@ -238,9 +238,9 @@ export default function HomePage() {
       {/* ── CTA ────────────────────────────────────────────────────────── */}
       <section className="pb-8">
         <CtaSection
-          title="Replace the photoshoot with an API call."
-          subtitle="Start free with 250 generations. Bring a flat-lay and see it come back on-model in minutes."
-          primary={{ label: "Talk to us", href: "/contact" }}
+          title="Fashion and ecommerce product imagery, at scale."
+          subtitle="Thousands of brands use ImagePipeline to turn flat-lays into on-model shots, run virtual try-on, and ship campaign-ready imagery from one API."
+          primary={{ label: "Talk to us", href: CAL_URL }}
           secondary={null}
         />
       </section>

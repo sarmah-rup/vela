@@ -41,7 +41,7 @@ export default function Navbar(): ReactNode {
   const onBurger = () => (isLanding ? setMenuOpen((v) => !v) : mobileSidebar.toggle());
 
   return (
-    // Keep the `navbar` class — Docusaurus's TOC-highlight hook measures
+    // Keep the `navbar` class, Docusaurus's TOC-highlight hook measures
     // `.navbar`.clientHeight; without it, scroll pages (e.g. quickstart) crash.
     <header
       className={`navbar ${styles.wrap}${
@@ -50,7 +50,7 @@ export default function Navbar(): ReactNode {
     >
       <div className={styles.inner}>
         <div className={styles.pill}>
-          {/* Logo — identical ImagePipeline mark + wordmark to the marketing SiteHeader. */}
+          {/* Logo, identical ImagePipeline mark + wordmark to the marketing SiteHeader. */}
           <a href="/" className={styles.logo} aria-label="ImagePipeline home">
             <svg viewBox="0 0 32 32" className={styles.logoMark} aria-hidden="true">
               <defs>
@@ -83,7 +83,7 @@ export default function Navbar(): ReactNode {
             <a href="/sign-in" className={styles.signin}>
               Sign in
             </a>
-            <a href="/sign-up" className={styles.tryBtn}>
+            <a href="https://cal.com/imagepipeline/30min" className={styles.tryBtn}>
               Try the API
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                 <path d="M7 17L17 7M17 7H8M17 7v9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -117,7 +117,7 @@ export default function Navbar(): ReactNode {
             <a href="/sign-in" onClick={close} className={styles.mobileItem}>
               Sign in
             </a>
-            <a href="/sign-up" onClick={close} className={styles.mobileTryBtn}>
+            <a href="https://cal.com/imagepipeline/30min" onClick={close} className={styles.mobileTryBtn}>
               Try the API
             </a>
           </div>
