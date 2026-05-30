@@ -8,7 +8,7 @@ design language (indigo `#5b5bd6`, Geist typography, dark code surfaces, 96px se
 rhythm, generous whitespace — see `../app/globals.css`).
 
 The API reference is generated **per endpoint** from the OpenAPI spec
-(`api/vela-openapi.json`) using
+(`api/openapi.json`) using
 [`docusaurus-plugin-openapi-docs`](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs)
 + `docusaurus-theme-openapi-docs`, which renders an interactive **"Try it"** request
 console on every endpoint page.
@@ -42,7 +42,7 @@ docs/
   capabilities/                          Generate, identity, editing, background, branding, upscale
   reference/                             Errors, compliance
   api/                                   GENERATED per-endpoint pages + sidebar.ts (gitignored)
-api/vela-openapi.json                    Source OpenAPI spec
+api/openapi.json                    Source OpenAPI spec
 src/pages/index.tsx                      Themed landing page (hero console, capability cards, workflow band)
 src/css/custom.css                       Vela design tokens mapped onto Docusaurus/Infima
 static/img/                              Logo, favicon, social card, hero console, capability icons, diagrams

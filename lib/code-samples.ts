@@ -10,32 +10,32 @@ export const heroTabs: CodeTab[] = [
     language: "bash",
     filename: "tryon.sh",
     code: `# Virtual try-on: drop a garment onto a model
-curl https://api.vela.dev/creator/tryon/image/v1 \\
-  -H "X-API-Key: $VELA_KEY" \\
+curl https://api.imagepipeline.io/creator/tryon/image/v1 \\
+  -H "X-API-Key: $IMAGEPIPELINE_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
     "person_image": "https://cdn.brand.com/models/ava.jpg",
     "clothing_image": "https://cdn.brand.com/sku/884.jpg",
     "gender": "female",
     "output_format": "webp",
-    "callback_url": "https://hooks.brand.com/vela"
+    "callback_url": "https://hooks.brand.com/imagepipeline"
   }'`,
   },
   {
     label: "TypeScript",
     language: "ts",
     filename: "onmodel.ts",
-    code: `import { Vela } from "@vela/sdk";
+    code: `import { ImagePipeline } from "@imagepipeline/sdk";
 
-const vela = new Vela(process.env.VELA_KEY);
+const client = new ImagePipeline(process.env.IMAGEPIPELINE_KEY);
 
 // On-model imagery for an entire catalogue, streamed back via webhook
 const jobs = await Promise.all(
   catalogue.map((p) =>
-    vela.creator.instamodel({
+    client.creator.instamodel({
       prompt: "studio model, soft daylight, editorial",
       input_face: "models/ava.jpg",
-      callback_url: "https://hooks.brand.com/vela",
+      callback_url: "https://hooks.brand.com/imagepipeline",
     }),
   ),
 );
@@ -46,12 +46,12 @@ return jobs.map((j) => j.job_id);`,
     label: "Python",
     language: "py",
     filename: "background.py",
-    code: `from vela import Vela
+    code: `from imagepipeline import ImagePipeline
 
-vela = Vela(api_key=os.environ["VELA_KEY"])
+client = ImagePipeline(api_key=os.environ["IMAGEPIPELINE_KEY"])
 
 # Clean and relight a raw product photo
-job = vela.background.change(
+job = client.background.change(
     input_image="sku/884-raw.jpg",
     prompt="seamless studio backdrop, soft shadow",
     output_format="png",
@@ -81,7 +81,7 @@ export const responseTab: CodeTab[] = [
     code: `{
   "job_id": "job_3kQ9aZ",
   "status": "completed",
-  "result_url": "https://cdn.vela.dev/o/3kQ9aZ.webp",
+  "result_url": "https://cdn.imagepipeline.io/o/3kQ9aZ.webp",
   "result_mime_type": "image/webp",
   "inference_time_seconds": 3.4,
   "credits_charged": true

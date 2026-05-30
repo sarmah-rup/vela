@@ -15,7 +15,7 @@ import { CtaSection } from "@/components/sections/cta";
 
 export const metadata: Metadata = {
   title: "Resources",
-  description: "Guides, templates, security docs and learning material for Vela.",
+  description: "Guides, templates, security docs and learning material for ImagePipeline.",
 };
 
 const guides = [

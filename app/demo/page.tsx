@@ -6,7 +6,7 @@ import { CtaSection } from "@/components/sections/cta";
 
 export const metadata: Metadata = {
   title: "Live Demo",
-  description: "Try the Vela API in your browser. Pick a task and render.",
+  description: "Try the ImagePipeline API in your browser. Pick a task and render.",
 };
 
 export default function DemoPage() {

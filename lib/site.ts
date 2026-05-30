@@ -4,13 +4,13 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 export const brand = {
-  name: "Vela",
-  wordmark: "Vela",
+  name: "ImagePipeline",
+  wordmark: "ImagePipeline",
   tagline: "The image AI API for product and fashion commerce.",
   description:
-    "Vela is the image AI API for ecommerce and fashion teams. On-model imagery, virtual try-on, background and relight, and ad creative. One key, async jobs, licensed output.",
-  domain: "vela.dev",
-  email: "hello@vela.dev",
+    "ImagePipeline is the image AI API for ecommerce and fashion teams. On-model imagery, virtual try-on, background and relight, and ad creative. One key, async jobs, licensed output.",
+  domain: "imagepipeline.io",
+  email: "hello@imagepipeline.io",
 } as const;
 
 export type NavItem = {
@@ -69,6 +69,7 @@ export const footerNav: NavGroup[] = [
       { label: "Pricing", href: "/pricing" },
       { label: "Sign in", href: "/sign-in" },
       { label: "Sign up", href: "/sign-up" },
+      { label: "FAQ", href: "/faq" },
       { label: "Help", href: "#" },
     ],
   },

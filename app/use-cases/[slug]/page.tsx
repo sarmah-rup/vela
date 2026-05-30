@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Quote } from "lucide-react";
 import { getUseCase, useCases } from "@/lib/use-cases";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbLd } from "@/lib/structured-data";
 import { Container, Eyebrow, SectionHeading } from "@/components/ui/primitives";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { CountUp } from "@/components/ui/count-up";
@@ -22,7 +24,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const u = getUseCase(slug);
   if (!u) return {};
-  return { title: `${u.company} case study`, description: u.oneLiner };
+  return {
+    title: `${u.company} case study`,
+    description: u.oneLiner,
+    alternates: { canonical: `/use-cases/${slug}` },
+  };
 }
 
 export default async function UseCasePage({
@@ -38,6 +44,13 @@ export default async function UseCasePage({
 
   return (
     <>
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Home", path: "/" },
+          { name: "Use cases", path: "/use-cases" },
+          { name: u.company, path: `/use-cases/${slug}` },
+        ])}
+      />
       {/* Hero */}
       <section className="relative overflow-hidden pt-36 pb-12 sm:pt-44">
         <div className="studio-glow opacity-60" />

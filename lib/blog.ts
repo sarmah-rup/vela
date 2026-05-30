@@ -37,7 +37,7 @@ export const posts: Post[] = [
     tone: "cool",
     body: [
       "The fastest way to stall an AI imagery rollout is an unanswered question from legal. If the provenance of the training data is unclear, the risk lands on the brand using the output.",
-      "Vela trains on licensed data and ships every render with a commercial license. Enterprise plans add full IP indemnification, so the obligation sits with us, not with you.",
+      "ImagePipeline trains on licensed data and ships every render with a commercial license. Enterprise plans add full IP indemnification, so the obligation sits with us, not with you.",
       "We also expose a per-render indemnified flag on every response, so you can prove provenance downstream and keep an auditable trail for compliance.",
       "Safety is not a feature you add later. It is the contract that makes generated imagery usable at all.",
     ],
@@ -69,7 +69,7 @@ export const posts: Post[] = [
     tone: "product",
     body: [
       "A good API response answers the next three questions before you ask them. For a render, those are: did it work, what did I get, and what did it cost.",
-      "Every Vela response includes status, latency, output dimensions, license state and credit usage. No second call to reconcile, no guessing.",
+      "Every ImagePipeline response includes status, latency, output dimensions, license state and credit usage. No second call to reconcile, no guessing.",
       "We treat the contract as frozen. New capabilities arrive as new fields, never as breaking changes to the ones you already depend on.",
       "Boring, stable responses are what let you build on top without fear. That is the whole point.",
     ],

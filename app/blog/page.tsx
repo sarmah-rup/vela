@@ -9,7 +9,7 @@ import { posts } from "@/lib/blog";
 
 export const metadata: Metadata = {
   title: "Blog & Changelog",
-  description: "Product updates, engineering notes and field guides from Vela.",
+  description: "Product updates, engineering notes and field guides from ImagePipeline.",
 };
 
 function formatDate(d: string) {

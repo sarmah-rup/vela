@@ -1,5 +1,5 @@
 // Detailed case studies. Companies and figures are fictional but realistic,
-// shown as illustrative placeholders. Workflows reference real Vela endpoints.
+// shown as illustrative placeholders. Workflows reference real ImagePipeline endpoints.
 
 export type Metric = { value: string; label: string };
 export type WorkflowStep = { endpoint: string; label: string; detail: string };
@@ -37,7 +37,7 @@ export const useCases: UseCase[] = [
     heroTone: "model",
     size: "Direct-to-consumer label, ~120 SKUs per drop, 14 drops a year",
     oneLiner:
-      "A fast-moving womenswear label replaced its on-model photoshoots with the Vela API and shipped every drop a week earlier.",
+      "A fast-moving womenswear label replaced its on-model photoshoots with the ImagePipeline API and shipped every drop a week earlier.",
     headlineMetric: { value: "−88%", label: "cost per on-model image" },
     metrics: [
       { value: "−88%", label: "cost per on-model image" },
@@ -181,7 +181,7 @@ export const useCases: UseCase[] = [
       "Manual moderation of image quality did not scale past a few thousand listings.",
     ],
     approach: [
-      "Every seller upload passes through a Vela normalisation step before it goes live: background standardised, lighting relit, resolution lifted.",
+      "Every seller upload passes through a ImagePipeline normalisation step before it goes live: background standardised, lighting relit, resolution lifted.",
       "Sellers get the same clean output through a self-serve API, so the standard is enforced at ingest rather than policed after the fact.",
       "Outputs carry C2PA provenance metadata, so the marketplace can prove how each listing image was processed.",
     ],

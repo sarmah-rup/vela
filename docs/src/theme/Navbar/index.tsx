@@ -50,26 +50,25 @@ export default function Navbar(): ReactNode {
     >
       <div className={styles.inner}>
         <div className={styles.pill}>
-          {/* Logo — identical sail mark + wordmark to the marketing SiteHeader. */}
-          <a href="/" className={styles.logo} aria-label="Vela home">
+          {/* Logo — identical ImagePipeline mark + wordmark to the marketing SiteHeader. */}
+          <a href="/" className={styles.logo} aria-label="ImagePipeline home">
             <svg viewBox="0 0 32 32" className={styles.logoMark} aria-hidden="true">
               <defs>
-                <linearGradient id="velaMark" x1="0" y1="0" x2="1" y2="1">
+                <linearGradient id="ipMark" x1="0" y1="0" x2="1" y2="1">
                   <stop offset="0" stopColor="#f0f0ee" />
-                  <stop offset="0.5" stopColor="#111317" />
+                  <stop offset="0.55" stopColor="#111317" />
                   <stop offset="1" stopColor="#4a4d55" />
                 </linearGradient>
               </defs>
-              <path
-                d="M16 2 L28 26 A14 14 0 0 1 4 26 Z"
-                fill="none"
-                stroke="url(#velaMark)"
-                strokeWidth="1.6"
-                opacity="0.55"
-              />
-              <path d="M16 5 L25 24 L16 20 Z" fill="url(#velaMark)" />
+              <rect x="11.5" y="3" width="17.5" height="17.5" rx="5" fill="url(#ipMark)" opacity="0.28" />
+              <rect x="7.25" y="7.25" width="17.5" height="17.5" rx="5" fill="url(#ipMark)" opacity="0.55" />
+              <rect x="3" y="11.5" width="17.5" height="17.5" rx="5" fill="url(#ipMark)" />
+              <circle cx="11.75" cy="20.25" r="2.3" fill="#ffffff" />
             </svg>
-            <span className={styles.logoWord}>Vela</span>
+            <span className={styles.logoWord}>
+              <span style={{ color: "var(--m-muted)", fontWeight: 400 }}>Image</span>
+              Pipeline
+            </span>
           </a>
 
           {/* Nav + CTAs, grouped on the right */}

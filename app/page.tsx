@@ -52,7 +52,7 @@ export default function HomePage() {
               </Reveal>
               <Reveal delay={0.12}>
                 <p className="max-w-sm text-pretty leading-relaxed text-muted">
-                  Vela helps fashion and ecommerce teams produce authentic,
+                  ImagePipeline helps fashion and ecommerce teams produce authentic,
                   on-brand imagery at scale, with full creative control. No
                   studio, no photoshoot.
                 </p>
@@ -81,7 +81,7 @@ export default function HomePage() {
         <div className="bg-ink py-7">
           <Container>
             <p className="mb-6 text-center font-mono text-xs uppercase tracking-[0.22em] text-white/45">
-              Top fashion teams build with Vela
+              Top fashion teams build with ImagePipeline
             </p>
             <div className="relative w-full overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_10%,#000_90%,transparent)]">
               <div className="marquee flex w-max items-center gap-12">

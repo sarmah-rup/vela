@@ -49,6 +49,12 @@ export function SiteFooter() {
                 {doc.label}
               </Link>
             ))}
+            <a href="/robots.txt" className="hover:text-fg">
+              robots.txt
+            </a>
+            <a href="/llms.txt" className="hover:text-fg">
+              llms.txt
+            </a>
           </div>
         </div>
       </Container>

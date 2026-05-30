@@ -58,14 +58,14 @@ export const features: Record<string, FeatureContent> = {
       { endpoint: "POST /background/change/image/v1", label: "Set the scene", detail: "Brand backdrop and light." },
       { endpoint: "POST /upscale/image/v1", label: "Finish", detail: "Sharpen for hero placements." },
     ],
-    sample: `curl https://api.vela.dev/creator/instamodel/image/v1 \\
-  -H "X-API-Key: $VELA_KEY" \\
+    sample: `curl https://api.imagepipeline.io/creator/instamodel/image/v1 \\
+  -H "X-API-Key: $IMAGEPIPELINE_KEY" \\
   -d '{
     "prompt": "studio model, soft daylight, editorial",
     "input_face": "models/ava.jpg",
     "profile_id": "prof_marisol_ava",
     "output_format": "webp",
-    "callback_url": "https://hooks.brand.com/vela"
+    "callback_url": "https://hooks.brand.com/imagepipeline"
   }'`,
   },
   "try-on": {
@@ -106,14 +106,14 @@ export const features: Record<string, FeatureContent> = {
       { endpoint: "POST /background/change/image/v1", label: "Set the scene", detail: "Optional backdrop swap." },
       { endpoint: "POST /upscale/image/v1", label: "Finish", detail: "Zoom-ready resolution." },
     ],
-    sample: `curl https://api.vela.dev/creator/tryon/image/v1 \\
-  -H "X-API-Key: $VELA_KEY" \\
+    sample: `curl https://api.imagepipeline.io/creator/tryon/image/v1 \\
+  -H "X-API-Key: $IMAGEPIPELINE_KEY" \\
   -d '{
     "person_image": "models/ava.jpg",
     "clothing_image": "sku/884.jpg",
     "gender": "female",
     "output_format": "webp",
-    "callback_url": "https://hooks.brand.com/vela"
+    "callback_url": "https://hooks.brand.com/imagepipeline"
   }'`,
   },
   editing: {
@@ -154,13 +154,13 @@ export const features: Record<string, FeatureContent> = {
       { endpoint: "POST /edit/image/v1", label: "Recompose", detail: "Prompt-based edits." },
       { endpoint: "POST /upscale/image/v1", label: "Lift", detail: "Up to 8K detail." },
     ],
-    sample: `curl https://api.vela.dev/background/change/image/v1 \\
-  -H "X-API-Key: $VELA_KEY" \\
+    sample: `curl https://api.imagepipeline.io/background/change/image/v1 \\
+  -H "X-API-Key: $IMAGEPIPELINE_KEY" \\
   -d '{
     "input_image": "sku/884-raw.jpg",
     "prompt": "seamless studio backdrop, soft shadow",
     "output_format": "png",
-    "callback_url": "https://hooks.brand.com/vela"
+    "callback_url": "https://hooks.brand.com/imagepipeline"
   }'`,
   },
   "ad-creative": {
@@ -201,14 +201,14 @@ export const features: Record<string, FeatureContent> = {
       { endpoint: "POST /branding/template/image/v1", label: "Brand it", detail: "Palette, logo, template." },
       { endpoint: "POST /generate/video/v1", label: "Animate", detail: "Short motion ad." },
     ],
-    sample: `curl https://api.vela.dev/branding/template/image/v1 \\
-  -H "X-API-Key: $VELA_KEY" \\
+    sample: `curl https://api.imagepipeline.io/branding/template/image/v1 \\
+  -H "X-API-Key: $IMAGEPIPELINE_KEY" \\
   -d '{
     "prompt": "summer launch, hero product",
     "logo_url": "https://cdn.brand.com/logo.png",
     "palette": ["#FF5733", "#1A1A1A"],
     "output_format": "png",
-    "callback_url": "https://hooks.brand.com/vela"
+    "callback_url": "https://hooks.brand.com/imagepipeline"
   }'`,
   },
   "enterprise-api": {
@@ -249,8 +249,8 @@ export const features: Record<string, FeatureContent> = {
       { endpoint: "POST /identity/lock/image/v1", label: "Lock identity", detail: "Reusable, consistent model." },
       { endpoint: "GET /webhooks/event-schema", label: "Wire webhooks", detail: "Async delivery contract." },
     ],
-    sample: `curl https://api.vela.dev/profiles/v1 \\
-  -H "X-API-Key: $VELA_KEY" \\
+    sample: `curl https://api.imagepipeline.io/profiles/v1 \\
+  -H "X-API-Key: $IMAGEPIPELINE_KEY" \\
   -d '{
     "name": "Marisol / Ava",
     "reference_images": ["models/ava-1.jpg", "models/ava-2.jpg"]

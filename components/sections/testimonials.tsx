@@ -15,21 +15,21 @@ const testimonials = [
   {
     brand: "Rappi",
     quote:
-      "Vela has been an awesome partner for Rappi. They helped us increase the number of on-model shots on our platform by 33%.",
+      "ImagePipeline has been an awesome partner for Rappi. They helped us increase the number of on-model shots on our platform by 33%.",
     name: "Alain Abud",
     role: "Ops Manager, Rappi",
   },
   {
     brand: "Mixtiles",
     quote:
-      "Using the Vela API, we've basically taken a shortcut. We don't have to worry about image quality, and we've solved common problems we faced with user-generated content.",
+      "Using the ImagePipeline API, we've basically taken a shortcut. We don't have to worry about image quality, and we've solved common problems we faced with user-generated content.",
     name: "Ido Grosberg",
     role: "Engineering Lead, Mixtiles",
   },
   {
     brand: "Caranty",
     quote:
-      "Vela has been an absolute game-changer for our online marketplace. Our website now showcases products at their best, giving us a competitive edge.",
+      "ImagePipeline has been an absolute game-changer for our online marketplace. Our website now showcases products at their best, giving us a competitive edge.",
     name: "Arturo Diaz",
     role: "CTO, Caranty",
   },

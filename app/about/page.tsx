@@ -51,7 +51,7 @@ export default function AboutPage() {
             <span className="text-gradient italic">a function call.</span>
           </>
         }
-        description="We started Vela because the gap between a product existing and a product being shown is still measured in weeks and studios. It should be measured in milliseconds."
+        description="We started ImagePipeline because the gap between a product existing and a product being shown is still measured in weeks and studios. It should be measured in milliseconds."
       />
 
       {/* Mission */}
@@ -63,7 +63,7 @@ export default function AboutPage() {
               <p className="relative max-w-3xl font-display text-2xl leading-snug tracking-tight text-balance sm:text-3xl">
                 Every brand now competes on visual volume, more SKUs, more
                 channels, more variants, faster. The old model of shoots,
-                retouchers and creative queues cannot keep up. Vela turns that
+                retouchers and creative queues cannot keep up. ImagePipeline turns that
                 whole pipeline into one licensed API so any team can produce
                 studio-grade imagery at the speed of their catalogue.
               </p>

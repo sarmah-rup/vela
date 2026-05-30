@@ -56,7 +56,7 @@ export function CategoryShowcase() {
         <Reveal>
           <SectionHeading
             title="Turn plain product photos into beautiful visual assets with AI."
-            description="Improve your visual content with Vela, tuned for enhancing faces, text, and ecommerce imagery."
+            description="Improve your visual content with ImagePipeline, tuned for enhancing faces, text, and ecommerce imagery."
           />
         </Reveal>
 

@@ -1,0 +1,56 @@
+# ImagePipeline
+
+> ImagePipeline is the image AI API for ecommerce and fashion teams: on-model imagery, virtual try-on, background & relight, and ad creative. One API key, async jobs, and licensed, provenance-tracked output.
+
+ImagePipeline exposes composable image and identity primitives over a REST API. Authenticate from the browser with a Clerk bearer token, or server-to-server with an API key. Generation is asynchronous: send a `POST` to start a job, then poll the matching status endpoint or receive a webhook when it completes. Output ships with a commercial license and C2PA provenance. We do not retain user images and do not train on user content.
+
+## Documentation
+- [Introduction](https://imagepipeline.io/docs/intro): What ImagePipeline is and how the API is structured
+- [Quickstart](https://imagepipeline.io/docs/quickstart): Your first generation in a few minutes
+- [Authentication](https://imagepipeline.io/docs/authentication): Bearer tokens (frontend) and API keys (server)
+- [API Reference](https://imagepipeline.io/docs/api): Interactive OpenAPI reference (Try-it-out)
+- [OpenAPI spec (JSON)](https://imagepipeline.io/docs/openapi.json): Machine-readable API definition
+- [Full documentation (single file)](https://imagepipeline.io/llms-full.txt): Every doc concatenated for agents
+
+## Capabilities
+- [Generate](https://imagepipeline.io/docs/capabilities/generate): Text-to-image generation from a prompt
+- [Identity](https://imagepipeline.io/docs/capabilities/identity): Faceswap, identity lock & replace, instamodel, virtual try-on, voice clone
+- [Editing](https://imagepipeline.io/docs/capabilities/editing): Inpainting, retouching, and clean-ups
+- [Background](https://imagepipeline.io/docs/capabilities/background): Replace backgrounds and relight any image
+- [Branding](https://imagepipeline.io/docs/capabilities/branding): Logos and branded templates constrained to a palette
+- [Upscale](https://imagepipeline.io/docs/capabilities/upscale): High-resolution upscaling
+
+## Concepts
+- [Jobs & Webhooks](https://imagepipeline.io/docs/concepts/jobs): Async job lifecycle, polling, and webhook delivery
+- [Identity Profiles](https://imagepipeline.io/docs/concepts/profiles): Reusable identities for consistent characters
+- [Composable Workflows](https://imagepipeline.io/docs/concepts/workflows): Chaining primitives into pipelines
+
+## Reference
+- [Errors](https://imagepipeline.io/docs/reference/errors): Error codes and handling
+- [Compliance](https://imagepipeline.io/docs/reference/compliance): Licensing, provenance, and data handling
+
+## API endpoints
+- `POST /generate/image/v1` — generate an image from a prompt (`GET /generate/image/v1/status/{job_id}`)
+- `POST /generate/video/v1` — generate video (`GET .../status/{job_id}`)
+- `POST /generate/speech/v1` — generate speech (`GET .../status/{job_id}`)
+- `POST /creator/tryon/image/v1` — virtual try-on: drop a garment onto a model
+- `POST /creator/instamodel/image/v1` — turn a flat-lay into an on-model shot
+- `POST /identity/faceswap/image/v1` — swap a face onto an image
+- `POST /identity/lock/image/v1` — lock an identity across generations
+- `POST /identity/replace/image/v1` — replace an identity in an image
+- `POST /identity/voice/clone/v1` — clone a voice
+- `POST /profiles/v1` — create an identity profile (`GET`/`PATCH`/`DELETE /profiles/v1/{profile_id}`)
+
+## Product
+- [Pricing](https://imagepipeline.io/pricing): Free, Pro, and Scale tiers
+- [Solutions](https://imagepipeline.io/solutions)
+- [Use cases](https://imagepipeline.io/use-cases)
+- [Developers](https://imagepipeline.io/developers)
+
+## Policies
+- [Privacy](https://imagepipeline.io/legal/privacy)
+- [Terms of Service](https://imagepipeline.io/legal/terms)
+- [Acceptable Use](https://imagepipeline.io/legal/acceptable-use)
+- [Copyright & DMCA](https://imagepipeline.io/legal/copyright-dmca)
+- [Security](https://imagepipeline.io/legal/security)
+- [Responsible AI](https://imagepipeline.io/legal/responsible-ai)

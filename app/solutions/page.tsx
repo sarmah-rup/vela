@@ -10,7 +10,7 @@ import { CtaSection } from "@/components/sections/cta";
 export const metadata: Metadata = {
   title: "Solutions",
   description:
-    "How fashion brands, marketplaces, agencies and platforms use Vela to generate product visuals at scale.",
+    "How fashion brands, marketplaces, agencies and platforms use ImagePipeline to generate product visuals at scale.",
 };
 
 const audiences = [
@@ -56,7 +56,7 @@ export default function SolutionsPage() {
             <span className="text-gradient italic">ships a catalogue.</span>
           </>
         }
-        description="The same five endpoints power very different workflows. Here is how teams put Vela to work."
+        description="The same five endpoints power very different workflows. Here is how teams put ImagePipeline to work."
       />
 
       <section className="py-12">

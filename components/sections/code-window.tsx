@@ -71,7 +71,7 @@ function highlight(code: string) {
 export function CodeWindow({
   tabs,
   className,
-  title = "vela.dev",
+  title = "imagepipeline.io",
 }: {
   tabs: CodeTab[];
   className?: string;

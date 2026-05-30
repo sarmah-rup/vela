@@ -9,7 +9,7 @@ import 'swagger-ui-react/swagger-ui.css';
 // Interactive API console: Authorize (X-API-Key), per-endpoint "Try it out",
 // JSON body editor, live Execute. Client-only via BrowserOnly.
 export default function SwaggerSpec(): ReactNode {
-  const specUrl = useBaseUrl('/vela-openapi.json');
+  const specUrl = useBaseUrl('/openapi.json');
   return (
     <BrowserOnly fallback={<div style={{padding: '3rem 0', color: 'var(--vela-muted)'}}>Loading API reference…</div>}>
       {() => {

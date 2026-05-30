@@ -9,7 +9,7 @@ import { CtaSection } from "@/components/sections/cta";
 
 export const metadata: Metadata = {
   title: "Customers",
-  description: "How commerce teams build with Vela. Stories and outcomes.",
+  description: "How commerce teams build with ImagePipeline. Stories and outcomes.",
 };
 
 const stories = [
@@ -19,7 +19,7 @@ const stories = [
     metric: "4,000 SKUs",
     blurb: "Refreshed an entire outerwear catalogue on-model in one sprint.",
     quote:
-      "Vela became a step in our build pipeline. Product data in, on-model imagery out, no studio.",
+      "ImagePipeline became a step in our build pipeline. Product data in, on-model imagery out, no studio.",
   },
   {
     brand: "Atelier 9",
@@ -51,7 +51,7 @@ export default function CustomersPage() {
             <span className="text-gradient italic">on autopilot.</span>
           </>
         }
-        description="From indie labels to global marketplaces, teams use Vela to make every product visual programmatic. Stories below are illustrative placeholders."
+        description="From indie labels to global marketplaces, teams use ImagePipeline to make every product visual programmatic. Stories below are illustrative placeholders."
       />
 
       <section className="py-12">

@@ -73,7 +73,7 @@ export function Placeholder({
     >
       <Image
         src={chosen}
-        alt={label ?? "Vela generated visual (placeholder)"}
+        alt={label ?? "ImagePipeline generated visual (placeholder)"}
         fill
         sizes="(max-width: 768px) 100vw, 640px"
         className="object-cover"

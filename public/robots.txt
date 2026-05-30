@@ -1,0 +1,36 @@
+# ImagePipeline — the image AI API for product & fashion commerce.
+# Search + AI crawlers are welcome.
+
+User-agent: *
+Allow: /
+
+# AI / LLM crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# LLM-readable index of the site and API
+# See: https://imagepipeline.io/llms.txt and https://imagepipeline.io/llms-full.txt
+
+Sitemap: https://imagepipeline.io/sitemap.xml
+Sitemap: https://imagepipeline.io/docs/sitemap.xml

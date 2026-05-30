@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/primitives";
 import { legalDocs, legalBySlug } from "@/lib/legal";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbLd } from "@/lib/structured-data";
 
 function getLegalHtml(slug: string): string | null {
   if (!legalBySlug[slug]) return null;
@@ -30,7 +32,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const doc = legalBySlug[slug];
   if (!doc) return {};
-  return { title: doc.title };
+  return { title: doc.title, alternates: { canonical: `/legal/${slug}` } };
 }
 
 export default async function LegalPage({
@@ -45,6 +47,12 @@ export default async function LegalPage({
 
   return (
     <section className="relative pb-28 pt-36 sm:pt-44">
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Home", path: "/" },
+          { name: doc.title, path: `/legal/${slug}` },
+        ])}
+      />
       <Container className="max-w-3xl">
         <article
           className={[

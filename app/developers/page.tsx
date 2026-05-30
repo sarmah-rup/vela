@@ -10,7 +10,7 @@ import { heroTabs } from "@/lib/code-samples";
 
 export const metadata: Metadata = {
   title: "Developers",
-  description: "Quickstart, API reference and SDKs for the Vela visual API.",
+  description: "Quickstart, API reference and SDKs for the ImagePipeline visual API.",
 };
 
 const endpoints = [

@@ -5,11 +5,13 @@ import { Faq } from "@/components/sections/faq";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/primitives";
 import { CtaSection } from "@/components/sections/cta";
+import { JsonLd } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
   title: "Pricing",
   description:
     "Simple plans that scale with you. Monthly or yearly billing, with a custom Enterprise tier.",
+  alternates: { canonical: "/pricing" },
 };
 
 const faqs = [
@@ -38,6 +40,17 @@ const faqs = [
 export default function PricingPage() {
   return (
     <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }}
+      />
       {/* Pricing renders its own eyebrow + heading + toggle (see components/sections/pricing.tsx). */}
       <Pricing />
 

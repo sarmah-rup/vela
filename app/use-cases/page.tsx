@@ -11,7 +11,7 @@ import { CtaSection } from "@/components/sections/cta";
 export const metadata: Metadata = {
   title: "Use cases",
   description:
-    "How DTC brands, footwear labels and marketplaces use Vela to cut imagery cost and ship catalogues faster.",
+    "How DTC brands, footwear labels and marketplaces use ImagePipeline to cut imagery cost and ship catalogues faster.",
 };
 
 export default function UseCasesPage() {

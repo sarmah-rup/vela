@@ -3,6 +3,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 import { features, featureOrder } from "@/lib/features";
+import { brand } from "@/lib/site";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbLd, SITE_URL } from "@/lib/structured-data";
 import { Container, Eyebrow, SectionHeading } from "@/components/ui/primitives";
 import { Button } from "@/components/ui/button";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
@@ -23,7 +26,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const f = features[slug];
   if (!f) return {};
-  return { title: f.nav, description: f.description };
+  return {
+    title: f.nav,
+    description: f.description,
+    alternates: { canonical: `/features/${slug}` },
+  };
 }
 
 export default async function FeaturePage({
@@ -39,6 +46,24 @@ export default async function FeaturePage({
 
   return (
     <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          name: `${f.nav} — ${brand.name}`,
+          serviceType: "Image AI API",
+          description: f.description,
+          url: `${SITE_URL}/features/${slug}`,
+          areaServed: "Worldwide",
+          provider: { "@id": `${SITE_URL}/#organization` },
+        }}
+      />
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Home", path: "/" },
+          { name: f.nav, path: `/features/${slug}` },
+        ])}
+      />
       <section className="relative overflow-hidden pt-36 pb-20 sm:pt-44">
         <div className="studio-glow opacity-70" />
         <div className="absolute inset-0 -z-[1] grid-lines opacity-40" />

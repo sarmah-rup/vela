@@ -8,7 +8,7 @@ import { ContactForm } from "./contact-form";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Talk to the Vela team about your catalogue.",
+  description: "Talk to the ImagePipeline team about your catalogue.",
 };
 
 const channels = [

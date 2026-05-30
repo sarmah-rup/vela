@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 export function BeforeAfter({
   className,
   beforeLabel = "Flat-lay input",
-  afterLabel = "Vela output",
+  afterLabel = "ImagePipeline output",
   beforeTone = "product",
   afterTone = "model",
   beforeSrc,

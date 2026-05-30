@@ -64,7 +64,7 @@ export default function PlatformPage() {
             <span className="text-gradient italic">modern commerce.</span>
           </>
         }
-        description="Vela sits between your product data and every surface that needs an image, replacing studios, retouchers and creative queues with one programmable API."
+        description="ImagePipeline sits between your product data and every surface that needs an image, replacing studios, retouchers and creative queues with one programmable API."
       />
 
       {/* How it works */}
