@@ -2,8 +2,9 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { motion } from "motion/react";
 import { Check, ArrowUpRight } from "lucide-react";
-import { Container, Eyebrow, SectionHeading } from "@/components/ui/primitives";
+import { Container, SectionHeading } from "@/components/ui/primitives";
 import { Reveal } from "@/components/ui/reveal";
 import { CAL_URL } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -27,7 +28,7 @@ type Tier = {
 const tiers: Tier[] = [
   {
     name: "Pro",
-    blurb: "For production apps shipping real volume.",
+    blurb: "For production apps.",
     monthly: 49,
     yearly: 41,
     credits: "20,000 credits / mo",
@@ -76,7 +77,35 @@ const tiers: Tier[] = [
   },
 ];
 
+// Smoothly tweens the displayed price from its previous value to the new one when
+// the billing period toggles — a quick count that settles on the final number.
+function useAnimatedNumber(target: number, duration = 600) {
+  const [display, setDisplay] = React.useState(target);
+  const fromRef = React.useRef(target);
+  const rafRef = React.useRef(0);
+
+  React.useEffect(() => {
+    const from = fromRef.current;
+    if (from === target) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let start = 0;
+    const tick = (t: number) => {
+      if (!start) start = t;
+      const p = reduce ? 1 : Math.min((t - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setDisplay(Math.round(from + (target - from) * eased));
+      if (p < 1) rafRef.current = requestAnimationFrame(tick);
+      else fromRef.current = target;
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [target, duration]);
+
+  return display;
+}
+
 function Price({ tier, yearly }: { tier: Tier; yearly: boolean }) {
+  const perMonth = useAnimatedNumber(tier.custom ? 0 : yearly ? tier.yearly! : tier.monthly!);
   if (tier.custom) {
     return (
       <div className="mt-6">
@@ -86,26 +115,14 @@ function Price({ tier, yearly }: { tier: Tier; yearly: boolean }) {
       </div>
     );
   }
-  const perMonth = yearly ? tier.yearly! : tier.monthly!;
-  const showStrike = yearly && tier.monthly! > tier.yearly!;
-  const savePct = Math.round((1 - tier.yearly! / tier.monthly!) * 100);
   return (
     <div className="mt-6">
-      {showStrike ? (
-        <div className="mb-1 flex items-center gap-2">
-          <span className="text-lg text-faint line-through">${tier.monthly}</span>
-          <span className="rounded-full bg-key-soft px-2 py-0.5 text-[0.7rem] font-semibold text-fg">
-            Save {savePct}%
-          </span>
-        </div>
-      ) : null}
       <div className="flex items-baseline gap-1.5">
-        <span className="font-display text-5xl font-semibold tracking-tight text-fg">
+        <span className="font-display text-5xl font-semibold tracking-tight text-fg tabular-nums">
           ${perMonth}
         </span>
         <span className="text-sm text-muted">
-          USD&nbsp;/<br className="hidden sm:block" />
-          month
+          USD&nbsp;/&nbsp;month
         </span>
       </div>
       <p className="mt-2 text-xs text-faint">
@@ -119,16 +136,12 @@ export function Pricing() {
   const [yearly, setYearly] = React.useState(true);
 
   return (
-    <section className="relative pb-20 pt-24 sm:pb-28 sm:pt-24">
+    <section className="relative pb-20 pt-36 sm:pb-28 sm:pt-44">
       <Container>
         <div className="mx-auto mb-10 max-w-2xl text-center">
           <Reveal>
-            <Eyebrow>Pricing</Eyebrow>
-          </Reveal>
-          <Reveal delay={0.06}>
             <SectionHeading
               align="center"
-              className="mt-4"
               title="Simple pricing that scales with you"
               description="Two plans with clear monthly or yearly pricing, plus a custom Enterprise tier. No seats, no minimums, no surprise invoices."
             />
@@ -137,26 +150,37 @@ export function Pricing() {
 
         {/* Monthly / Yearly toggle */}
         <Reveal delay={0.1}>
-          <div className="mb-12 flex items-center justify-center gap-3">
+          <div className="mb-12 flex items-center justify-end gap-3">
             <div className="inline-flex items-center rounded-pill border border-line bg-surface p-1">
-              <button
-                onClick={() => setYearly(false)}
-                className={cn(
-                  "rounded-pill px-4 py-1.5 text-sm font-medium transition-colors",
-                  !yearly ? "bg-key text-white" : "text-muted hover:text-fg",
-                )}
-              >
-                Monthly
-              </button>
-              <button
-                onClick={() => setYearly(true)}
-                className={cn(
-                  "rounded-pill px-4 py-1.5 text-sm font-medium transition-colors",
-                  yearly ? "bg-key text-white" : "text-muted hover:text-fg",
-                )}
-              >
-                Yearly
-              </button>
+              {[
+                { label: "Monthly", value: false },
+                { label: "Yearly", value: true },
+              ].map((opt) => {
+                const active = yearly === opt.value;
+                return (
+                  <button
+                    key={opt.label}
+                    onClick={() => setYearly(opt.value)}
+                    className="relative rounded-pill px-4 py-1.5 text-sm font-medium"
+                  >
+                    {active ? (
+                      <motion.span
+                        layoutId="pricing-toggle-pill"
+                        className="absolute inset-0 rounded-pill bg-key"
+                        transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                      />
+                    ) : null}
+                    <span
+                      className={cn(
+                        "relative z-10 transition-colors",
+                        active ? "text-white" : "text-muted hover:text-fg",
+                      )}
+                    >
+                      {opt.label}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
             <span className="hidden text-sm text-muted sm:inline">
               Save ~17% with yearly plans
@@ -282,26 +306,15 @@ export function Pricing() {
 
 // Price block on the dark (popular) card, same layout, light-on-dark colors.
 function PriceDark({ tier, yearly }: { tier: Tier; yearly: boolean }) {
-  const perMonth = yearly ? tier.yearly! : tier.monthly!;
-  const showStrike = yearly && tier.monthly! > tier.yearly!;
-  const savePct = Math.round((1 - tier.yearly! / tier.monthly!) * 100);
+  const perMonth = useAnimatedNumber(yearly ? tier.yearly! : tier.monthly!);
   return (
     <div className="mt-6">
-      {showStrike ? (
-        <div className="mb-1 flex items-center gap-2">
-          <span className="text-lg text-white/50 line-through">${tier.monthly}</span>
-          <span className="rounded-full bg-white/15 px-2 py-0.5 text-[0.7rem] font-semibold text-white">
-            Save {savePct}%
-          </span>
-        </div>
-      ) : null}
       <div className="flex items-baseline gap-1.5">
-        <span className="font-display text-5xl font-semibold tracking-tight text-white">
+        <span className="font-display text-5xl font-semibold tracking-tight text-white tabular-nums">
           ${perMonth}
         </span>
         <span className="text-sm text-white/70">
-          USD&nbsp;/<br className="hidden sm:block" />
-          month
+          USD&nbsp;/&nbsp;month
         </span>
       </div>
       <p className="mt-2 text-xs text-white/60">

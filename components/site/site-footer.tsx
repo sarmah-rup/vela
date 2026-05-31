@@ -39,9 +39,11 @@ const SOCIAL_ICONS: Record<string, React.ReactNode> = {
   ),
 };
 
-export function SiteFooter() {
+export function SiteFooter({ flush = false }: { flush?: boolean }) {
   return (
-    <footer className="relative z-[2] mt-32 border-t border-line bg-bg-soft/60">
+    <footer
+      className={`relative z-[2] border-t border-line bg-bg-soft/60 ${flush ? "" : "mt-32"}`}
+    >
       <Container className="py-16">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_3fr]">
           <div className="flex flex-col gap-5">

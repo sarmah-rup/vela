@@ -1,5 +1,4 @@
 import { getAppUser } from "@/lib/user";
-import { PLANS } from "@/lib/plans";
 import { DashboardClient } from "./dashboard-client";
 
 const clerkConfigured =
@@ -25,22 +24,9 @@ export default async function DashboardPage() {
     return <p className="text-muted">Please sign in.</p>;
   }
 
-  const plans = PLANS.map((p) => ({
-    key: p.key,
-    name: p.name,
-    priceLabel: p.priceLabel,
-    blurb: p.blurb,
-    features: p.features,
-    popular: !!p.popular,
-    purchasable: !!p.priceId,
-  }));
-
+  // Real identity + plan come from Clerk; credits / API keys / usage are dummy in
+  // the client for now (backend wired up later).
   return (
-    <DashboardClient
-      email={user.email}
-      plan={user.plan}
-      planStatus={user.planStatus}
-      plans={plans}
-    />
+    <DashboardClient email={user.email} plan={user.plan} planStatus={user.planStatus} />
   );
 }

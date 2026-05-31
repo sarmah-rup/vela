@@ -60,9 +60,8 @@ const SAMPLE = `curl https://api.imagepipeline.io/generate/image/v1 \\
 
 function Hero() {
   return (
-    <header className={clsx('vela-glow-bg', styles.hero)}>
+    <header className={styles.hero}>
       <div className={styles.heroInner}>
-        <span className={styles.eyebrow}>ImagePipeline API · v1</span>
         <h1 className={styles.heroTitle}>
           Generate, preserve, swap, and animate{' '}
           <span className="vela-gradient-text">real people</span>
@@ -82,14 +81,50 @@ function Hero() {
       </div>
 
       <div className={styles.heroMedia}>
-        <img
-          className={styles.heroImage}
-          src={useBaseUrl('/img/hero-console.svg')}
-          alt="ImagePipeline generation console"
-          loading="eager"
-          width={720}
-          height={460}
-        />
+        <div className={styles.heroFrame}>
+          {/* On-model shot pulled from the marketing home hero (served at the app
+              root, so no useBaseUrl). */}
+          <img
+            className={styles.heroImage}
+            src="/img/ip2/69773c05ff330c75b2550fc3_Botika_Homepage_WhiteCurlyAIModel_Mobile.avif"
+            alt="AI-generated on-model look"
+            loading="eager"
+            width={720}
+            height={900}
+          />
+        </div>
+
+        {/* Dev cues — terminal-style API calls floating over the shot. */}
+        <div className={`${styles.devCue} ${styles.devCueTL}`}>
+          <div className={styles.devRow}>
+            <span className={styles.devDollar}>$</span>
+            <span className={styles.devMethod}>POST</span>
+            <span className={styles.devPath}>/generate/image/v1</span>
+          </div>
+          <div className={styles.devPrompt}>
+            prompt: &quot;curly hair, pastel studio, beauty&quot;
+            <span className={styles.devCaret}>▋</span>
+          </div>
+        </div>
+
+        <div className={`${styles.devCue} ${styles.devCueMR}`}>
+          <div className={styles.devRow}>
+            <span className={styles.devDollar}>$</span>
+            <span className={styles.devMethod}>POST</span>
+            <span className={styles.devPath}>/identity/faceswap/v1</span>
+          </div>
+        </div>
+
+        <div className={`${styles.devCue} ${styles.devCueBR}`}>
+          <div className={styles.devRow}>
+            <span className={styles.devDollar}>$</span>
+            <span className={styles.devMethod}>POST</span>
+            <span className={styles.devPath}>/background/replace/v1</span>
+          </div>
+          <div className={styles.devPrompt}>
+            status: <span className={styles.devOk}>200 · succeeded</span>
+          </div>
+        </div>
       </div>
     </header>
   );

@@ -33,8 +33,8 @@ export async function POST(req: Request) {
     customer: customerId,
     line_items: [{ price: selected.priceId, quantity: 1 }],
     allow_promotion_codes: true,
-    success_url: `${appUrl}/app?checkout=success`,
-    cancel_url: `${appUrl}/app?checkout=cancelled`,
+    success_url: `${appUrl}/dashboard?checkout=success`,
+    cancel_url: `${appUrl}/dashboard?checkout=cancelled`,
     metadata: { userId: user.id, plan: selected.key },
     subscription_data: { metadata: { userId: user.id, plan: selected.key } },
   });

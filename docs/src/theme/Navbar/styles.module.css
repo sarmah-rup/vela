@@ -14,7 +14,7 @@
   top: 0;
   z-index: 200;
   padding: 1rem 0;
-  background: transparent;
+  background: #f0f0f0; /* opaque page color so no white shows behind the pill at the top */
   font-family: var(--m-font);
 }
 
@@ -32,8 +32,14 @@
   gap: 1rem;
   padding: 0.5rem 0.75rem 0.5rem 1rem;
   border-radius: 999px;
+  background: transparent;
+  border: 1px solid transparent;
+  box-shadow: none;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.pillScrolled {
   background: #ffffff;
-  border: 1px solid var(--m-line);
+  border-color: var(--m-line);
   box-shadow: 0 20px 50px -30px rgba(0, 0, 0, 0.5);
 }
 
@@ -85,6 +91,22 @@
 .navLink:hover,
 .navBtn:hover { color: var(--m-fg); text-decoration: none; }
 
+/* Active section gets the marketing header's underline bar. */
+.navLinkActive {
+  position: relative;
+  color: var(--m-fg);
+}
+.navLinkActive::after {
+  content: '';
+  position: absolute;
+  left: 0.875rem;
+  right: 0.875rem;
+  bottom: 0.125rem;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--m-key);
+}
+
 .chev { transition: transform 0.2s ease; }
 .chevUp { transform: rotate(180deg); transition: transform 0.2s ease; }
 
@@ -128,7 +150,21 @@
 }
 
 /* CTAs */
-.cta { display: none; align-items: center; gap: 0.5rem; }
+.cta {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  /* Revealed as one (nav links + auth buttons) once auth state is resolved — logo
+     stays immediate. Mirrors the marketing header's fade-up. */
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ctaReady { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .cta { transform: none; transition: opacity 0.3s ease; }
+}
 .signin {
   border-radius: 999px;
   padding: 0.5rem 0.875rem;
@@ -153,6 +189,21 @@
   transition: background 0.2s ease;
 }
 .tryBtn:hover { background: var(--m-key-deep); color: #fff; text-decoration: none; }
+.dashBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 12px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: transparent;
+  color: var(--m-fg);
+  border: 1px solid var(--m-line);
+  text-decoration: none;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.dashBtn:hover { border-color: var(--m-key); color: var(--m-key); text-decoration: none; }
 
 /* Mobile burger toggles the docs sidebar */
 .burger {

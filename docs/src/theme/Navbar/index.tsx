@@ -23,11 +23,40 @@ const MAIN: Item[] = [
   {label: 'Pricing', href: '/pricing'},
 ];
 
+// Clerk sets a non-httpOnly `__client_uat` cookie on this origin (the docs are
+// proxied under the same localhost:3000/docs origin as the Next app): 0 = signed
+// out, a positive timestamp = signed in. This lets the docs menu mirror the site's
+// auth state without bundling the Clerk SDK into Docusaurus.
+function readSignedIn(): boolean {
+  if (typeof document === 'undefined') return false;
+  const m = document.cookie.match(/(?:^|;\s*)__client_uat=(\d+)/);
+  return m ? Number(m[1]) > 0 : false;
+}
+
 export default function Navbar(): ReactNode {
   const {siteConfig} = useDocusaurusContext();
   const location = useLocation();
   const mobileSidebar = useNavbarMobileSidebar();
   const [menuOpen, setMenuOpen] = React.useState(false);
+
+  // Mirror the site's auth state (signed in → Dashboard; signed out → Sign in / Try
+  // Now). Gated on `authReady` so signed-in users never flash the "Sign in" state.
+  const [authReady, setAuthReady] = React.useState(false);
+  const [signedIn, setSignedIn] = React.useState(false);
+  React.useEffect(() => {
+    setSignedIn(readSignedIn());
+    setAuthReady(true);
+  }, [location.pathname]);
+
+  // Match the marketing header: the pill is borderless/flat at the top and only gains
+  // its border + background + shadow once the page is scrolled.
+  const [scrolled, setScrolled] = React.useState(false);
+  React.useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener('scroll', onScroll, {passive: true});
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   // The docs landing page is served at the baseUrl root; doc pages have a sidebar.
   const base = siteConfig.baseUrl.replace(/\/$/, ''); // e.g. "/docs"
@@ -49,7 +78,7 @@ export default function Navbar(): ReactNode {
       }`}
     >
       <div className={styles.inner}>
-        <div className={styles.pill}>
+        <div className={`${styles.pill}${scrolled ? ` ${styles.pillScrolled}` : ''}`}>
           {/* Logo, identical ImagePipeline mark + wordmark to the marketing SiteHeader. */}
           <a href="/" className={styles.logo} aria-label="ImagePipeline home">
             <svg viewBox="0 0 32 32" className={styles.logoMark} aria-hidden="true">
@@ -71,24 +100,43 @@ export default function Navbar(): ReactNode {
             </span>
           </a>
 
-          {/* Nav + CTAs, grouped on the right */}
-          <div className={styles.cta}>
+          {/* Nav + CTAs, grouped on the right — revealed together once ready */}
+          <div className={`${styles.cta}${authReady ? ` ${styles.ctaReady}` : ''}`}>
             <nav className={styles.nav}>
-              {MAIN.map((item) => (
-                <a key={item.href} href={item.href} className={styles.navLink}>
-                  {item.label}
-                </a>
-              ))}
+              {MAIN.map((item) => {
+                // This navbar only renders inside the docs app, so "Docs" is the
+                // active top-level section here.
+                const active = item.href === '/docs';
+                return (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    className={`${styles.navLink}${active ? ` ${styles.navLinkActive}` : ''}`}
+                  >
+                    {item.label}
+                  </a>
+                );
+              })}
             </nav>
-            <a href="/sign-in" className={styles.signin}>
-              Sign in
-            </a>
-            <a href="/sign-up" className={styles.tryBtn}>
-              Try Now
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M7 17L17 7M17 7H8M17 7v9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </a>
+            {authReady ? (
+              signedIn ? (
+                <a href="/dashboard" className={styles.dashBtn}>
+                  Dashboard
+                </a>
+              ) : (
+                <>
+                  <a href="/sign-in" className={styles.signin}>
+                    Sign in
+                  </a>
+                  <a href="/sign-up" className={styles.tryBtn}>
+                    Try Now
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M7 17L17 7M17 7H8M17 7v9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </a>
+                </>
+              )
+            ) : null}
           </div>
 
           {/* Mobile burger: landing → dropdown card, doc pages → Docusaurus drawer. */}
@@ -114,12 +162,20 @@ export default function Navbar(): ReactNode {
               </a>
             ))}
             <div className={styles.mobileDivider} />
-            <a href="/sign-in" onClick={close} className={styles.mobileItem}>
-              Sign in
-            </a>
-            <a href="/sign-up" onClick={close} className={styles.mobileTryBtn}>
-              Try Now
-            </a>
+            {signedIn ? (
+              <a href="/dashboard" onClick={close} className={styles.mobileItem}>
+                Dashboard
+              </a>
+            ) : (
+              <>
+                <a href="/sign-in" onClick={close} className={styles.mobileItem}>
+                  Sign in
+                </a>
+                <a href="/sign-up" onClick={close} className={styles.mobileTryBtn}>
+                  Try Now
+                </a>
+              </>
+            )}
           </div>
         ) : null}
       </div>

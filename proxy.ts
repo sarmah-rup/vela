@@ -8,7 +8,7 @@ const clerkConfigured =
   !!process.env.CLERK_SECRET_KEY && !process.env.CLERK_SECRET_KEY.includes("REPLACE_ME");
 
 const isProtected = createRouteMatcher([
-  "/app(.*)",
+  "/dashboard(.*)",
   "/api/billing(.*)",
 ]);
 

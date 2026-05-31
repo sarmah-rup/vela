@@ -29,10 +29,10 @@
 }
 
 .heroTitle {
-  font-size: clamp(2.6rem, 6vw, 4.25rem);
-  line-height: 1.04;
-  letter-spacing: -0.045em;
-  font-weight: 600;
+  font-size: clamp(2.25rem, 5vw, 3rem); /* match home hero: text-4xl → sm:text-5xl */
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  font-weight: 500;
   margin: 0 auto;
   max-width: 18ch;
   text-wrap: balance;
@@ -56,19 +56,81 @@
 .heroMedia {
   position: relative;
   z-index: 1;
-  max-width: 920px;
-  margin: 5rem auto 0;
+  max-width: 600px;
+  margin: 2rem auto 0;
   padding: 0 1.5rem;
 }
+.heroFrame {
+  position: relative;
+  max-width: 420px;
+  margin: 0 auto;
+}
+/* Soft shadow only at the very bottom — a blurred ellipse behind the image. */
+.heroFrame::after {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  left: 12%;
+  right: 12%;
+  bottom: -8px;
+  height: 22px;
+  background: rgba(10, 10, 15, 0.4);
+  filter: blur(20px);
+  border-radius: 50%;
+}
 .heroImage {
+  position: relative;
+  z-index: 1;
+  display: block;
   width: 100%;
   height: auto;
-  border-radius: 16px;
-  border: 1px solid var(--vela-border);
-  box-shadow:
-    0 2px 4px rgba(10, 10, 15, 0.04),
-    0 24px 60px rgba(91, 91, 214, 0.16),
-    0 8px 24px rgba(10, 10, 15, 0.08);
+}
+
+/* Dev cues — terminal-style overlays floating over the on-model shot. */
+.devCue {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.7rem 0.95rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(11, 12, 14, 0.85);
+  backdrop-filter: saturate(140%) blur(10px);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+  box-shadow: 0 14px 34px -14px rgba(0, 0, 0, 0.9);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.62);
+  white-space: nowrap;
+}
+.devRow { display: flex; align-items: center; gap: 0.5rem; }
+.devDollar { color: rgba(255, 255, 255, 0.3); }
+.devMethod { color: #34d399; font-weight: 600; }
+.devPath { color: rgba(255, 255, 255, 0.66); }
+.devPrompt { color: rgba(255, 255, 255, 0.42); }
+.devOk { color: #34d399; }
+.devCaret {
+  display: inline-block;
+  margin-left: 1px;
+  color: rgba(52, 211, 153, 0.85);
+  animation: devBlink 1.1s steps(1) infinite;
+}
+@keyframes devBlink {
+  50% { opacity: 0; }
+}
+
+.devCueTL { top: 5%; left: -0.5rem; }
+.devCueMR { top: 45%; right: -0.75rem; }
+.devCueBR { bottom: 12%; left: -0.25rem; }
+
+@media (max-width: 600px) {
+  .devCue { font-size: 0.7rem; padding: 0.5rem 0.7rem; }
+  .devCueTL { left: 0.25rem; }
+  .devCueMR { display: none; }
+  .devCueBR { left: 0.25rem; bottom: 8%; }
 }
 
 /* ---------------------------------------------------------- Sections */
@@ -90,8 +152,9 @@
 }
 .sectionTitle {
   font-size: clamp(1.8rem, 3.4vw, 2.4rem);
-  letter-spacing: -0.035em;
+  letter-spacing: -0.03em;
   line-height: 1.12;
+  font-weight: 500;
   margin: 0;
 }
 .sectionLede {

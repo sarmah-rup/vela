@@ -31,12 +31,13 @@
   --vela-border: #e6e5e1;
   --vela-subtle: #f4f4f2;
 
-  /* Typography, Geist, exactly as the app */
-  --ifm-font-family-base: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Typography, Plus Jakarta Sans, to match the homepage (its --font-display /
+     --font-sans both map to Jakarta). */
+  --ifm-font-family-base: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --ifm-font-family-monospace: 'Geist Mono', ui-monospace, 'SF Mono', Monaco, monospace;
   --ifm-font-size-base: 16.5px;
   --ifm-line-height-base: 1.7;
-  --ifm-heading-font-weight: 600;
+  --ifm-heading-font-weight: 500; /* match the homepage's lighter headings */
   --ifm-heading-line-height: 1.18;
   --ifm-paragraph-margin-bottom: 1.5rem;
 
@@ -58,11 +59,11 @@
   --ifm-spacing-horizontal: 1.5rem;
   --ifm-container-width-xl: 1240px;
 
-  --ifm-background-color: #ffffff; /* match the homepage body background */
-  --ifm-background-surface-color: #ffffff; /* cards / navbar stay white */
+  --ifm-background-color: #f0f0f0; /* page background, matches the auth panel */
+  --ifm-background-surface-color: #ffffff; /* cards / code blocks stay white */
   --ifm-font-color-base: #0e0f12;
   --ifm-heading-color: #0e0f12;
-  --ifm-navbar-background-color: #ffffff; /* opaque: also backs the mobile drawer */
+  --ifm-navbar-background-color: #f0f0f0; /* blend with the page — no white menu band */
   --ifm-toc-border-color: var(--vela-border);
   --ifm-color-emphasis-200: #f1f1f4;
   --ifm-color-emphasis-300: var(--vela-border);
@@ -138,9 +139,8 @@ html {
 
 /* ============================================================= Navbar */
 .navbar {
-  backdrop-filter: saturate(180%) blur(14px);
-  -webkit-backdrop-filter: saturate(180%) blur(14px);
-  border-bottom: 1px solid var(--vela-border);
+  background-color: #f0f0f0; /* explicit, so no white band sits behind the menu */
+  border-bottom: none;
   box-shadow: none;
   padding-inline: clamp(1rem, 4vw, 2.5rem);
 }
