@@ -9,14 +9,12 @@ import { auth } from "@clerk/nextjs/server";
 // Auth bridge: we forward the signed-in user's Clerk session token as
 // `Authorization: Bearer …` (per SETUP.md). The backend resolves the user from
 // that token, so the "current user" endpoints (/v1/user/me, …) need no user_id.
-// (The spec also documents an X-API-Key scheme for raw API consumers; the app
-// doesn't use it.)
 //
-// We cover every distinct user capability in the spec. The `{user_id}` /
-// `/v1/user/{user_id}/…` path variants are admin lookups that return the SAME
-// data as the current-user endpoints, so we intentionally don't re-expose them —
-// where an endpoint needs a user_id (models / images / metrics) we resolve it
-// from /me and call the canonical route.
+// The `{user_id}` / `/v1/user/{user_id}/…` path variants are admin lookups that
+// return the SAME data as the current-user endpoints, so we don't re-expose them;
+// where an endpoint needs a user_id (images / metrics) we resolve it from /me.
+//
+// NOTE: the /v1/user/models endpoints are deprecated and intentionally not used.
 // ─────────────────────────────────────────────────────────────────────────────
 
 const BASE_URL = (process.env.IMAGEPIPELINE_API_URL ?? "https://api.imagepipeline.io").replace(
@@ -26,7 +24,7 @@ const BASE_URL = (process.env.IMAGEPIPELINE_API_URL ?? "https://api.imagepipelin
 
 // ── Typed shapes (from components.schemas) ───────────────────────────────────
 
-// GET /v1/user/me · /v1/user/details · /v1/user/{user_id} (UserDetails)
+// GET /v1/user/me (UserDetails). `api_key` is redacted before reaching the client.
 export type UserMe = {
   user_id: string;
   email: string | null;
@@ -49,25 +47,6 @@ export type UserSubscription = {
   period_end: string;
   subscription_status: string;
   sqs: string | null;
-};
-
-// GET /v1/user/models (UserModelInfo) — list rows
-export type UserModelInfo = {
-  model_id: string;
-  user_id: string;
-  model_name: string | null;
-  status: string;
-  trigger_word: string | null;
-  created_at: string | null;
-};
-
-// GET /v1/user/models/{model_id} (UserModel) — detail
-export type UserModel = UserModelInfo & {
-  updated_at: string | null;
-  training_steps: number | null;
-  model_url: string | null;
-  thumbnail_url: string | null;
-  training_config: Record<string, unknown> | null;
 };
 
 // GET /v1/user/images (UserImage)
@@ -119,6 +98,11 @@ async function ipFetch<T>(path: string, init?: RequestInit): Promise<T> {
 
 const q = (userId: string) => `?user_id=${encodeURIComponent(userId)}`;
 
+// Generic helpers for the Try-now runner (path is allowlisted by the caller).
+export const ipGet = (path: string) => ipFetch<Json>(path);
+export const ipPost = (path: string, body: unknown) =>
+  ipFetch<Json>(path, { method: "POST", body: JSON.stringify(body ?? {}) });
+
 // ── Account / identity ───────────────────────────────────────────────────────
 export const getMe = () => ipFetch<UserMe>("/v1/user/me");
 
@@ -132,11 +116,7 @@ export const getRateLimitStats = () => ipFetch<Json>("/v1/user/rate-limits/stats
 // ── Subscriptions ─────────────────────────────────────────────────────────────
 export const getSubscriptions = () => ipFetch<UserSubscription[]>("/v1/user/subscriptions");
 
-// ── Models & images (need the resolved ImagePipeline user_id) ─────────────────
-export const getModels = (userId: string) =>
-  ipFetch<UserModelInfo[]>(`/v1/user/models${q(userId)}`);
-export const getModel = (modelId: string) =>
-  ipFetch<UserModel>(`/v1/user/models/${encodeURIComponent(modelId)}`);
+// ── Images (needs the resolved ImagePipeline user_id) ─────────────────────────
 export const getImages = (userId: string) => ipFetch<UserImage[]>(`/v1/user/images${q(userId)}`);
 
 // ── API key (single key: get / create-if-none / rotate) ───────────────────────
@@ -162,76 +142,86 @@ export function extractApiKey(data: Json | null): string | null {
   return typeof v === "string" ? v : null;
 }
 
-// Is any of the loose payloads non-empty? (drives conditional enterprise UI)
-const nonEmpty = (v: unknown) =>
-  v != null && (Array.isArray(v) ? v.length > 0 : typeof v !== "object" || Object.keys(v).length > 0);
+// Mask a secret for display so the full value never has to leave the server.
+function mask(key: string | null | undefined): string | null {
+  if (!key) return null;
+  return key.length <= 12
+    ? `${key.slice(0, 4)}••••`
+    : `${key.slice(0, 12)}••••••••••${key.slice(-4)}`;
+}
 
 // ── Aggregate everything the dashboard needs in one server-side pass ──────────
 // Each piece degrades independently so a single failing endpoint doesn't blank
 // the dashboard. `reachable` reflects whether the core /me call succeeded.
 export type DashboardData = {
-  account: UserMe | null;
+  account: UserMe | null; // api_key is redacted to null here (see apiKeyMasked)
   reachable: boolean;
+  apiKeyMasked: string | null; // safe-to-render masked form
+  hasApiKey: boolean;
   subscriptions: UserSubscription[];
+  subscriptionsError: boolean; // distinguish backend failure from genuinely none
   plan: Json | null;
   usage: Json | null;
   rateLimits: Json | null;
-  rateLimitStats: Json | null;
-  models: UserModelInfo[];
   images: UserImage[];
   enterprise: {
+    // Whether this account actually has enterprise access (the pod/queue endpoints
+    // 403 with "Enterprise plan required" otherwise). Drives the locked teaser.
+    hasAccess: boolean;
     sqsMetrics: Json | null;
     pods: Json | null;
     podStatus: Json | null;
     queueMetrics: Json | null;
-    hasData: boolean;
   };
 };
 
 export async function getDashboardData(): Promise<DashboardData> {
   const [meSettled] = await Promise.allSettled([getMe()]);
-  const account = meSettled.status === "fulfilled" ? meSettled.value : null;
+  const fullAccount = meSettled.status === "fulfilled" ? meSettled.value : null;
   const reachable = meSettled.status === "fulfilled";
-  const uid = account?.user_id;
+  const uid = fullAccount?.user_id;
 
   const settled = await Promise.allSettled([
     getSubscriptions(), // 0
     getPlanInfo(), // 1
     getUsage(30), // 2
     getRateLimits(), // 3
-    getRateLimitStats(), // 4
-    uid ? getModels(uid) : Promise.resolve([]), // 5
-    uid ? getImages(uid) : Promise.resolve([]), // 6
-    uid ? getSqsMetrics(uid) : Promise.resolve(null), // 7
-    listEnterprisePods(), // 8
-    getEnterprisePodStatus(), // 9
-    getEnterpriseQueueMetrics(), // 10
+    uid ? getImages(uid) : Promise.resolve([]), // 4
+    uid ? getSqsMetrics(uid) : Promise.resolve(null), // 5
+    listEnterprisePods(), // 6
+    getEnterprisePodStatus(), // 7
+    getEnterpriseQueueMetrics(), // 8
   ]);
 
+  const ok = (i: number) => settled[i].status === "fulfilled";
   const val = <T,>(i: number, fb: T): T =>
-    settled[i].status === "fulfilled" ? ((settled[i] as PromiseFulfilledResult<T>).value ?? fb) : fb;
+    ok(i) ? ((settled[i] as PromiseFulfilledResult<T>).value ?? fb) : fb;
 
-  const sqsMetrics = val<Json | null>(7, null);
-  const pods = val<Json | null>(8, null);
-  const podStatus = val<Json | null>(9, null);
-  const queueMetrics = val<Json | null>(10, null);
+  const pods = val<Json | null>(6, null);
+  const podStatus = val<Json | null>(7, null);
+  const queueMetrics = val<Json | null>(8, null);
+
+  // Redact the API key — never ship the full secret in the page payload.
+  const account: UserMe | null = fullAccount ? { ...fullAccount, api_key: null } : null;
 
   return {
     account,
     reachable,
+    apiKeyMasked: mask(fullAccount?.api_key),
+    hasApiKey: !!fullAccount?.api_key,
     subscriptions: val<UserSubscription[]>(0, []),
+    subscriptionsError: !ok(0),
     plan: val<Json | null>(1, null),
     usage: val<Json | null>(2, null),
     rateLimits: val<Json | null>(3, null),
-    rateLimitStats: val<Json | null>(4, null),
-    models: val<UserModelInfo[]>(5, []),
-    images: val<UserImage[]>(6, []),
+    images: val<UserImage[]>(4, []),
     enterprise: {
-      sqsMetrics,
+      // A successful (non-403) response from any pod/queue endpoint means access.
+      hasAccess: ok(6) || ok(7) || ok(8),
+      sqsMetrics: val<Json | null>(5, null),
       pods,
       podStatus,
       queueMetrics,
-      hasData: [sqsMetrics, pods, podStatus, queueMetrics].some(nonEmpty),
     },
   };
 }

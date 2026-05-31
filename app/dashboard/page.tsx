@@ -25,18 +25,22 @@ export default async function DashboardPage() {
     return <p className="text-muted">Please sign in.</p>;
   }
 
-  // Real account state (credits, plan, usage, limits, API key, models, images,
+  // Real account state (credits, plan, usage, limits, API key, images,
   // subscriptions, enterprise) comes from api.imagepipeline.io, fetched server-side
-  // with the user's bearer token. If the backend is unreachable the client renders a
-  // graceful "couldn't load" state instead of fabricated numbers. Identity falls
-  // back to Clerk.
+  // with the user's bearer token. The ImagePipeline account is the source of truth
+  // for plan + active state (Stripe/Clerk only drives the upgrade/checkout flow). If
+  // the backend is unreachable the client degrades gracefully. Identity falls back
+  // to Clerk.
   const data = await getDashboardData();
+  const plan = data.account?.plan || user.plan;
+  // Active = the account holds a real (non-free) plan, regardless of Stripe state.
+  const active = !!data.account && !["free", "none", ""].includes(plan.toLowerCase());
 
   return (
     <DashboardClient
       email={data.account?.email || user.email}
-      plan={data.account?.plan || user.plan}
-      planStatus={user.planStatus}
+      plan={plan}
+      active={active}
       data={data}
     />
   );

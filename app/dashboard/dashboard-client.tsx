@@ -5,11 +5,10 @@ import { useUser, UserButton } from "@clerk/nextjs";
 import {
   LayoutDashboard,
   KeyRound,
+  Images as ImagesIcon,
   Activity,
   CreditCard,
   Settings,
-  Boxes,
-  Images as ImagesIcon,
   Plus,
   Copy,
   Check,
@@ -19,28 +18,22 @@ import {
   ArrowUpRight,
   TriangleAlert,
   WifiOff,
-  Server,
-  ChevronDown,
+  Lock,
+  Zap,
+  Wand2,
 } from "lucide-react";
 import { motion } from "motion/react";
 import { CAL_URL } from "@/lib/site";
 import { cn } from "@/lib/utils";
-import type {
-  UserMe,
-  UserSubscription,
-  UserModelInfo,
-  UserModel,
-  UserImage,
-  DashboardData,
-  Json,
-} from "@/lib/imagepipeline";
+import type { UserMe, UserSubscription, UserImage, DashboardData, Json } from "@/lib/imagepipeline";
+import { TryNow } from "./try-now";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// All account data (credits, plan, usage, limits, API key, models, images,
+// All account data (credits, plan, usage, rate limits, API key, images,
 // subscriptions, enterprise) is fetched server-side from api.imagepipeline.io and
-// passed in as `data` — see app/dashboard/page.tsx + lib/imagepipeline.ts. The plan
-// tiers below are presentational (mirrors lib/plans.ts) for the upgrade grid; the
-// live plan/status come from `account` + Clerk.
+// passed in as `data` — see app/dashboard/page.tsx + lib/imagepipeline.ts. The
+// ImagePipeline account is the source of truth for plan/credits; the plan tiers
+// below are presentational (mirrors lib/plans.ts) for the upgrade grid.
 // ─────────────────────────────────────────────────────────────────────────────
 
 type PlanTier = {
@@ -81,12 +74,12 @@ const PLAN_TIERS: PlanTier[] = [
   },
 ];
 
-type Tab = "overview" | "keys" | "models" | "images" | "usage" | "billing" | "settings";
+type Tab = "overview" | "try" | "keys" | "images" | "usage" | "billing" | "settings";
 
 const NAV: { key: Tab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { key: "overview", label: "Overview", icon: LayoutDashboard },
+  { key: "try", label: "Try now", icon: Wand2 },
   { key: "keys", label: "API key", icon: KeyRound },
-  { key: "models", label: "Models", icon: Boxes },
   { key: "images", label: "Images", icon: ImagesIcon },
   { key: "usage", label: "Usage", icon: Activity },
   { key: "billing", label: "Plans & billing", icon: CreditCard },
@@ -95,6 +88,9 @@ const NAV: { key: Tab; label: string; icon: React.ComponentType<{ className?: st
 
 const fmt = (n: number) => n.toLocaleString("en-US");
 
+const titleCase = (s: string) =>
+  s.replace(/\w\S*/g, (w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
+
 function fmtDate(iso: string | null | undefined): string {
   if (!iso) return "—";
   const d = new Date(iso);
@@ -102,33 +98,24 @@ function fmtDate(iso: string | null | undefined): string {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
-function maskKey(key: string): string {
-  if (key.length <= 12) return `${key.slice(0, 4)}••••`;
-  return `${key.slice(0, 12)}••••••••••${key.slice(-4)}`;
-}
-
-const humanize = (k: string) =>
-  k.replace(/[_-]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-
 export function DashboardClient({
   email,
   plan,
-  planStatus,
+  active,
   data,
 }: {
   email: string;
   plan: string;
-  planStatus: string;
+  active: boolean;
   data: DashboardData;
 }) {
   const [tab, setTab] = React.useState<Tab>("overview");
   const { user } = useUser();
 
-  const { account, subscriptions, reachable } = data;
+  const { account, reachable } = data;
   const name = user?.firstName || user?.fullName || email.split("@")[0];
-  const active = planStatus === "active" || planStatus === "trialing";
   const creditsLeft = account?.tokens_remaining ?? 0;
-  const hasKey = !!account?.api_key;
+  const planLabel = titleCase(plan);
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 lg:flex-row lg:gap-8 lg:px-6 lg:py-8">
@@ -178,15 +165,15 @@ export function DashboardClient({
               <Sparkles className="h-3.5 w-3.5 text-key" />
               {account ? `${fmt(creditsLeft)} credits left` : "—"}
             </span>
-            <span className="inline-flex items-center rounded-pill bg-key px-3 py-1.5 text-xs font-semibold capitalize text-white">
-              {plan}
+            <span className="inline-flex max-w-[12rem] items-center truncate rounded-pill bg-key px-3 py-1.5 text-xs font-semibold text-white">
+              {planLabel}
             </span>
           </div>
         </div>
 
         {!reachable && (
-          <div className="mb-6 flex items-start gap-3 rounded-2xl border border-amber-500/30 bg-amber-500/5 p-4 text-sm">
-            <WifiOff className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
+          <div className="mb-6 flex items-start gap-3 rounded-2xl border border-line bg-bg-soft p-4 text-sm">
+            <WifiOff className="mt-0.5 h-4 w-4 shrink-0 text-faint" />
             <p className="text-muted">
               Couldn&apos;t reach the ImagePipeline API right now. Account details may be
               unavailable — try again shortly.
@@ -197,19 +184,24 @@ export function DashboardClient({
         {tab === "overview" && (
           <Overview
             name={name}
-            plan={plan}
+            planLabel={planLabel}
             active={active}
             data={data}
-            hasKey={hasKey}
             onGoTo={setTab}
           />
         )}
-        {tab === "keys" && <ApiKeys account={account} />}
-        {tab === "models" && <Models models={data.models} />}
+        {tab === "try" && <TryNow />}
+        {tab === "keys" && <ApiKeys masked={data.apiKeyMasked} hasKey={data.hasApiKey} />}
         {tab === "images" && <ImagesTab images={data.images} />}
         {tab === "usage" && <Usage data={data} />}
         {tab === "billing" && (
-          <Billing plan={plan} planStatus={planStatus} active={active} subscriptions={subscriptions} />
+          <Billing
+            plan={plan}
+            planLabel={planLabel}
+            active={active}
+            subscriptions={data.subscriptions}
+            subscriptionsError={data.subscriptionsError}
+          />
         )}
         {tab === "settings" && (
           <SettingsTab name={name} email={email} avatar={user?.imageUrl} account={account} />
@@ -224,45 +216,139 @@ function Card({ children, className }: { children: React.ReactNode; className?: 
   return <div className={cn("rounded-2xl border border-line bg-surface p-5", className)}>{children}</div>;
 }
 
-function CreditStat({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="flex items-baseline justify-between border-b border-line py-3 last:border-0">
-      <span className="text-sm text-muted">{label}</span>
-      <span className="font-medium tabular-nums text-fg">{fmt(value)}</span>
-    </div>
-  );
-}
+const isPlainObject = (v: unknown): v is Json =>
+  !!v && typeof v === "object" && !Array.isArray(v);
+
+const isEmptyVal = (v: unknown) =>
+  v == null ||
+  v === "" ||
+  (Array.isArray(v) && v.length === 0) ||
+  (isPlainObject(v) && Object.keys(v).length === 0);
 
 function renderVal(v: unknown): React.ReactNode {
   if (v == null) return "—";
   if (typeof v === "number") return fmt(v);
   if (typeof v === "boolean") return v ? "Yes" : "No";
   if (typeof v === "string") return v;
+  if (Array.isArray(v) && v.every((x) => typeof x !== "object")) return v.join(", ");
   return <code className="font-mono text-xs text-muted">{JSON.stringify(v)}</code>;
 }
 
-// Generic renderer for the spec's untyped responses (plan, usage, rate-limits, …).
-function KeyValues({ data }: { data: Json | null }) {
-  if (!data || Object.keys(data).length === 0) {
-    return <p className="py-4 text-sm text-muted">No data available.</p>;
+// Recursive renderer for the spec's untyped responses (plan, usage, rate-limits).
+// Empty objects/arrays are skipped so the UI never shows raw `{}` / `[]`.
+function DataRows({ data, depth = 0 }: { data: Json | null; depth?: number }) {
+  const entries = data ? Object.entries(data).filter(([, v]) => !isEmptyVal(v)) : [];
+  if (entries.length === 0) {
+    return <p className="py-3 text-sm text-muted">No data available.</p>;
   }
   return (
-    <dl className="divide-y divide-line text-sm">
-      {Object.entries(data).map(([k, v]) => (
-        <div key={k} className="flex items-start justify-between gap-4 py-2.5">
-          <dt className="text-muted">{humanize(k)}</dt>
-          <dd className="max-w-[60%] break-words text-right font-medium text-fg">{renderVal(v)}</dd>
-        </div>
-      ))}
+    <dl className={cn("text-sm", depth === 0 && "divide-y divide-line")}>
+      {entries.map(([k, v]) =>
+        isPlainObject(v) ? (
+          <div key={k} className="py-2.5">
+            <p className="mb-1 text-xs font-medium uppercase tracking-wide text-faint">{titleCase(k.replace(/[_-]/g, " "))}</p>
+            <div className="rounded-lg bg-bg-soft/60 px-3 py-1">
+              <DataRows data={v} depth={depth + 1} />
+            </div>
+          </div>
+        ) : (
+          <div
+            key={k}
+            className={cn("flex items-start justify-between gap-4", depth === 0 ? "py-2.5" : "py-1.5")}
+          >
+            <dt className="text-muted">{titleCase(k.replace(/[_-]/g, " "))}</dt>
+            <dd className="max-w-[60%] break-words text-right font-medium text-fg">{renderVal(v)}</dd>
+          </div>
+        ),
+      )}
     </dl>
   );
 }
 
-function SectionCard({ title, data }: { title: string; data: Json | null }) {
+// ───────────────────────────────────────── Enterprise upsell (banner + locked card)
+function EnterpriseBanner() {
   return (
-    <Card>
-      <h3 className="mb-1 text-sm font-semibold text-fg">{title}</h3>
-      <KeyValues data={data} />
+    <div className="flex flex-col items-start justify-between gap-4 rounded-2xl border border-key/30 bg-gradient-to-r from-key-soft to-surface p-5 sm:flex-row sm:items-center">
+      <div className="flex items-start gap-3">
+        <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-key-soft">
+          <Zap className="h-4 w-4 text-key" />
+        </span>
+        <div>
+          <p className="font-display text-base font-semibold text-fg">Go faster with Enterprise</p>
+          <p className="mt-0.5 max-w-prose text-sm text-muted">
+            Dedicated GPUs, priority queues, and video models for high-speed generation at scale.
+            Need a product video shoot? Talk to us.
+          </p>
+        </div>
+      </div>
+      <div className="flex shrink-0 items-center gap-2">
+        <a
+          href={CAL_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 rounded-xl bg-key px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-key-deep"
+        >
+          Book a demo
+        </a>
+        <a
+          href={CAL_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center rounded-xl border border-line bg-surface px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-key/50 hover:text-key"
+        >
+          Talk to us
+        </a>
+      </div>
+    </div>
+  );
+}
+
+// Locked, translucent teaser shown on the Usage tab for non-enterprise accounts
+// (the pod/queue endpoints 403 with "Enterprise plan required").
+function EnterpriseLocked() {
+  return (
+    <Card className="relative overflow-hidden p-0">
+      {/* Blurred faux metrics behind the lock */}
+      <div aria-hidden className="pointer-events-none select-none p-5 opacity-50 blur-[3px]">
+        <div className="grid gap-4 sm:grid-cols-2">
+          {["Pods", "Queue depth", "Throughput", "GPU hours"].map((label) => (
+            <div key={label} className="rounded-xl border border-line p-4">
+              <div className="mb-3 h-3 w-24 rounded bg-bg-soft" />
+              <div className="mb-2 h-6 w-16 rounded bg-bg-soft" />
+              <div className="h-2 w-full rounded bg-bg-soft" />
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Overlay CTA */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-b from-surface/70 to-surface/90 p-6 text-center backdrop-blur-[2px]">
+        <span className="flex h-11 w-11 items-center justify-center rounded-full bg-key-soft">
+          <Lock className="h-5 w-5 text-key" />
+        </span>
+        <h3 className="font-display text-lg font-semibold text-fg">Need high speed?</h3>
+        <p className="max-w-md text-sm text-muted">
+          Enterprise unlocks dedicated GPUs, priority queues, and video models — the fastest loads
+          at scale, with live pod &amp; queue metrics here. Need a product video shoot? Talk to us.
+        </p>
+        <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
+          <a
+            href={CAL_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-key px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-key-deep"
+          >
+            Book a demo
+          </a>
+          <a
+            href={CAL_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center rounded-xl border border-line bg-surface px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-key/50 hover:text-key"
+          >
+            Talk to us
+          </a>
+        </div>
+      </div>
     </Card>
   );
 }
@@ -321,7 +407,7 @@ function PlanGrid({ plan, active }: { plan: string; active: boolean }) {
 
       <div className="grid gap-4 sm:grid-cols-3">
         {PLAN_TIERS.map((tier) => {
-          const current = active && plan === tier.key;
+          const current = active && plan.toLowerCase() === tier.key;
           return (
             <div
               key={tier.key}
@@ -403,20 +489,18 @@ function PlanGrid({ plan, active }: { plan: string; active: boolean }) {
 // ───────────────────────────────────────── Overview
 function Overview({
   name,
-  plan,
+  planLabel,
   active,
   data,
-  hasKey,
   onGoTo,
 }: {
   name: string;
-  plan: string;
+  planLabel: string;
   active: boolean;
   data: DashboardData;
-  hasKey: boolean;
   onGoTo: (t: Tab) => void;
 }) {
-  const { account, models, images } = data;
+  const { account, images, hasApiKey, enterprise } = data;
   const creditsLeft = account?.tokens_remaining ?? 0;
   return (
     <div className="space-y-6">
@@ -444,8 +528,13 @@ function Overview({
 
         <Card>
           <p className="text-sm text-muted">Current plan</p>
-          <p className="mt-1 font-display text-3xl font-semibold capitalize tracking-tight text-fg">{plan}</p>
-          <p className="mt-1 text-xs text-faint">{active ? "Active subscription" : "No active subscription"}</p>
+          <p
+            className="mt-1 truncate font-display text-3xl font-semibold tracking-tight text-fg"
+            title={planLabel}
+          >
+            {planLabel}
+          </p>
+          <p className="mt-1 text-xs text-faint">{active ? "Active" : "No active plan"}</p>
           <button
             onClick={() => onGoTo("billing")}
             className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-key hover:underline"
@@ -455,23 +544,23 @@ function Overview({
         </Card>
 
         <Card>
-          <p className="text-sm text-muted">Models</p>
-          <p className="mt-1 font-display text-3xl font-semibold tracking-tight text-fg">{models.length}</p>
-          <p className="mt-1 text-xs text-faint">Trained models</p>
+          <p className="text-sm text-muted">Images</p>
+          <p className="mt-1 font-display text-3xl font-semibold tracking-tight text-fg">{images.length}</p>
+          <p className="mt-1 text-xs text-faint">Generated</p>
           <button
-            onClick={() => onGoTo("models")}
+            onClick={() => onGoTo("images")}
             className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-key hover:underline"
           >
-            View models <ArrowUpRight className="h-4 w-4" />
+            View images <ArrowUpRight className="h-4 w-4" />
           </button>
         </Card>
 
         <Card>
           <p className="text-sm text-muted">API key</p>
           <p className="mt-1 font-display text-3xl font-semibold tracking-tight text-fg">
-            {hasKey ? "Active" : "None"}
+            {hasApiKey ? "Active" : "None"}
           </p>
-          <p className="mt-1 text-xs text-faint">{images.length} images generated</p>
+          <p className="mt-1 text-xs text-faint">{hasApiKey ? "1 key issued" : "Create one to start"}</p>
           <button
             onClick={() => onGoTo("keys")}
             className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-key hover:underline"
@@ -481,25 +570,32 @@ function Overview({
         </Card>
       </div>
 
+      {/* Enterprise upsell — only for accounts without enterprise access */}
+      {!enterprise.hasAccess && <EnterpriseBanner />}
+
       {/* Plans shown right on landing */}
       <Card>
         <div className="mb-1 flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-key" />
           <h3 className="text-sm font-semibold text-fg">Upgrade for more credits</h3>
         </div>
-        <PlanGrid plan={plan} active={active} />
+        <PlanGrid plan={planLabel.toLowerCase()} active={active} />
       </Card>
     </div>
   );
 }
 
 // ───────────────────────────────────────── API key (single key per user)
-function ApiKeys({ account }: { account: UserMe | null }) {
-  const [key, setKey] = React.useState<string | null>(account?.api_key ?? null);
+function ApiKeys({ masked, hasKey: initialHasKey }: { masked: string | null; hasKey: boolean }) {
+  const [maskedKey, setMaskedKey] = React.useState<string | null>(masked);
+  const [hasKey, setHasKey] = React.useState(initialHasKey);
   const [fullKey, setFullKey] = React.useState<string | null>(null); // shown after create/reset/reveal
   const [copied, setCopied] = React.useState(false);
   const [busy, setBusy] = React.useState<string | null>(null);
   const [error, setError] = React.useState<string | null>(null);
+
+  const maskOf = (key: string) =>
+    key.length <= 12 ? `${key.slice(0, 4)}••••` : `${key.slice(0, 12)}••••••••••${key.slice(-4)}`;
 
   async function mutate(action: "create" | "reset") {
     setBusy(action);
@@ -513,7 +609,8 @@ function ApiKeys({ account }: { account: UserMe | null }) {
       const data = await res.json();
       if (res.ok && data.apiKey) {
         setFullKey(data.apiKey);
-        setKey(data.apiKey);
+        setMaskedKey(maskOf(data.apiKey));
+        setHasKey(true);
         setCopied(false);
       } else setError("Couldn't update your API key. Please try again.");
     } catch {
@@ -531,7 +628,6 @@ function ApiKeys({ account }: { account: UserMe | null }) {
       const data = await res.json();
       if (res.ok && data.apiKey) {
         setFullKey(data.apiKey);
-        setKey(data.apiKey);
         setCopied(false);
       } else setError("Couldn't fetch your API key.");
     } catch {
@@ -555,7 +651,7 @@ function ApiKeys({ account }: { account: UserMe | null }) {
           if it&apos;s ever exposed.
         </p>
         <div className="flex shrink-0 items-center gap-2">
-          {key && (
+          {hasKey && (
             <button
               onClick={reveal}
               disabled={!!busy}
@@ -565,7 +661,7 @@ function ApiKeys({ account }: { account: UserMe | null }) {
               {busy === "reveal" ? "Revealing…" : "Reveal"}
             </button>
           )}
-          {key ? (
+          {hasKey ? (
             <button
               onClick={() => mutate("reset")}
               disabled={!!busy}
@@ -616,11 +712,11 @@ function ApiKeys({ account }: { account: UserMe | null }) {
       )}
 
       <Card className="p-0">
-        {key ? (
+        {hasKey && maskedKey ? (
           <div className="flex items-center justify-between gap-4 px-5 py-4">
             <div className="min-w-0">
               <p className="text-sm font-medium text-fg">Default key</p>
-              <p className="truncate font-mono text-xs text-muted">{maskKey(key)}</p>
+              <p className="truncate font-mono text-xs text-muted">{maskedKey}</p>
             </div>
             <span className="rounded-full bg-bg-soft px-2 py-0.5 text-xs font-medium text-muted">Active</span>
           </div>
@@ -634,250 +730,135 @@ function ApiKeys({ account }: { account: UserMe | null }) {
   );
 }
 
-// ───────────────────────────────────────── Models (list + on-demand detail)
-function Models({ models }: { models: UserModelInfo[] }) {
-  const [openId, setOpenId] = React.useState<string | null>(null);
-  const [detail, setDetail] = React.useState<UserModel | null>(null);
-  const [loading, setLoading] = React.useState(false);
-
-  async function toggle(id: string) {
-    if (openId === id) {
-      setOpenId(null);
-      return;
-    }
-    setOpenId(id);
-    setDetail(null);
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/user/models/${encodeURIComponent(id)}`);
-      const d = await res.json();
-      if (res.ok) setDetail(d);
-    } catch {
-      /* leave detail null; row still shows summary */
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  if (models.length === 0) {
-    return (
-      <Card>
-        <p className="py-6 text-center text-sm text-muted">
-          No trained models yet. Train one via the API to see it here.
-        </p>
-      </Card>
-    );
-  }
-
-  return (
-    <Card className="p-0">
-      <div className="divide-y divide-line">
-        {models.map((m) => {
-          const open = openId === m.model_id;
-          return (
-            <div key={m.model_id}>
-              <button
-                onClick={() => toggle(m.model_id)}
-                className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors hover:bg-bg-soft"
-              >
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-medium text-fg">
-                    {m.model_name || m.model_id}
-                  </p>
-                  <p className="truncate text-xs text-muted">
-                    {m.trigger_word ? `Trigger: ${m.trigger_word} · ` : ""}
-                    {fmtDate(m.created_at)}
-                  </p>
-                </div>
-                <div className="flex shrink-0 items-center gap-3">
-                  <span className="rounded-full bg-bg-soft px-2 py-0.5 text-xs font-medium capitalize text-muted">
-                    {m.status}
-                  </span>
-                  <ChevronDown
-                    className={cn("h-4 w-4 text-faint transition-transform", open && "rotate-180")}
-                  />
-                </div>
-              </button>
-              {open && (
-                <div className="border-t border-line bg-bg-soft/40 px-5 py-4">
-                  {loading && <p className="text-sm text-muted">Loading…</p>}
-                  {!loading && detail && (
-                    <div className="flex flex-col gap-4 sm:flex-row">
-                      {detail.thumbnail_url && (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={detail.thumbnail_url}
-                          alt=""
-                          className="h-24 w-24 shrink-0 rounded-xl border border-line object-cover"
-                        />
-                      )}
-                      <dl className="flex-1 divide-y divide-line text-sm">
-                        {[
-                          ["Model ID", detail.model_id],
-                          ["Status", detail.status],
-                          ["Trigger word", detail.trigger_word ?? "—"],
-                          ["Training steps", detail.training_steps != null ? fmt(detail.training_steps) : "—"],
-                          ["Created", fmtDate(detail.created_at)],
-                          ["Updated", fmtDate(detail.updated_at)],
-                        ].map(([k, v]) => (
-                          <div key={k} className="flex items-center justify-between py-2">
-                            <dt className="text-muted">{k}</dt>
-                            <dd className="font-medium text-fg">{v}</dd>
-                          </div>
-                        ))}
-                        {detail.model_url && (
-                          <div className="pt-2">
-                            <a
-                              href={detail.model_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 text-sm font-medium text-key hover:underline"
-                            >
-                              Open model <ArrowUpRight className="h-4 w-4" />
-                            </a>
-                          </div>
-                        )}
-                      </dl>
-                    </div>
-                  )}
-                  {!loading && !detail && (
-                    <p className="text-sm text-muted">Couldn&apos;t load model details.</p>
-                  )}
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    </Card>
-  );
-}
-
 // ───────────────────────────────────────── Images (gallery)
 function ImagesTab({ images }: { images: UserImage[] }) {
-  if (images.length === 0) {
-    return (
-      <Card>
-        <p className="py-6 text-center text-sm text-muted">
-          No generated images yet. Images you create via the API will appear here.
-        </p>
-      </Card>
-    );
-  }
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-      {images.map((img) => (
-        <a
-          key={img.image_id}
-          href={img.download_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group overflow-hidden rounded-2xl border border-line bg-surface"
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={img.download_url}
-            alt=""
-            className="aspect-square w-full object-cover transition-transform group-hover:scale-105"
-          />
-          <p className="truncate px-3 py-2 text-xs text-muted">{fmtDate(img.creation_timestamp)}</p>
-        </a>
-      ))}
+    <div className="space-y-5">
+      <div className="flex items-start gap-3 rounded-2xl border border-line bg-bg-soft p-4 text-sm">
+        <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-fg" />
+        <p className="text-muted">
+          Images are stored for only <span className="font-medium text-fg">24 hours</span> for
+          privacy. Please download and keep them somewhere safe.
+        </p>
+      </div>
+
+      {images.length === 0 ? (
+        <Card>
+          <p className="py-6 text-center text-sm text-muted">
+            No generated images yet. Images you create via the API will appear here.
+          </p>
+        </Card>
+      ) : (
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {images.map((img) => (
+            <a
+              key={img.image_id}
+              href={img.download_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group overflow-hidden rounded-2xl border border-line bg-surface"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={img.download_url}
+                alt=""
+                className="aspect-square w-full object-cover transition-transform group-hover:scale-105"
+              />
+              <p className="truncate px-3 py-2 text-xs text-muted">{fmtDate(img.creation_timestamp)}</p>
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
-// ───────────────────────────────────────── Usage (credits + plan + limits + enterprise)
+// ───────────────────────────────────────── Usage (credits + activity + rate limits)
 function Usage({ data }: { data: DashboardData }) {
-  const { account, subscriptions, plan, usage, rateLimits, rateLimitStats, enterprise } = data;
+  const { account, subscriptions, usage, rateLimits, enterprise } = data;
   const sub = subscriptions[0];
-  const [reqBusy, setReqBusy] = React.useState(false);
-  const [reqMsg, setReqMsg] = React.useState<string | null>(null);
-
-  async function requestPod() {
-    setReqBusy(true);
-    setReqMsg(null);
-    try {
-      const res = await fetch("/api/user/enterprise/pod", { method: "POST" });
-      setReqMsg(res.ok ? "Pod requested — we'll provision it shortly." : "Couldn't request a pod.");
-    } catch {
-      setReqMsg("Couldn't request a pod.");
-    } finally {
-      setReqBusy(false);
-    }
-  }
+  const jobStats = isPlainObject(usage?.job_statistics) ? (usage!.job_statistics as Json) : null;
+  const periodDays = typeof usage?.usage_period_days === "number" ? usage!.usage_period_days : null;
+  // Just the structured limits/usage/remaining block (drop the redundant `plan` key).
+  const limitsBlock: Json | null = rateLimits
+    ? Object.fromEntries(Object.entries(rateLimits).filter(([k]) => k !== "plan"))
+    : null;
 
   return (
     <div className="space-y-5">
-      <Card>
-        <div className="mb-2 flex items-baseline justify-between">
-          <h3 className="text-sm font-semibold text-fg">Credit balances</h3>
-          {account?.plan_expiry_date && (
-            <span className="text-xs text-faint">Renews {fmtDate(account.plan_expiry_date)}</span>
-          )}
-        </div>
-        {account ? (
-          <div className="mt-1">
-            <CreditStat label="Image credits" value={account.tokens_remaining} />
-            <CreditStat label="Model trainings" value={account.model_trainings_remaining} />
-            <CreditStat label="Private model loads" value={account.private_model_loads_remaining} />
-          </div>
-        ) : (
-          <p className="py-6 text-center text-sm text-muted">Usage data is unavailable right now.</p>
-        )}
-      </Card>
-
       <div className="grid gap-5 lg:grid-cols-2">
-        <SectionCard title="Plan limits" data={plan} />
-        <SectionCard title="Usage (last 30 days)" data={usage} />
-        <SectionCard title="Rate limits" data={rateLimits} />
-        <SectionCard title="Rate limit stats" data={rateLimitStats} />
+        <Card>
+          <p className="text-sm text-muted">Image credits remaining</p>
+          <p className="mt-1 font-display text-4xl font-semibold tracking-tight text-fg">
+            {account ? fmt(account.tokens_remaining) : "—"}
+          </p>
+          <p className="mt-1 text-xs text-faint">
+            {account?.plan_expiry_date ? `Renews ${fmtDate(account.plan_expiry_date)}` : "Credits remaining"}
+          </p>
+        </Card>
+
+        <Card>
+          <h3 className="mb-2 text-sm font-semibold text-fg">
+            Activity{periodDays ? ` (last ${periodDays} days)` : ""}
+          </h3>
+          {jobStats ? (
+            <DataRows data={jobStats} />
+          ) : (
+            <p className="py-3 text-sm text-muted">No activity yet.</p>
+          )}
+        </Card>
       </div>
+
+      {limitsBlock && Object.keys(limitsBlock).length > 0 && (
+        <Card>
+          <h3 className="mb-1 text-sm font-semibold text-fg">Rate limits</h3>
+          <DataRows data={limitsBlock} />
+        </Card>
+      )}
 
       {sub && (
         <Card>
           <h3 className="mb-4 text-sm font-semibold text-fg">Current billing period</h3>
           <dl className="divide-y divide-line text-sm">
             {[
-              ["Plan", sub.plan],
-              ["Status", sub.subscription_status],
+              ["Plan", titleCase(sub.plan)],
+              ["Status", titleCase(sub.subscription_status)],
               ["Period start", fmtDate(sub.period_start)],
               ["Period end", fmtDate(sub.period_end)],
               ...(sub.pod_id ? ([["Pod", `${sub.pod_id} (${sub.pod_status})`]] as [string, string][]) : []),
             ].map(([k, v]) => (
               <div key={k} className="flex items-center justify-between py-3">
                 <dt className="text-muted">{k}</dt>
-                <dd className="font-medium capitalize text-fg">{v}</dd>
+                <dd className="font-medium text-fg">{v}</dd>
               </div>
             ))}
           </dl>
         </Card>
       )}
 
-      {/* Enterprise — only when the account actually has enterprise data */}
-      {enterprise.hasData && (
+      {/* Enterprise — live metrics if the account has access, otherwise a locked upsell */}
+      {enterprise.hasAccess ? (
         <Card>
-          <div className="mb-4 flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <Server className="h-4 w-4 text-key" />
-              <h3 className="text-sm font-semibold text-fg">Enterprise</h3>
-            </div>
-            <button
-              onClick={requestPod}
-              disabled={reqBusy}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-line bg-surface px-3 py-1.5 text-xs font-medium text-fg transition-colors hover:border-key/50 disabled:opacity-50"
-            >
-              {reqBusy ? "Requesting…" : "Request pod"}
-            </button>
+          <div className="mb-4 flex items-center gap-2">
+            <Zap className="h-4 w-4 text-key" />
+            <h3 className="text-sm font-semibold text-fg">Enterprise</h3>
           </div>
-          {reqMsg && <p className="mb-3 text-xs text-muted">{reqMsg}</p>}
           <div className="grid gap-5 lg:grid-cols-2">
-            <SectionCard title="Pods" data={enterprise.pods} />
-            <SectionCard title="Pod status" data={enterprise.podStatus} />
-            <SectionCard title="Queue metrics" data={enterprise.queueMetrics} />
-            <SectionCard title="SQS metrics" data={enterprise.sqsMetrics} />
+            {[
+              ["Pods", enterprise.pods],
+              ["Pod status", enterprise.podStatus],
+              ["Queue metrics", enterprise.queueMetrics],
+              ["SQS metrics", enterprise.sqsMetrics],
+            ].map(([title, d]) => (
+              <div key={title as string}>
+                <p className="mb-1 text-xs font-medium uppercase tracking-wide text-faint">{title as string}</p>
+                <DataRows data={d as Json | null} />
+              </div>
+            ))}
           </div>
         </Card>
+      ) : (
+        <EnterpriseLocked />
       )}
     </div>
   );
@@ -886,14 +867,16 @@ function Usage({ data }: { data: DashboardData }) {
 // ───────────────────────────────────────── Billing
 function Billing({
   plan,
-  planStatus,
+  planLabel,
   active,
   subscriptions,
+  subscriptionsError,
 }: {
   plan: string;
-  planStatus: string;
+  planLabel: string;
   active: boolean;
   subscriptions: UserSubscription[];
+  subscriptionsError: boolean;
 }) {
   const [busy, setBusy] = React.useState(false);
 
@@ -912,10 +895,10 @@ function Billing({
   return (
     <div className="space-y-6">
       <Card className="flex flex-wrap items-center justify-between gap-4">
-        <div>
+        <div className="min-w-0">
           <p className="text-sm text-muted">Current plan</p>
-          <p className="font-display text-2xl font-semibold capitalize text-fg">
-            {plan} <span className="text-sm font-normal text-faint">({active ? planStatus : "inactive"})</span>
+          <p className="truncate font-display text-2xl font-semibold text-fg" title={planLabel}>
+            {planLabel} <span className="text-sm font-normal text-faint">({active ? "active" : "inactive"})</span>
           </p>
         </div>
         <button
@@ -938,16 +921,18 @@ function Billing({
         </div>
         <div className="divide-y divide-line">
           {subscriptions.length === 0 && (
-            <p className="px-5 py-8 text-center text-sm text-muted">No subscriptions yet.</p>
+            <p className="px-5 py-8 text-center text-sm text-muted">
+              {subscriptionsError ? "Couldn't load subscriptions right now." : "No subscriptions yet."}
+            </p>
           )}
           {subscriptions.map((sub) => (
             <div key={sub.subscription_id} className="flex items-center justify-between gap-4 px-5 py-3.5 text-sm">
-              <span className="capitalize text-fg">{sub.plan}</span>
+              <span className="text-fg">{titleCase(sub.plan)}</span>
               <span className="text-muted">
                 {fmtDate(sub.period_start)} – {fmtDate(sub.period_end)}
               </span>
-              <span className="rounded-full bg-bg-soft px-2 py-0.5 text-xs font-medium capitalize text-muted">
-                {sub.subscription_status}
+              <span className="rounded-full bg-bg-soft px-2 py-0.5 text-xs font-medium text-muted">
+                {titleCase(sub.subscription_status)}
               </span>
             </div>
           ))}
@@ -996,12 +981,12 @@ function SettingsTab({
             ["Name", name],
             ["Email", email],
             ["Account ID", account?.user_id ?? "—"],
-            ["Plan", account?.plan ?? "—"],
+            ["Plan", account ? titleCase(account.plan) : "—"],
             ["Plan renews", fmtDate(account?.plan_expiry_date)],
           ].map(([k, v]) => (
             <div key={k} className="flex items-center justify-between py-3">
               <dt className="text-muted">{k}</dt>
-              <dd className="font-medium capitalize text-fg">{v}</dd>
+              <dd className="font-medium text-fg">{v}</dd>
             </div>
           ))}
         </dl>

@@ -11,6 +11,7 @@ const isProtected = createRouteMatcher([
   "/dashboard(.*)",
   "/api/billing(.*)",
   "/api/user(.*)",
+  "/api/playground(.*)",
 ]);
 
 const proxy = clerkConfigured
