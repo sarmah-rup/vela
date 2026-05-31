@@ -75,7 +75,14 @@ export async function POST(req: Request) {
     "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
   };
 
+  // Resend's API is rate limited (2 req/sec on the free tier). The audience
+  // upsert plus the 8 scheduling calls would blow past that and silently drop
+  // the later steps, so we space the calls out.
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  const RATE_GAP_MS = 700;
+
   await upsertContact(email, firstName);
+  await sleep(RATE_GAP_MS);
 
   // Schedule the whole sequence. day 0 sends now; the rest are scheduled by offset.
   const now = Date.now();
@@ -99,6 +106,7 @@ export async function POST(req: Request) {
     } catch {
       /* one failed step shouldn't abort the rest */
     }
+    await sleep(RATE_GAP_MS);
   }
 
   await mergePrivateMetadata(user.id, {
