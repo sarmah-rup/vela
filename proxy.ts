@@ -10,6 +10,7 @@ const clerkConfigured =
 const isProtected = createRouteMatcher([
   "/dashboard(.*)",
   "/api/billing(.*)",
+  "/api/user(.*)",
 ]);
 
 const proxy = clerkConfigured

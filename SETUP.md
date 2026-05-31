@@ -16,6 +16,12 @@ localhost:3000/sign-in, /sign-up → Clerk auth (Google + GitHub)
 The frontend authenticates to your backend with the **Clerk session token (bearer)**; API
 calls from outside the browser use an **API key issued by AWS** — neither is managed here.
 
+The dashboard's live data (image credits, plan, the user's API key, and subscriptions) is
+read from the ImagePipeline backend at **`api.imagepipeline.io`**, fetched **server-side** so
+the base URL and token never reach the browser (see `lib/imagepipeline.ts`). Override the host
+with `IMAGEPIPELINE_API_URL` in `.env.local` (defaults to production). If the backend is
+unreachable the dashboard degrades gracefully instead of showing fake numbers.
+
 ## 1. Clerk (auth)
 
 1. Create an app at <https://dashboard.clerk.com>.
@@ -67,6 +73,8 @@ app/app/                         Dashboard (layout, page, dashboard-client)
 app/api/billing/checkout         Start a subscription Checkout
 app/api/billing/portal           Open the Stripe Customer Portal
 app/api/stripe/webhook           Sync subscription state into Clerk (signature-verified)
+app/api/user/api-key             Create / rotate the user's ImagePipeline API key
+lib/imagepipeline.ts             Server-only client for api.imagepipeline.io (bearer auth)
 lib/user.ts                      Read/write billing state on Clerk privateMetadata
 lib/stripe.ts, lib/plans.ts      Stripe client + subscription tiers
 ```
