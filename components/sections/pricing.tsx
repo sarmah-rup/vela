@@ -150,7 +150,7 @@ export function Pricing() {
 
         {/* Monthly / Yearly toggle */}
         <Reveal delay={0.1}>
-          <div className="mb-12 flex items-center justify-end gap-3">
+          <div className="mb-12 flex flex-col items-end gap-2">
             <div className="inline-flex items-center rounded-pill border border-line bg-surface p-1">
               {[
                 { label: "Monthly", value: false },
@@ -182,7 +182,7 @@ export function Pricing() {
                 );
               })}
             </div>
-            <span className="hidden text-sm text-muted sm:inline">
+            <span className="text-sm text-muted">
               Save ~17% with yearly plans
             </span>
           </div>
