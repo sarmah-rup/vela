@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
+import { brand } from "@/lib/site";
 import { planByPriceId } from "@/lib/plans";
-import { setBillingMetadata } from "@/lib/user";
+import { setBillingMetadata, getUserEmailAndMetadata } from "@/lib/user";
+import { resendConfigured, sendEmail } from "@/lib/email/resend";
+import { buildPurchaseEmail } from "@/lib/email/transactional";
 
 // Stripe needs the raw body to verify the signature, read it as text, don't parse.
 export async function POST(req: Request) {
@@ -64,6 +67,28 @@ export async function POST(req: Request) {
       if (session.subscription) {
         const sub = await stripe.subscriptions.retrieve(session.subscription as string);
         await syncSubscription(sub);
+
+        // "Thank you for your purchase" email. checkout.session.completed fires
+        // once per purchase, so no extra dedupe is needed.
+        if (resendConfigured) {
+          const userId =
+            (typeof session.metadata?.userId === "string" && session.metadata.userId) ||
+            (typeof sub.metadata?.userId === "string" ? sub.metadata.userId : null);
+          const plan = planByPriceId(sub.items.data[0]?.price?.id ?? null);
+          const info = userId ? await getUserEmailAndMetadata(userId) : null;
+          const email =
+            info?.email || session.customer_details?.email || session.customer_email || "";
+          if (email) {
+            const firstName = email.split("@")[0];
+            const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? `https://${brand.domain}`;
+            const mail = buildPurchaseEmail({ firstName, plan, appUrl });
+            try {
+              await sendEmail({ to: email, subject: mail.subject, html: mail.html, text: mail.text });
+            } catch {
+              /* email failure shouldn't fail the webhook */
+            }
+          }
+        }
       }
       break;
     }

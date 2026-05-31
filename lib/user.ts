@@ -57,3 +57,31 @@ export async function setBillingMetadata(userId: string, data: BillingMetadata):
     privateMetadata: { ...(user.privateMetadata ?? {}), ...data },
   });
 }
+
+// Generic merge into privateMetadata (used by the email-drip enrollment state).
+export async function mergePrivateMetadata(
+  userId: string,
+  data: Record<string, unknown>,
+): Promise<void> {
+  const client = await clerkClient();
+  const user = await client.users.getUser(userId);
+  await client.users.updateUserMetadata(userId, {
+    privateMetadata: { ...(user.privateMetadata ?? {}), ...data },
+  });
+}
+
+// Read a user's email + privateMetadata (used by the unsubscribe route, which has
+// no session). Returns null if the user no longer exists.
+export async function getUserEmailAndMetadata(
+  userId: string,
+): Promise<{ email: string; metadata: Record<string, unknown> } | null> {
+  const client = await clerkClient();
+  try {
+    const user = await client.users.getUser(userId);
+    const email =
+      user.primaryEmailAddress?.emailAddress ?? user.emailAddresses?.[0]?.emailAddress ?? "";
+    return { email, metadata: (user.privateMetadata ?? {}) as Record<string, unknown> };
+  } catch {
+    return null;
+  }
+}

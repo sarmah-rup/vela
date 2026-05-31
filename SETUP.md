@@ -53,7 +53,25 @@ both the subscription and customer metadata, then writes the plan into Clerk. Re
 events are safe to reprocess (writing the same plan twice is a no-op), so no idempotency log
 is needed.
 
-## 3. Run
+## 3. Resend (email)
+
+Onboarding drip + a purchase confirmation, sent from **`noreply@imagepipeline.io`**.
+
+1. Create a Resend account, **verify the `imagepipeline.io` domain**, and create an
+   **Audience**. Copy into `.env.local`: `RESEND_API_KEY`, `RESEND_AUDIENCE_ID`,
+   `RESEND_FROM` (defaults to `ImagePipeline <noreply@imagepipeline.io>`), and a
+   random `EMAIL_LINK_SECRET` (signs one-click unsubscribe links).
+2. **Clerk webhook** — Clerk dashboard → **Webhooks** → add an endpoint at
+   `{APP_URL}/api/webhooks/clerk`, subscribe to **`user.created`**, and copy the
+   signing secret into `CLERK_WEBHOOK_SECRET`. On sign-up the user is added to the
+   Audience and the welcome + 7-email drip is scheduled (all within Resend's 30-day
+   window). Unsubscribing cancels the remaining sends.
+
+The Stripe webhook also sends a "thank you for your purchase" email on
+`checkout.session.completed`. All copy lives in `email.md` / `lib/email/`. Sending
+stays inert until `RESEND_API_KEY` is set, so it's a safe no-op before configuration.
+
+## 4. Run
 
 ```bash
 npm run dev          # http://localhost:3000
@@ -72,9 +90,13 @@ app/sign-in, app/sign-up         Clerk auth pages (Google + GitHub)
 app/app/                         Dashboard (layout, page, dashboard-client)
 app/api/billing/checkout         Start a subscription Checkout
 app/api/billing/portal           Open the Stripe Customer Portal
-app/api/stripe/webhook           Sync subscription state into Clerk (signature-verified)
+app/api/stripe/webhook           Sync subscription state into Clerk (+ purchase email)
+app/api/webhooks/clerk           On user.created: add to audience + schedule the drip
+app/api/email/unsubscribe        One-click unsubscribe (cancels remaining sends)
 app/api/user/api-key             Create / rotate the user's ImagePipeline API key
 lib/imagepipeline.ts             Server-only client for api.imagepipeline.io (bearer auth)
+lib/email/                       Resend client, layout, drip sequence, transactional
+email.md                         All email copy (review / edit here)
 lib/user.ts                      Read/write billing state on Clerk privateMetadata
 lib/stripe.ts, lib/plans.ts      Stripe client + subscription tiers
 ```

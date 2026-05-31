@@ -277,7 +277,6 @@ function EnterpriseBanner() {
           <p className="font-display text-base font-semibold text-fg">Go faster with Enterprise</p>
           <p className="mt-0.5 max-w-prose text-sm text-muted">
             Dedicated GPUs, priority queues, and video models for high-speed generation at scale.
-            Need a product video shoot? Talk to us.
           </p>
         </div>
       </div>
@@ -289,14 +288,6 @@ function EnterpriseBanner() {
           className="inline-flex items-center gap-1.5 rounded-xl bg-key px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-key-deep"
         >
           Book a demo
-        </a>
-        <a
-          href={CAL_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center rounded-xl border border-line bg-surface px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-key/50 hover:text-key"
-        >
-          Talk to us
         </a>
       </div>
     </div>
@@ -327,8 +318,8 @@ function EnterpriseLocked() {
         </span>
         <h3 className="font-display text-lg font-semibold text-fg">Need high speed?</h3>
         <p className="max-w-md text-sm text-muted">
-          Enterprise unlocks dedicated GPUs, priority queues, and video models — the fastest loads
-          at scale, with live pod &amp; queue metrics here. Need a product video shoot? Talk to us.
+          Enterprise unlocks dedicated GPUs, priority queues, and video models for the fastest loads
+          at scale, with live pod &amp; queue metrics here.
         </p>
         <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
           <a
@@ -338,14 +329,6 @@ function EnterpriseLocked() {
             className="inline-flex items-center gap-1.5 rounded-xl bg-key px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-key-deep"
           >
             Book a demo
-          </a>
-          <a
-            href={CAL_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center rounded-xl border border-line bg-surface px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-key/50 hover:text-key"
-          >
-            Talk to us
           </a>
         </div>
       </div>
