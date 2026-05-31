@@ -12,13 +12,14 @@ import { cn } from "@/lib/utils";
 // silently snaps back a copy once it drifts past the edges, so clicking left or
 // right (or autoplay) keeps producing images endlessly.
 const slides = [
-  { src: "/img/ip2/694d1aba2b34deb3ac23e9bf_Botika_Homepage_Client_Tobi.avif", brand: "Marisol" },
-  { src: "/img/ip2/694d1aba2b34deb3ac23e9c3_Botika_Homepage_Client_Edikted.avif", brand: "Northwind" },
-  { src: "/img/ip2/694d1aba6f75e6997aa01475_Botika_Homepage_Client_Forever21.avif", brand: "Cadence" },
-  { src: "/img/ip2/694d1aba357b875e39fac185_Botika_Homepage_Client_NilandMon.avif", brand: "Tindra" },
-  { src: "/img/ip2/694d1aba91a13a0bfec750c4_Botika_Homepage_Client_Jordache.avif", brand: "Atelier 9" },
-  { src: "/img/ip2/694d1abaab7d5eb267387995_Botika_Homepage_Client_PerryEllis.avif", brand: "Saola" },
-  { src: "/img/ip2/69843784a0cc58c8ebf8d877_Heliot_AImodel_Example.avif", brand: "Kestrel" },
+  { src: "/img/ip/shoot/image_01.png", brand: "Marisol" },
+  { src: "/img/ip/shoot/image_37.png", brand: "Halden" },
+  { src: "/img/ip/shoot/image_08.png", brand: "Cadence" },
+  { src: "/img/ip/shoot/image_30.png", brand: "Tindra" },
+  { src: "/img/ip/shoot/image_02.png", brand: "Atelier 9" },
+  { src: "/img/ip/shoot/image_03.png", brand: "Saola" },
+  { src: "/img/ip/shoot/image_19.png", brand: "Loulou" },
+  { src: "/img/ip/shoot/image_31.png", brand: "Kestrel" },
 ];
 
 const W = 340; // slide width (px)
@@ -126,13 +127,13 @@ export function CenterSlider() {
                       : "",
                   )}
                 >
-                  <div className="relative h-full w-full overflow-hidden rounded-2xl">
+                  <div className="relative h-full w-full overflow-hidden rounded-2xl bg-[#f0f0f0]">
                     <Image
                       src={s.src}
                       alt={`${s.brand} on-model shot`}
                       fill
                       sizes="320px"
-                      className="object-cover"
+                      className="object-cover object-top"
                     />
                     <motion.span
                       animate={{ opacity: isActive ? 1 : 0 }}

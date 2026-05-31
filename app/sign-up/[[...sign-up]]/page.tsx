@@ -17,7 +17,10 @@ export default function SignUpPage() {
     );
   }
   return (
-    <AuthShell>
+    <AuthShell
+      heroSrc="/img/ip/shoot/image_17.png"
+      heroPrompt="full-body tailored pantsuit, neutral studio ground..."
+    >
       <SignUp appearance={clerkAppearance} />
     </AuthShell>
   );

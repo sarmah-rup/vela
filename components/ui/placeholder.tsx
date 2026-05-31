@@ -8,29 +8,31 @@ import { cn } from "@/lib/utils";
 // Keep the wrapper sizing and everything else stays put.
 // ───────────────────────────────────────────────────────────────────────
 
+// On-model pools now use our own AI-generated shots (flat #f0f0f0 ground).
+// Flat-lay product pools are left as-is — they stand in for the "before" input.
 const pools: Record<string, string[]> = {
   model: [
-    "/img/ip/onmodel-jacket-1.png",
-    "/img/ip/model-20.png",
-    "/img/ip/model-10.png",
-    "/img/ip/model-1.png",
-    "/img/ip/model-3.png",
+    "/img/ip/shoot/image_01.png",
+    "/img/ip/shoot/image_04.png",
+    "/img/ip/shoot/image_11.png",
+    "/img/ip/shoot/image_17.png",
+    "/img/ip/shoot/image_16.png",
   ],
   garment: [
-    "/img/ip/onmodel-jacket-2.png",
-    "/img/ip/model-5.png",
-    "/img/ip/model-12.png",
-    "/img/ip/model-2.png",
+    "/img/ip/shoot/image_02.png",
+    "/img/ip/shoot/image_08.png",
+    "/img/ip/shoot/image_12.png",
+    "/img/ip/shoot/image_19.png",
   ],
-  warm: ["/img/ip/onmodel-jacket-1.png", "/img/ip/model-20.png", "/img/ip/model-7.png"],
-  cool: ["/img/ip/model-10.png", "/img/ip/model-8.png", "/img/ip/model-15.png"],
+  warm: ["/img/ip/shoot/image_11.png", "/img/ip/shoot/image_21.png", "/img/ip/shoot/image_24.png"],
+  cool: ["/img/ip/shoot/image_17.png", "/img/ip/shoot/image_03.png", "/img/ip/shoot/image_31.png"],
   product: [
     "/img/ip/flat-jacket.webp",
     "/img/ip/flat-dress.webp",
     "/img/ip/flat-shirt.avif",
     "/img/ip/product-bag.webp",
   ],
-  studio: ["/img/ip/model-10.png", "/img/ip/product-bag.webp", "/img/ip/model-25.png"],
+  studio: ["/img/ip/shoot/image_11.png", "/img/ip/shoot/image_16.png", "/img/ip/shoot/image_22.png"],
 };
 
 function hash(s: string) {
@@ -64,7 +66,7 @@ export function Placeholder({
   return (
     <div
       className={cn(
-        "relative isolate overflow-hidden bg-bg-soft",
+        "relative isolate overflow-hidden bg-[#f0f0f0]",
         rounded,
         className,
       )}
@@ -76,7 +78,7 @@ export function Placeholder({
         alt={label ?? "ImagePipeline generated visual (placeholder)"}
         fill
         sizes="(max-width: 768px) 100vw, 640px"
-        className="object-cover"
+        className="object-cover object-top"
         priority={priority}
       />
       {label ? (

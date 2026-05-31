@@ -8,8 +8,8 @@ import { Container } from "@/components/ui/primitives";
 import { Reveal } from "@/components/ui/reveal";
 
 const peek = {
-  left: "/img/ip2/6976234b84e6fbece572e594_Botika_HomePage_Editorials.avif",
-  right: "/img/ip2/697623e2c1bb8c1db4a9c872_Botika_Homepage_BotikaCreatorProgram.avif",
+  left: "/img/ip/shoot/image_22.png",
+  right: "/img/ip/shoot/image_12.png",
 };
 
 // Quotes are kept to a similar length so the card height stays stable as it cycles.
@@ -49,10 +49,10 @@ export function Testimonials() {
         <Reveal className="relative mx-auto flex w-full max-w-5xl items-center justify-center">
           {/* Decorative peeking previews */}
           <div className="absolute left-0 top-1/2 hidden h-56 w-72 -translate-y-1/2 -rotate-[5deg] overflow-hidden rounded-2xl shadow-2xl lg:block">
-            <Image src={peek.left} alt="" fill sizes="288px" className="object-cover" />
+            <Image src={peek.left} alt="" fill sizes="288px" className="object-cover object-top" />
           </div>
           <div className="absolute right-0 top-1/2 hidden h-56 w-72 -translate-y-1/2 rotate-[5deg] overflow-hidden rounded-2xl shadow-2xl lg:block">
-            <Image src={peek.right} alt="" fill sizes="288px" className="object-cover" />
+            <Image src={peek.right} alt="" fill sizes="288px" className="object-cover object-top" />
           </div>
 
           {/* Static card; only the text inside cross-fades between slides. */}

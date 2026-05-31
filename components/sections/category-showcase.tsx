@@ -9,39 +9,42 @@ import { cn } from "@/lib/utils";
 
 // Category switcher: pick a use-case pill and the showcase image swaps, with a
 // small "plain product" inset standing in for the before state.
+// Each main image is one of our own AI-generated shots on a flat #f0f0f0 ground
+// (object-contain, so square shots sit centered with no crop). Mix of women, men,
+// and product stills to show the range.
 const categories = [
   {
     id: "lifestyle",
     label: "Lifestyle",
-    src: "/img/ip2/697623e2c1bb8c1db4a9c872_Botika_Homepage_BotikaCreatorProgram.avif",
+    src: "/img/ip/shoot/image_21.png",
     inset: "/img/ip/flat-jacket.webp",
     prompt: "candid lifestyle, natural daylight, city street...",
   },
   {
     id: "editorial",
     label: "Editorial",
-    src: "/img/ip2/6976234b84e6fbece572e594_Botika_HomePage_Editorials.avif",
+    src: "/img/ip/shoot/image_16.png",
     inset: "/img/ip/flat-dress.webp",
     prompt: "high-fashion editorial, dramatic rim light...",
   },
   {
     id: "on-model",
     label: "On-model",
-    src: "/img/ip2/694d1aba6f75e6997aa01475_Botika_Homepage_Client_Forever21.avif",
+    src: "/img/ip/shoot/image_38.png",
     inset: "/img/ip/flat-shirt.avif",
-    prompt: "on-model flat-lay, neutral studio, full body...",
+    prompt: "on-model menswear, neutral studio, full body...",
   },
   {
     id: "studio",
     label: "Studio",
-    src: "/img/ip2/6976234bc173726a3281e3e5_Botika_HomePage_IncreaseDiversity.avif",
+    src: "/img/ip/shoot/image_39.png",
     inset: "/img/ip/product-bag.webp",
     prompt: "studio product, seamless backdrop, soft shadow...",
   },
   {
     id: "campaign",
     label: "Campaign",
-    src: "/img/ip2/6976234b086075b0811ad678_Botika_HomePage_GetToMarketFaster.avif",
+    src: "/img/ip/shoot/image_36.png",
     inset: "/img/ip/flat-jacket.webp",
     prompt: "campaign hero, bold styling, wide crop...",
   },
@@ -80,7 +83,7 @@ export function CategoryShowcase() {
         </Reveal>
 
         <Reveal delay={0.12} className="w-full">
-          <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[28px] border border-line">
+          <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[28px] border border-line bg-[#f0f0f0]">
             {categories.map((c, i) => (
               <Image
                 key={c.id}
@@ -90,7 +93,7 @@ export function CategoryShowcase() {
                 sizes="(max-width: 1024px) 100vw, 1100px"
                 priority={i === 0}
                 className={cn(
-                  "object-cover transition-opacity duration-700 ease-out",
+                  "object-contain object-center transition-opacity duration-700 ease-out",
                   i === active ? "opacity-100" : "opacity-0",
                 )}
               />

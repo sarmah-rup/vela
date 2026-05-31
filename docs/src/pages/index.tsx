@@ -82,15 +82,15 @@ function Hero() {
 
       <div className={styles.heroMedia}>
         <div className={styles.heroFrame}>
-          {/* On-model shot pulled from the marketing home hero (served at the app
-              root, so no useBaseUrl). */}
+          {/* Our own AI-generated on-model shot on a flat #f0f0f0 ground (served
+              at the app root, so no useBaseUrl). */}
           <img
             className={styles.heroImage}
-            src="/img/ip2/69773c05ff330c75b2550fc3_Botika_Homepage_WhiteCurlyAIModel_Mobile.avif"
+            src="/img/ip/shoot/image_04.png"
             alt="AI-generated on-model look"
             loading="eager"
-            width={720}
-            height={900}
+            width={1024}
+            height={1024}
           />
         </div>
 

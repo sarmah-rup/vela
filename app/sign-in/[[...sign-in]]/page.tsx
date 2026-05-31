@@ -19,7 +19,10 @@ export default function SignInPage() {
     );
   }
   return (
-    <AuthShell>
+    <AuthShell
+      heroSrc="/img/ip/shoot/image_11.png"
+      heroPrompt="full-body on-model, tailored suit, soft studio light..."
+    >
       <SignIn appearance={clerkAppearance} />
     </AuthShell>
   );

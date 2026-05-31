@@ -45,3 +45,9 @@ next-env.d.ts
 
 # Raw policy source exports (extracted into content/legal via scripts/extract-legal.mjs)
 /ss
+
+# Local test folder
+/test
+
+# Raw bg-removal working dump (site assets live in public/img/ip/shoot)
+/batch1

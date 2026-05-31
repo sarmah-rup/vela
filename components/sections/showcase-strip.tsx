@@ -3,16 +3,16 @@ import Image from "next/image";
 // A continuously scrolling row of on-model shots with brand tags, in the
 // spirit of an ecommerce AI gallery. Images are free-licensed placeholders.
 const shots = [
-  { src: "/img/ip/model-1.png", brand: "Marisol" },
-  { src: "/img/ip/model-10.png", brand: "Cadence" },
-  { src: "/img/ip/model-20.png", brand: "Tindra" },
-  { src: "/img/ip/onmodel-jacket-1.png", brand: "Northwind" },
-  { src: "/img/ip/model-3.png", brand: "Atelier 9" },
-  { src: "/img/ip/model-5.png", brand: "Saola" },
-  { src: "/img/ip/model-12.png", brand: "Kestrel" },
-  { src: "/img/ip/model-2.png", brand: "Florarama" },
-  { src: "/img/ip/model-25.png", brand: "Loulou" },
-  { src: "/img/ip/model-30.png", brand: "Meister" },
+  { src: "/img/ip/shoot/image_01.png", brand: "Marisol" },
+  { src: "/img/ip/shoot/image_03.png", brand: "Cadence" },
+  { src: "/img/ip/shoot/image_11.png", brand: "Tindra" },
+  { src: "/img/ip/shoot/image_17.png", brand: "Northwind" },
+  { src: "/img/ip/shoot/image_16.png", brand: "Atelier 9" },
+  { src: "/img/ip/shoot/image_08.png", brand: "Saola" },
+  { src: "/img/ip/shoot/image_31.png", brand: "Kestrel" },
+  { src: "/img/ip/shoot/image_02.png", brand: "Florarama" },
+  { src: "/img/ip/shoot/image_19.png", brand: "Loulou" },
+  { src: "/img/ip/shoot/image_12.png", brand: "Meister" },
 ];
 
 export function ShowcaseStrip() {

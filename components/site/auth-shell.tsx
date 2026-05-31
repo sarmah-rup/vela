@@ -22,16 +22,25 @@ export const clerkAppearance = {
 };
 
 // Full-bleed auth screen: on the left a fixed-height image that runs from the top of
-// the viewport (behind the fixed menu) and fills ~65vw — the home-hero looks, cross-
-// fading, each with a dev cue overlaid; on the right, the bare Clerk form.
-export function AuthShell({ children }: { children: React.ReactNode }) {
+// the viewport (behind the fixed menu) and fills ~65vw — one AI-generated on-model
+// look with a dev cue overlaid; on the right, the bare Clerk form. Pages can pass a
+// distinct image so sign-in and sign-up don't show the same model.
+export function AuthShell({
+  children,
+  heroSrc,
+  heroPrompt,
+}: {
+  children: React.ReactNode;
+  heroSrc?: string;
+  heroPrompt?: string;
+}) {
   return (
     <div className="grid h-[100dvh] lg:grid-cols-[65vw_minmax(0,1fr)]">
-      {/* Left: rotating home-hero imagery + dev cues, starting at the top of the screen */}
-      <AuthHero />
+      {/* Left: AI-generated on-model imagery + dev cue, starting at the top of the screen */}
+      <AuthHero src={heroSrc} prompt={heroPrompt} />
 
       {/* Right: bare Clerk form, vertically centered, on the #f0f0f0 panel the
-          image fades into on its right edge. */}
+          image sits on. */}
       <div className="flex items-center justify-center bg-[#f0f0f0] px-6 py-10 sm:px-10">{children}</div>
     </div>
   );
