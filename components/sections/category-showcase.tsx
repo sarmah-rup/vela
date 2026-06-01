@@ -8,58 +8,59 @@ import { Reveal } from "@/components/ui/reveal";
 import { DevTag } from "@/components/ui/dev-tag";
 import { cn } from "@/lib/utils";
 
-// Category switcher: pick a use-case pill, then pick one of three variant
-// thumbnails at the bottom — the large showcase image swaps to match.
-// 5 pills x 3 variants = 15 images (dummy assets from "ip asset 2" for now).
+// Category switcher: pick a use-case pill, then pick one of three product
+// thumbnails at the bottom. Each thumbnail is a plain product shot; the large
+// showcase image is a *different* image — a model showcasing that product.
+// 5 pills x 3 variants. Placeholder assets for now.
 const categories = [
   {
     id: "lifestyle",
     label: "Lifestyle",
     prompt: "candid lifestyle, natural daylight, city street...",
-    images: [
-      "/img/ip/cat/cat-01.avif",
-      "/img/ip/cat/cat-02.avif",
-      "/img/ip/cat/cat-03.avif",
+    variants: [
+      { product: "/img/ip/flat-shirt.avif", model: "/img/ip/model-1.png" },
+      { product: "/img/ip/flat-jacket.webp", model: "/img/ip/model-2.png" },
+      { product: "/img/ip/flat-dress.webp", model: "/img/ip/model-3.png" },
     ],
   },
   {
     id: "editorial",
     label: "Editorial",
     prompt: "high-fashion editorial, dramatic rim light...",
-    images: [
-      "/img/ip/cat/cat-04.avif",
-      "/img/ip/cat/cat-05.avif",
-      "/img/ip/cat/cat-06.avif",
+    variants: [
+      { product: "/img/ip/product-1.avif", model: "/img/ip/model-4.png" },
+      { product: "/img/ip/product-2.avif", model: "/img/ip/model-5.png" },
+      { product: "/img/ip/product-3.webp", model: "/img/ip/model-6.png" },
     ],
   },
   {
     id: "on-model",
     label: "On-model",
     prompt: "on-model menswear, neutral studio, full body...",
-    images: [
-      "/img/ip/cat/cat-07.avif",
-      "/img/ip/cat/cat-08.avif",
-      "/img/ip/cat/cat-09.avif",
+    variants: [
+      { product: "/img/ip/flat-jacket.webp", model: "/img/ip/onmodel-jacket-1.png" },
+      { product: "/img/ip/flat-jacket.webp", model: "/img/ip/onmodel-jacket-2.png" },
+      { product: "/img/ip/product-bag.webp", model: "/img/ip/model-7.png" },
     ],
   },
   {
     id: "studio",
     label: "Studio",
     prompt: "studio product, seamless backdrop, soft shadow...",
-    images: [
-      "/img/ip/cat/cat-10.avif",
-      "/img/ip/cat/cat-11.avif",
-      "/img/ip/cat/cat-12.avif",
+    variants: [
+      { product: "/img/ip/product-1.avif", model: "/img/ip/model-8.png" },
+      { product: "/img/ip/product-2.avif", model: "/img/ip/model-9.png" },
+      { product: "/img/ip/product-3.webp", model: "/img/ip/model-10.png" },
     ],
   },
   {
     id: "campaign",
     label: "Campaign",
     prompt: "campaign hero, bold styling, wide crop...",
-    images: [
-      "/img/ip/cat/cat-13.avif",
-      "/img/ip/cat/cat-14.avif",
-      "/img/ip/cat/cat-15.avif",
+    variants: [
+      { product: "/img/ip/flat-dress.webp", model: "/img/ip/model-11.png" },
+      { product: "/img/ip/flat-shirt.avif", model: "/img/ip/model-12.png" },
+      { product: "/img/ip/product-bag.webp", model: "/img/ip/model-13.png" },
     ],
   },
 ];
@@ -70,18 +71,18 @@ export function CategoryShowcase() {
   const reduce = useReducedMotion();
 
   const current = categories[active];
-  const src = current.images[variant];
+  const src = current.variants[variant].model;
 
   // Auto-cycle through the active category's variants (like the hero rotator).
   // Re-runs on any change to active/variant, so a manual pick restarts the timer.
   React.useEffect(() => {
     if (reduce) return;
     const id = setInterval(
-      () => setVariant((v) => (v + 1) % current.images.length),
+      () => setVariant((v) => (v + 1) % current.variants.length),
       4500,
     );
     return () => clearInterval(id);
-  }, [active, variant, reduce, current.images.length]);
+  }, [active, variant, reduce, current.variants.length]);
 
   function pickCategory(i: number) {
     setActive(i);
@@ -151,22 +152,23 @@ export function CategoryShowcase() {
               </motion.div>
             </AnimatePresence>
 
-            {/* Three variant thumbnails, center-bottom; click to swap the large image. */}
+            {/* Three product thumbnails, center-bottom; click to swap the large
+                model image. Thumbnail = plain product, large = model showcase. */}
             <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 gap-3">
-              {current.images.map((img, i) => (
+              {current.variants.map((v, i) => (
                 <button
-                  key={img}
+                  key={v.product + i}
                   onClick={() => setVariant(i)}
-                  aria-label={`${current.label} variant ${i + 1}`}
+                  aria-label={`${current.label} product ${i + 1}`}
                   className={cn(
-                    "relative h-16 w-16 overflow-hidden rounded-xl border-4 bg-white shadow-2xl transition-all sm:h-20 sm:w-20",
+                    "relative h-16 w-16 overflow-hidden rounded-xl border bg-white shadow-2xl transition-all sm:h-20 sm:w-20",
                     i === variant
                       ? "border-white ring-2 ring-ink"
                       : "border-white opacity-80 hover:opacity-100",
                   )}
                 >
                   <Image
-                    src={img}
+                    src={v.product}
                     alt=""
                     fill
                     sizes="80px"
