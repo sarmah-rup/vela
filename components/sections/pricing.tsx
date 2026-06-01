@@ -133,8 +133,6 @@ function Price({ tier, yearly }: { tier: Tier; yearly: boolean }) {
 }
 
 export function Pricing() {
-  const [yearly, setYearly] = React.useState(true);
-
   return (
     <section className="relative pb-20 pt-36 sm:pb-28 sm:pt-44">
       <Container>
@@ -147,7 +145,19 @@ export function Pricing() {
             />
           </Reveal>
         </div>
+        <PricingTiers />
+      </Container>
+    </section>
+  );
+}
 
+// The toggle + tier cards + footer note, without the marketing section chrome.
+// Shared by the Pricing section and the dashboard plan-upgrade popup.
+export function PricingTiers() {
+  const [yearly, setYearly] = React.useState(true);
+
+  return (
+    <>
         {/* Monthly / Yearly toggle */}
         <Reveal delay={0.1}>
           <div className="mb-12 flex flex-col items-end gap-2">
@@ -299,8 +309,7 @@ export function Pricing() {
           </Link>
           .
         </p>
-      </Container>
-    </section>
+    </>
   );
 }
 

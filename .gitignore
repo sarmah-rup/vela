@@ -49,5 +49,8 @@ next-env.d.ts
 # Local test folder
 /test
 
+# Local email test endpoint (not for production)
+/app/api/email/test
+
 # Raw bg-removal working dump (site assets live in public/img/ip/shoot)
 /batch1

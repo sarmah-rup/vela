@@ -25,6 +25,7 @@ import {
   type Feature,
   type SnippetLang,
 } from "@/lib/playground";
+import { PricingTiers } from "@/components/sections/pricing";
 
 // Category order follows first appearance in FEATURES.
 const CATEGORIES = FEATURES.reduce<string[]>(
@@ -76,6 +77,7 @@ export function TryNow() {
   const [run, setRun] = React.useState<RunState>({ phase: "idle" });
   const [generated, setGenerated] = React.useState<string | null>(null);
   const [lightbox, setLightbox] = React.useState<string | null>(null);
+  const [upsell, setUpsell] = React.useState(false);
   const pollRef = React.useRef<number | null>(null);
 
   React.useEffect(() => () => void (pollRef.current && clearTimeout(pollRef.current)), []);
@@ -144,6 +146,12 @@ export function TryNow() {
         body: JSON.stringify({ path: feature.path, payload }),
       });
       const data = await res.json();
+      // 403 → feature not on the user's plan: show the upgrade/pricing popup.
+      if (res.status === 403 || data.error === "plan_upgrade_required") {
+        setRun({ phase: "idle" });
+        setUpsell(true);
+        return;
+      }
       if (!res.ok || !data.job_id) {
         setRun({ phase: "error", error: data.detail || "The request was rejected." });
         return;
@@ -430,6 +438,56 @@ export function TryNow() {
           />
         </div>
       )}
+
+      {/* Plan upgrade popup (shown on a 403 from the API) */}
+      {upsell && <PlanUpsellModal feature={feature.label} onClose={() => setUpsell(false)} />}
+    </div>
+  );
+}
+
+// Shown when the API returns 403 — the selected feature isn't on the user's
+// plan. Reuses the same pricing tiers as the marketing site.
+function PlanUpsellModal({ feature, onClose }: { feature: string; onClose: () => void }) {
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-ink/80 p-4 backdrop-blur-sm sm:p-8"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        className="relative my-6 w-full max-w-5xl rounded-card border border-line bg-bg p-6 shadow-2xl sm:p-10"
+      >
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-bg-soft text-fg transition-colors hover:bg-line"
+        >
+          <X className="h-5 w-5" />
+        </button>
+
+        <div className="mx-auto max-w-xl text-center">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-key-soft px-3 py-1 text-xs font-semibold text-key">
+            <TriangleAlert className="h-3.5 w-3.5" /> Not available on your plan
+          </span>
+          <h2 className="mt-4 font-display text-2xl font-semibold text-fg">
+            Upgrade to unlock {feature}
+          </h2>
+          <p className="mt-2 text-sm text-muted">
+            {feature} isn&rsquo;t included in your current plan. Choose a plan below to start using
+            it right away.
+          </p>
+        </div>
+
+        <PricingTiers />
+      </div>
     </div>
   );
 }

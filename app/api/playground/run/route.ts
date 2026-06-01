@@ -24,6 +24,14 @@ export async function POST(req: Request) {
     return NextResponse.json(data);
   } catch (err) {
     const status = (err as { status?: number }).status ?? 502;
+    // 403 with a valid session = the feature isn't on the user's plan. Signal
+    // the client to show the upgrade/pricing popup.
+    if (status === 403) {
+      return NextResponse.json(
+        { error: "plan_upgrade_required", detail: (err as Error).message },
+        { status: 403 },
+      );
+    }
     return NextResponse.json(
       { error: "imagepipeline_error", detail: (err as Error).message },
       { status },
