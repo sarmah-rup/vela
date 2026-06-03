@@ -10,28 +10,41 @@ import { DevTag } from "@/components/ui/dev-tag";
 // the hero section), so the figure sits seamlessly with no visible card edge.
 const looks = [
   {
-    src: "/img/ip/shoot/image_11.png",
+    src: "/img/ip/shoot/image_01.png",
     brand: "Marisol",
-    prompt: "full-body on-model, tailored suit, soft studio light...",
+    body: `{
+  "mode": "on-model",
+  "garment": "emerald-gown.jpg",
+  "pose": "seated",
+  "background": "studio",
+  "size": "1024x1536"
+}`,
   },
   {
-    src: "/img/ip/shoot/image_04.png",
+    src: "/img/ip/shoot/image_03.png",
     brand: "Anna Nova",
-    prompt: "on-model evening dress, clean studio, editorial...",
+    body: `{
+  "mode": "on-model",
+  "garment": "satin-slip.jpg",
+  "pose": "seated",
+  "background": "studio",
+  "size": "1024x1536"
+}`,
   },
   {
-    src: "/img/ip/shoot/image_17.png",
-    brand: "Northwind",
-    prompt: "full-body tailored pantsuit, neutral ground...",
-  },
-  {
-    src: "/img/ip/shoot/image_24.png",
+    src: "/img/ip/shoot/image_12.png",
     brand: "Kestrel",
-    prompt: "two-piece set, on-model, soft daylight...",
+    body: `{
+  "mode": "on-model",
+  "garment": "knit-set.jpg",
+  "pose": "cross-legged",
+  "background": "daylight",
+  "size": "1024x1536"
+}`,
   },
 ];
 
-export function HeroRotator() {
+export function HeroRotator({ fullBleed = false }: { fullBleed?: boolean }) {
   const [i, setI] = React.useState(0);
   const reduce = useReducedMotion();
 
@@ -41,11 +54,51 @@ export function HeroRotator() {
     return () => clearInterval(id);
   }, [reduce]);
 
+  // Clamp so the index can never point past the array (e.g. after the set of
+  // looks changes), which would crash on looks[i].
+  const look = looks[i % looks.length];
+
+  // Full-bleed magazine-cover variant: the look fills the whole hero frame and
+  // is anchored to the right on large screens, leaving the lower-left clear for
+  // the overlaid headline. The #F0F0F0 ground matches the section, so the
+  // object-contain margins read as intentional negative space, not letterboxing.
+  if (fullBleed) {
+    return (
+      <div className="absolute inset-0 overflow-hidden">
+        <AnimatePresence initial={false} mode="sync">
+          <motion.div
+            key={look.src}
+            className="absolute inset-0"
+            initial={reduce ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.6, ease: "easeInOut" }}
+          >
+            <Image
+              src={look.src}
+              alt={`${look.brand}, AI-generated on-model look`}
+              fill
+              sizes="100vw"
+              className="object-contain object-bottom lg:object-[62%_bottom]"
+              priority={i === 0}
+            />
+            <DevTag
+              path="/generate/image/v1"
+              body={look.body}
+              corner="br"
+              className="bottom-16 right-5 px-3.5 py-2.5 text-[13px] sm:bottom-20 sm:right-[16%]"
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    );
+  }
+
   return (
     <div className="relative h-[26rem] w-full overflow-hidden bg-[#F0F0F0] sm:h-[34rem] lg:h-[calc(37rem+10vh)] lg:w-[calc(100%+5rem)]">
       <AnimatePresence initial={false} mode="sync">
         <motion.div
-          key={looks[i].src}
+          key={look.src}
           className="absolute inset-0"
           initial={reduce ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -53,15 +106,15 @@ export function HeroRotator() {
           transition={{ duration: 1.6, ease: "easeInOut" }}
         >
           <Image
-            src={looks[i].src}
-            alt={`${looks[i].brand}, AI-generated on-model look`}
+            src={look.src}
+            alt={`${look.brand}, AI-generated on-model look`}
             fill
             sizes="(max-width: 1024px) 100vw, 720px"
             className="object-contain object-bottom"
             priority={i === 0}
           />
-          {/* Inside the cross-fading layer, so the prompt fades with its image. */}
-          <DevTag path="/generate/image/v1" prompt={looks[i].prompt} />
+          {/* Inside the cross-fading layer, so the dev cue fades with its image. */}
+          <DevTag path="/generate/image/v1" body={look.body} />
         </motion.div>
       </AnimatePresence>
     </div>

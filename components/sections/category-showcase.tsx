@@ -12,55 +12,46 @@ import { cn } from "@/lib/utils";
 // thumbnails at the bottom. Each thumbnail is a plain product shot; the large
 // showcase image is a *different* image — a model showcasing that product.
 // 5 pills x 3 variants. Placeholder assets for now.
+// Nav thumbnails (product) temporarily mirror the large image — real nav
+// thumbnails to be supplied later. Large images are recolored to #f0f0f0.
 const categories = [
   {
-    id: "lifestyle",
-    label: "Lifestyle",
-    prompt: "candid lifestyle, natural daylight, city street...",
+    id: "male",
+    label: "Male models",
+    prompt: "on-model, same garment, swap the model, neutral studio...",
     variants: [
-      { product: "/img/ip/flat-shirt.avif", model: "/img/ip/model-1.png" },
-      { product: "/img/ip/flat-jacket.webp", model: "/img/ip/model-2.png" },
-      { product: "/img/ip/flat-dress.webp", model: "/img/ip/model-3.png" },
+      { product: "/img/ip/showcase/male-1-orig.webp", model: "/img/ip/showcase/male-1-orig.webp" },
+      { product: "/img/ip/showcase/male-2-orig.webp", model: "/img/ip/showcase/male-2-orig.webp" },
+      { product: "/img/ip/showcase/male-3-orig.webp", model: "/img/ip/showcase/male-3-orig.webp" },
     ],
   },
   {
-    id: "editorial",
-    label: "Editorial",
-    prompt: "high-fashion editorial, dramatic rim light...",
+    id: "female",
+    label: "Female models",
+    prompt: "on-model, same garment, swap the model, neutral studio...",
     variants: [
-      { product: "/img/ip/product-1.avif", model: "/img/ip/model-4.png" },
-      { product: "/img/ip/product-2.avif", model: "/img/ip/model-5.png" },
-      { product: "/img/ip/product-3.webp", model: "/img/ip/model-6.png" },
+      { product: "/img/ip/showcase/female-1.webp", model: "/img/ip/showcase/female-1.webp" },
+      { product: "/img/ip/showcase/female-2.webp", model: "/img/ip/showcase/female-2.webp" },
+      { product: "/img/ip/showcase/female-3.webp", model: "/img/ip/showcase/female-3.webp" },
     ],
   },
   {
-    id: "on-model",
-    label: "On-model",
-    prompt: "on-model menswear, neutral studio, full body...",
+    id: "try-on",
+    label: "Try-on",
+    prompt: "virtual try-on, accessories, on-model, neutral studio...",
     variants: [
-      { product: "/img/ip/flat-jacket.webp", model: "/img/ip/onmodel-jacket-1.png" },
-      { product: "/img/ip/flat-jacket.webp", model: "/img/ip/onmodel-jacket-2.png" },
-      { product: "/img/ip/product-bag.webp", model: "/img/ip/model-7.png" },
+      { product: "/img/ip/showcase/tryon-1.webp", model: "/img/ip/showcase/tryon-1.webp" },
+      { product: "/img/ip/showcase/tryon-2.webp", model: "/img/ip/showcase/tryon-2.webp" },
+      { product: "/img/ip/showcase/tryon-3.webp", model: "/img/ip/showcase/tryon-3.webp" },
     ],
   },
   {
-    id: "studio",
-    label: "Studio",
-    prompt: "studio product, seamless backdrop, soft shadow...",
+    id: "holding",
+    label: "Holding product",
+    prompt: "on-model holding product, studio, soft light...",
     variants: [
-      { product: "/img/ip/product-1.avif", model: "/img/ip/model-8.png" },
-      { product: "/img/ip/product-2.avif", model: "/img/ip/model-9.png" },
-      { product: "/img/ip/product-3.webp", model: "/img/ip/model-10.png" },
-    ],
-  },
-  {
-    id: "campaign",
-    label: "Campaign",
-    prompt: "campaign hero, bold styling, wide crop...",
-    variants: [
-      { product: "/img/ip/flat-dress.webp", model: "/img/ip/model-11.png" },
-      { product: "/img/ip/flat-shirt.avif", model: "/img/ip/model-12.png" },
-      { product: "/img/ip/product-bag.webp", model: "/img/ip/model-13.png" },
+      { product: "/img/ip/showcase/hold-man-orig.webp", model: "/img/ip/showcase/hold-man-orig.webp" },
+      { product: "/img/ip/showcase/hold-woman-orig.webp", model: "/img/ip/showcase/hold-woman-orig.webp" },
     ],
   },
 ];
@@ -147,7 +138,7 @@ export function CategoryShowcase() {
                   fill
                   sizes="(max-width: 1024px) 100vw, 1100px"
                   priority={active === 0 && variant === 0}
-                  className="object-cover object-center"
+                  className="object-contain object-center"
                 />
               </motion.div>
             </AnimatePresence>
